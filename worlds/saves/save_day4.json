@@ -1,0 +1,2402 @@
+{
+  "version": 1,
+  "world_day": 4,
+  "player": {
+    "gold": 50,
+    "name": "Adventurer",
+    "reputation": 0,
+    "id": "player-1"
+  },
+  "player_location_id": "loc-tavern",
+  "player_items": [],
+  "npcs": [
+    {
+      "npc": {
+        "backstory": "Marta has led Oakhollow for twenty years. She lost her husband to the forest beasts long ago and carries a silver locket as her only memento. She is wise but sometimes too cautious.",
+        "archetype": "guardian",
+        "occupation": "village elder",
+        "alive": true,
+        "personality": "O:mid, C:high, E:mid, A:high, N:low",
+        "mood": "excited",
+        "current_activity": "patrolling",
+        "name": "Elder Marta",
+        "id": "npc-marta",
+        "age": 58,
+        "goals": [
+          "keep the village safe",
+          "find out what stirs in the forest",
+          "prepare for winter"
+        ]
+      },
+      "location_id": "loc-square",
+      "relationships": [
+        {
+          "name": "Magda the Cook",
+          "id": "npc-magda",
+          "sentiment": 0.8,
+          "reason": "loyal informant who keeps her ear to the ground"
+        },
+        {
+          "name": "Captain Roderick",
+          "id": "npc-roderick",
+          "sentiment": 0.2,
+          "reason": "useful but too ambitious, needs to be kept on a short leash"
+        },
+        {
+          "name": "Sister Elara",
+          "id": "npc-elara",
+          "sentiment": 0.7,
+          "reason": "grateful for her healing work"
+        },
+        {
+          "name": "Finn the Troublemaker",
+          "id": "npc-finn",
+          "sentiment": -0.3,
+          "reason": "worries about his reckless attitude"
+        },
+        {
+          "name": "Torvin the Smith",
+          "id": "npc-torvin",
+          "sentiment": 0.6,
+          "reason": "old friend, trusts his judgment"
+        }
+      ]
+    },
+    {
+      "npc": {
+        "gold": 12,
+        "backstory": "A massive, quiet man who lets his hammer do the talking. Torvin's weapons are sought after even by city folk. He harbors a secret \u2014 he once killed a man in self-defense and fled to Oakhollow.",
+        "archetype": "stoic",
+        "occupation": "blacksmith",
+        "alive": true,
+        "mood": "content",
+        "personality": "O:low, C:high, E:low, A:mid, N:low",
+        "current_activity": "working as blacksmith",
+        "name": "Torvin the Smith",
+        "id": "npc-torvin",
+        "age": 45,
+        "goals": [
+          "forge a masterwork blade",
+          "keep his past hidden",
+          "earn enough to retire"
+        ]
+      },
+      "location_id": "loc-smithy",
+      "relationships": [
+        {
+          "name": "Captain Roderick",
+          "id": "npc-roderick",
+          "sentiment": 0.3,
+          "reason": "good customer, orders weapons regularly"
+        },
+        {
+          "name": "Vasek the Carpenter",
+          "id": "npc-vasek",
+          "sentiment": 0.6,
+          "reason": "working together on a secret project, trusts the man's skill"
+        },
+        {
+          "name": "Lira the Merchant",
+          "id": "npc-lira",
+          "sentiment": 0.4,
+          "reason": "she brings him ore from traders"
+        },
+        {
+          "name": "Elder Marta",
+          "id": "npc-marta",
+          "sentiment": 0.5,
+          "reason": "respects her leadership"
+        }
+      ]
+    },
+    {
+      "npc": {
+        "backstory": "A sharp-tongued trader from the capital who settled in Oakhollow to escape debts. She knows everyone's business and trades in information as much as goods.",
+        "archetype": "merchant_soul",
+        "occupation": "merchant",
+        "alive": true,
+        "mood": "content",
+        "personality": "O:high, C:mid, E:high, A:low, N:mid",
+        "current_activity": "sneaking",
+        "name": "Lira the Merchant",
+        "id": "npc-lira",
+        "age": 34,
+        "goals": [
+          "expand her trade network",
+          "pay off old debts",
+          "become the richest person in the village"
+        ]
+      },
+      "location_id": "loc-market",
+      "relationships": [
+        {
+          "name": "Oleg the Miller",
+          "id": "npc-oleg",
+          "sentiment": 0.5,
+          "reason": "price-fixing partner on flour and grain"
+        },
+        {
+          "name": "Victor the Moneylender",
+          "id": "npc-victor",
+          "sentiment": -0.2,
+          "reason": "recent interaction"
+        },
+        {
+          "name": "Darya the Herbalist",
+          "id": "npc-darya",
+          "sentiment": 0.5,
+          "reason": "darya supplies her with rare forest herbs"
+        },
+        {
+          "name": "Bran the Farmhand",
+          "id": "npc-bran",
+          "sentiment": -0.2,
+          "reason": "he tried to steal from her stall"
+        },
+        {
+          "name": "Torvin the Smith",
+          "id": "npc-torvin",
+          "sentiment": 0.3,
+          "reason": "profitable business relationship"
+        }
+      ]
+    },
+    {
+      "npc": {
+        "backstory": "A young man working on Millfield Farm, dreaming of adventure beyond the village. He's impulsive and often gets into trouble, but his heart is in the right place.",
+        "archetype": "brawler",
+        "occupation": "farmhand",
+        "alive": true,
+        "mood": "excited",
+        "personality": "O:mid, C:low, E:high, A:mid, N:high",
+        "current_activity": "patrolling",
+        "name": "Bran the Farmhand",
+        "id": "npc-bran",
+        "age": 19,
+        "goals": [
+          "leave the village someday",
+          "prove himself as a warrior",
+          "impress Anya"
+        ]
+      },
+      "location_id": "loc-farm",
+      "relationships": [
+        {
+          "name": "Yara the Stablehand",
+          "id": "npc-yara",
+          "sentiment": 0.3,
+          "reason": "friendly coworker on the farm"
+        },
+        {
+          "name": "Petra the Farmer",
+          "id": "npc-petra",
+          "sentiment": 0.5,
+          "reason": "recent interaction"
+        },
+        {
+          "name": "Goran the Hunter",
+          "id": "npc-goran",
+          "sentiment": 0.6,
+          "reason": "looks up to him as a fighter"
+        },
+        {
+          "name": "Lira the Merchant",
+          "id": "npc-lira",
+          "sentiment": -0.4,
+          "reason": "she caught him stealing and humiliated him"
+        },
+        {
+          "name": "Anya the Baker",
+          "id": "npc-anya",
+          "sentiment": 0.8,
+          "reason": "secretly in love with her"
+        }
+      ]
+    },
+    {
+      "npc": {
+        "backstory": "Anya runs the village bakery with her mother. She's kind, practical, and keeps the village fed. She knows Bran has feelings for her but isn't sure how she feels about him.",
+        "archetype": "caretaker",
+        "occupation": "baker",
+        "alive": true,
+        "personality": "O:mid, C:high, E:mid, A:high, N:mid",
+        "mood": "angry",
+        "current_activity": "helping villagers arguing over sickness",
+        "name": "Anya the Baker",
+        "id": "npc-anya",
+        "age": 21,
+        "goals": [
+          "keep the bakery running",
+          "learn her grandmother's secret recipes",
+          "find genuine love"
+        ]
+      },
+      "location_id": "loc-market",
+      "relationships": [
+        {
+          "name": "Magda the Cook",
+          "id": "npc-magda",
+          "sentiment": 0.7,
+          "reason": "fellow cook, they exchange recipes and gossip"
+        },
+        {
+          "name": "Elder Marta",
+          "id": "npc-marta",
+          "sentiment": 0.5,
+          "reason": "respects the elder"
+        },
+        {
+          "name": "Sister Elara",
+          "id": "npc-elara",
+          "sentiment": 0.6,
+          "reason": "close friends who share herbs and recipes"
+        },
+        {
+          "name": "Bran the Farmhand",
+          "id": "npc-bran",
+          "sentiment": 0.4,
+          "reason": "childhood friend, but unsure about romance"
+        }
+      ]
+    },
+    {
+      "npc": {
+        "backstory": "The village healer and keeper of the Chapel of the Dawn. Elara is gentle but firm, with knowledge of herbs that borders on the mystical. Some whisper she has the Sight.",
+        "archetype": "sage",
+        "occupation": "healer",
+        "alive": true,
+        "personality": "O:high, C:mid, E:low, A:high, N:low",
+        "mood": "content",
+        "current_activity": "praying at the chapel",
+        "name": "Sister Elara",
+        "id": "npc-elara",
+        "age": 40,
+        "goals": [
+          "heal the sick",
+          "understand the dark energy from the forest",
+          "protect the village spiritually"
+        ]
+      },
+      "location_id": "loc-chapel",
+      "relationships": [
+        {
+          "name": "Ilse the Midwife",
+          "id": "npc-ilse",
+          "sentiment": 0.1,
+          "reason": "recent interaction"
+        },
+        {
+          "name": "Katya the Apothecary",
+          "id": "npc-katya",
+          "sentiment": -0.4,
+          "reason": "katya sells diluted remedies and undermines real healing"
+        },
+        {
+          "name": "Brother Aldric",
+          "id": "npc-brother-aldric",
+          "sentiment": -0.3,
+          "reason": "was threatened"
+        },
+        {
+          "name": "Darya the Herbalist",
+          "id": "npc-darya",
+          "sentiment": 0.3,
+          "reason": "shares interest in forest lore but distrusts her methods"
+        },
+        {
+          "name": "Anya the Baker",
+          "id": "npc-anya",
+          "sentiment": 0.5,
+          "reason": "teaches her about herbs"
+        },
+        {
+          "name": "Elder Marta",
+          "id": "npc-marta",
+          "sentiment": 0.6,
+          "reason": "mutual respect and cooperation"
+        }
+      ]
+    },
+    {
+      "npc": {
+        "backstory": "A grizzled hunter who has patrolled the Whispering Woods for decades. His scars tell stories he rarely shares. Recently, he's been finding strange tracks that don't match any known beast.",
+        "archetype": "sentinel",
+        "occupation": "hunter",
+        "mood": "fearful",
+        "alive": true,
+        "personality": "O:mid, C:mid, E:mid, A:low, N:mid",
+        "current_activity": "patrolling",
+        "name": "Goran the Hunter",
+        "id": "npc-goran",
+        "age": 52,
+        "goals": [
+          "discover what's killing the deer",
+          "train young hunters",
+          "keep the forest road safe"
+        ]
+      },
+      "location_id": "loc-forest",
+      "relationships": [
+        {
+          "name": "Captain Roderick",
+          "id": "npc-roderick",
+          "sentiment": -0.2,
+          "reason": "militia oversteps into forest territory"
+        },
+        {
+          "name": "Korin the Poacher",
+          "id": "npc-korin",
+          "sentiment": -0.9999999999999999,
+          "reason": "recent interaction"
+        },
+        {
+          "name": "Elder Marta",
+          "id": "npc-marta",
+          "sentiment": 0.4,
+          "reason": "respects her authority"
+        },
+        {
+          "name": "Bran the Farmhand",
+          "id": "npc-bran",
+          "sentiment": 0.3,
+          "reason": "sees potential in the boy"
+        },
+        {
+          "name": "Darya the Herbalist",
+          "id": "npc-darya",
+          "sentiment": 0.2,
+          "reason": "uneasy allies in the forest"
+        }
+      ]
+    },
+    {
+      "npc": {
+        "backstory": "A mysterious woman who lives at the forest edge. She gathers rare plants and sells potions. Villagers come to her when Elara's prayers don't work, though they whisper about witchcraft.",
+        "archetype": "hermit",
+        "occupation": "herbalist",
+        "alive": true,
+        "mood": "excited",
+        "personality": "O:high, C:low, E:low, A:low, N:mid",
+        "current_activity": "investigating strange sounds in the Whispering Woods",
+        "name": "Darya the Herbalist",
+        "id": "npc-darya",
+        "age": 36,
+        "goals": [
+          "discover the source of corruption in the woods",
+          "earn acceptance in the village",
+          "master ancient herb lore"
+        ]
+      },
+      "location_id": "loc-forest",
+      "relationships": [
+        {
+          "name": "Korin the Poacher",
+          "id": "npc-korin",
+          "sentiment": 0.2,
+          "reason": "he sometimes brings her rare plants from deep forest"
+        },
+        {
+          "name": "Katya the Apothecary",
+          "id": "npc-katya",
+          "sentiment": -0.6,
+          "reason": "katya steals her recipes and sells inferior copies"
+        },
+        {
+          "name": "Lira the Merchant",
+          "id": "npc-lira",
+          "sentiment": 0.4,
+          "reason": "good customer for rare ingredients"
+        },
+        {
+          "name": "Goran the Hunter",
+          "id": "npc-goran",
+          "sentiment": 0.3,
+          "reason": "they patrol the same woods"
+        },
+        {
+          "name": "Sister Elara",
+          "id": "npc-elara",
+          "sentiment": 0.1,
+          "reason": "professional rivalry but grudging respect"
+        }
+      ]
+    },
+    {
+      "npc": {
+        "backstory": "A charming rogue who arrived in Oakhollow a year ago. Nobody knows where he came from. He drinks, gambles, and somehow always avoids real consequences. Some suspect he's a spy.",
+        "archetype": "trickster",
+        "occupation": "drifter",
+        "alive": true,
+        "mood": "excited",
+        "personality": "O:high, C:low, E:high, A:low, N:high",
+        "current_activity": "gossiping about Thessa the Bard",
+        "name": "Finn the Troublemaker",
+        "id": "npc-finn",
+        "age": 28,
+        "goals": [
+          "find the treasure rumored to be hidden in the forest",
+          "avoid his past catching up",
+          "have a good time"
+        ]
+      },
+      "location_id": "loc-tavern",
+      "relationships": [
+        {
+          "name": "Rolf the Drunk",
+          "id": "npc-rolf",
+          "sentiment": 0.3,
+          "reason": "drinking companion, rolf tells great war stories when drunk"
+        },
+        {
+          "name": "Thessa the Bard",
+          "id": "npc-thessa",
+          "sentiment": 0.6,
+          "reason": "recent interaction"
+        },
+        {
+          "name": "Lira the Merchant",
+          "id": "npc-lira",
+          "sentiment": 0.1,
+          "reason": "they understand each other's shadiness"
+        },
+        {
+          "name": "Bran the Farmhand",
+          "id": "npc-bran",
+          "sentiment": 0.3,
+          "reason": "drinking buddy, teaches him card tricks"
+        },
+        {
+          "name": "Elder Marta",
+          "id": "npc-marta",
+          "sentiment": -0.2,
+          "reason": "she watches him too closely"
+        }
+      ]
+    },
+    {
+      "npc": {
+        "backstory": "The oldest person in Oakhollow. Old Tom sits in the tavern corner every day, nursing his ale and telling stories that may or may not be true. He claims to have once been a knight.",
+        "archetype": "coward",
+        "occupation": "retired",
+        "alive": true,
+        "personality": "O:low, C:low, E:low, A:mid, N:high",
+        "mood": "excited",
+        "current_activity": "talking with Rolf the Drunk",
+        "name": "Old Tom",
+        "id": "npc-old-tom",
+        "age": 78,
+        "goals": [
+          "be left in peace",
+          "tell his stories to anyone who'll listen",
+          "see one more spring"
+        ]
+      },
+      "location_id": "loc-tavern",
+      "relationships": [
+        {
+          "name": "Ivan the Gravedigger",
+          "id": "npc-ivan",
+          "sentiment": 0.3,
+          "reason": "ivan knows the history tom talks about, one of the few who believes him"
+        },
+        {
+          "name": "Rolf the Drunk",
+          "id": "npc-rolf",
+          "sentiment": 0.7,
+          "reason": "recent interaction"
+        },
+        {
+          "name": "Goran the Hunter",
+          "id": "npc-goran",
+          "sentiment": 0.4,
+          "reason": "old hunting companions"
+        },
+        {
+          "name": "Finn the Troublemaker",
+          "id": "npc-finn",
+          "sentiment": 0.4,
+          "reason": "recent interaction"
+        },
+        {
+          "name": "Elder Marta",
+          "id": "npc-marta",
+          "sentiment": 0.5,
+          "reason": "she was kind to him when others forgot"
+        }
+      ]
+    },
+    {
+      "npc": {
+        "gold": 2,
+        "backstory": "Hilde has woven cloth in Oakhollow for over thirty years. Her loom sits by a window overlooking the market, and she sees everything that passes below. She can identify any villager by the thread of their clothes from fifty paces.\n\nHer husband was a traveling merchant who never returned from a journey to the capital fifteen years ago. She never remarried, channeling her loneliness into an obsessive attention to the social fabric of the village. Every patron who sits for a fitting leaves with lighter pockets and lighter secrets.\n\nThe merchants guild values her because she produces the finest cloth between here and the capital. She values them because they bring her silk thread and news from afar.",
+        "archetype": "curator",
+        "occupation": "weaver",
+        "alive": true,
+        "mood": "excited",
+        "personality": "O:mid, C:high, E:high, A:mid, N:low",
+        "current_activity": "gossiping about Katya the Apothecary",
+        "name": "Hilde the Weaver",
+        "id": "npc-hilde",
+        "age": 55,
+        "goals": [
+          "collect every secret in the village",
+          "find out what happened to her husband",
+          "weave a tapestry that tells Oakhollow's true history"
+        ]
+      },
+      "location_id": "loc-market",
+      "relationships": [
+        {
+          "name": "Victor the Moneylender",
+          "id": "npc-victor",
+          "sentiment": -0.30000000000000004,
+          "reason": "recent interaction"
+        },
+        {
+          "name": "Thessa the Bard",
+          "id": "npc-thessa",
+          "sentiment": 0.3,
+          "reason": "the bard brings interesting stories from outside the village"
+        },
+        {
+          "name": "Zev the Beggar",
+          "id": "npc-zev",
+          "sentiment": 0.4,
+          "reason": "feeds him scraps of cloth in exchange for street-level gossip"
+        },
+        {
+          "name": "Magda the Cook",
+          "id": "npc-magda",
+          "sentiment": 0.7,
+          "reason": "best friends and gossip partners, they know more together than anyone"
+        },
+        {
+          "name": "Lira the Merchant",
+          "id": "npc-lira",
+          "sentiment": 0.5,
+          "reason": "business partner who brings fine thread from the capital"
+        }
+      ]
+    },
+    {
+      "npc": {
+        "backstory": "Roderick served in the king's army for twelve years before a wound to his knee ended his military career. He came to Oakhollow seeking a quiet posting and found a village with no real defenses. He built the militia from nothing, training farmers to hold spears and stand in formation.\n\nBut quiet was never what Roderick wanted. He chafes under Marta's cautious leadership, believing the village needs a stronger hand. He has heard rumors of bandit armies gathering in the north and wants to fortify Oakhollow before it is too late. Marta calls him an alarmist. He calls her naive.\n\nYara the stablehand adores him, but he is oblivious \u2014 his mind is on walls and watchtowers, not poetry and flowers.",
+        "archetype": "sentinel",
+        "occupation": "militia captain",
+        "alive": true,
+        "mood": "content",
+        "personality": "O:low, C:high, E:mid, A:low, N:mid",
+        "current_activity": "patrolling",
+        "name": "Captain Roderick",
+        "id": "npc-roderick",
+        "age": 42,
+        "goals": [
+          "fortify the village against the coming threat",
+          "gain more authority from the council",
+          "train a proper fighting force",
+          "prove Marta wrong about the northern threat"
+        ]
+      },
+      "location_id": "loc-barracks",
+      "relationships": [
+        {
+          "name": "Yara the Stablehand",
+          "id": "npc-yara",
+          "sentiment": 0.1,
+          "reason": "barely notices her, sees her as the girl who tends the horses"
+        },
+        {
+          "name": "Rolf the Drunk",
+          "id": "npc-rolf",
+          "sentiment": 0.3,
+          "reason": "respects the old soldier's experience, tries to get intel from him"
+        },
+        {
+          "name": "Goran the Hunter",
+          "id": "npc-goran",
+          "sentiment": -0.2,
+          "reason": "territorial disputes over patrol jurisdiction in the woods"
+        },
+        {
+          "name": "Torvin the Smith",
+          "id": "npc-torvin",
+          "sentiment": 0.5,
+          "reason": "reliable arms supplier and straight talker"
+        },
+        {
+          "name": "Elder Marta",
+          "id": "npc-marta",
+          "sentiment": -0.1,
+          "reason": "respects her wisdom but despises her caution, wants more authority"
+        }
+      ]
+    },
+    {
+      "npc": {
+        "backstory": "Senna's parents died of fever when she was nine. No family claimed her. She survived by begging, then stealing, then learning which shadows to hide in and which doors were left unlocked. The tavern keeper lets her sleep by the kitchen fire in exchange for washing dishes.\n\nShe knows every secret passage, loose floorboard, and hidden cellar in Oakhollow. The Whisperers recruited her two years ago \u2014 she doesn't know who leads them, but dead drops of coin appear when she delivers useful information. It is the closest thing to belonging she has ever known.\n\nDespite her hard exterior, she is fiercely loyal to anyone who shows her genuine kindness. Magda's cooking is the closest thing to a mother's love she remembers.",
+        "archetype": "survivalist",
+        "occupation": "street urchin",
+        "alive": true,
+        "mood": "content",
+        "personality": "O:high, C:low, E:mid, A:low, N:high",
+        "current_activity": "resting",
+        "name": "Senna the Orphan",
+        "id": "npc-senna",
+        "age": 15,
+        "goals": [
+          "survive another winter",
+          "find out who leads the Whisperers",
+          "save enough coin to leave Oakhollow",
+          "never be hungry again"
+        ]
+      },
+      "location_id": "loc-tavern",
+      "relationships": [
+        {
+          "name": "Thessa the Bard",
+          "id": "npc-thessa",
+          "sentiment": 0.4,
+          "reason": "thessa slips her coins and tells her stories about the wide world"
+        },
+        {
+          "name": "Victor the Moneylender",
+          "id": "npc-victor",
+          "sentiment": -0.6,
+          "reason": "he kicked her out of the market square last winter when she was begging"
+        },
+        {
+          "name": "Zev the Beggar",
+          "id": "npc-zev",
+          "sentiment": 0.5,
+          "reason": "fellow Whisperer contact, they share information"
+        },
+        {
+          "name": "Finn the Troublemaker",
+          "id": "npc-finn",
+          "sentiment": 0.30000000000000004,
+          "reason": "recent interaction"
+        },
+        {
+          "name": "Magda the Cook",
+          "id": "npc-magda",
+          "sentiment": 0.7,
+          "reason": "the only adult who feeds her without asking for something first"
+        }
+      ]
+    },
+    {
+      "npc": {
+        "backstory": "Brother Aldric arrived in Oakhollow eight years ago, sent by the High Temple to assist Sister Elara. In truth, he was sent to watch her \u2014 the Church has long suspected her healing gift is not entirely divine in origin. But the years of quiet village life have eroded his certainty.\n\nHe preaches fire and righteousness on Sundays, but in the small hours he kneels alone in the chapel and hears only silence. His faith is crumbling, and it terrifies him. He compensates with stricter sermons and harsher judgments, alienating the very flock he was sent to tend.\n\nHe resents Elara's easy grace with the villagers. They come to her with their ailments and leave smiling. They come to him with their sins and leave burdened. He cannot decide if she is a saint or a heretic.",
+        "archetype": "zealot",
+        "occupation": "priest",
+        "alive": true,
+        "mood": "angry",
+        "personality": "O:low, C:high, E:mid, A:mid, N:high",
+        "current_activity": "threatening Sister Elara",
+        "name": "Brother Aldric",
+        "id": "npc-brother-aldric",
+        "age": 50,
+        "goals": [
+          "determine if Elara's powers are divine or heretical",
+          "restore his own faith",
+          "gain more influence over the chapel"
+        ]
+      },
+      "location_id": "loc-chapel",
+      "relationships": [
+        {
+          "name": "Ivan the Gravedigger",
+          "id": "npc-ivan",
+          "sentiment": -0.1,
+          "reason": "the gravedigger's talk of hearing the dead unsettles him deeply"
+        },
+        {
+          "name": "Ilse the Midwife",
+          "id": "npc-ilse",
+          "sentiment": 0.4,
+          "reason": "she confides in him, one of the few who still seeks his counsel"
+        },
+        {
+          "name": "Elder Marta",
+          "id": "npc-marta",
+          "sentiment": 0.2,
+          "reason": "she at least respects the institution of the Church"
+        },
+        {
+          "name": "Sister Elara",
+          "id": "npc-elara",
+          "sentiment": -0.7,
+          "reason": "recent interaction"
+        }
+      ]
+    },
+    {
+      "npc": {
+        "backstory": "Magda has cooked at The Rusty Flagon for twenty-two years. She arrived as a young bride, and when her husband drank himself to death, she stayed because the kitchen was more home than any house. Her stew is legendary \u2014 people confess more to her over a bowl of lamb broth than they ever would to Brother Aldric.\n\nElder Marta recognized early that Magda hears everything and forgets nothing. A quiet arrangement formed: Magda keeps her ears open, and Marta keeps the tavern taxes low. It is not espionage \u2014 Magda genuinely cares about the village. She simply believes that Marta needs to know what people are really thinking.\n\nShe has taken Senna under her wing and worries about the girl's future. She also worries about Rolf, whose drinking has gotten worse since autumn.",
+        "archetype": "caretaker",
+        "occupation": "tavern cook",
+        "alive": true,
+        "personality": "O:mid, C:high, E:high, A:high, N:low",
+        "mood": "angry",
+        "current_activity": "helping Senna the Orphan",
+        "name": "Magda the Cook",
+        "id": "npc-magda",
+        "age": 48,
+        "goals": [
+          "keep the tavern running and everyone fed",
+          "protect Senna from the streets",
+          "make sure Marta knows what's brewing in the village"
+        ]
+      },
+      "location_id": "loc-tavern",
+      "relationships": [
+        {
+          "name": "Hilde the Weaver",
+          "id": "npc-hilde",
+          "sentiment": 0.7,
+          "reason": "closest friend, they share all the village gossip over tea"
+        },
+        {
+          "name": "Anya the Baker",
+          "id": "npc-anya",
+          "sentiment": 0.6,
+          "reason": "fellow cook, they share recipes and laughter"
+        },
+        {
+          "name": "Rolf the Drunk",
+          "id": "npc-rolf",
+          "sentiment": 0.3,
+          "reason": "worries about his drinking but enjoys his company when sober"
+        },
+        {
+          "name": "Senna the Orphan",
+          "id": "npc-senna",
+          "sentiment": 0.8,
+          "reason": "treats her like the daughter she never had"
+        },
+        {
+          "name": "Elder Marta",
+          "id": "npc-marta",
+          "sentiment": 0.7,
+          "reason": "loyal informant and genuine friend"
+        }
+      ]
+    },
+    {
+      "npc": {
+        "gold": 6,
+        "backstory": "Vasek builds and repairs everything wooden in Oakhollow \u2014 from roof beams to coffins, fence posts to furniture. He is a man of few words and precise measurements. His workshop behind the smithy smells of pine shavings and linseed oil.\n\nTorvin approached him six months ago with a strange commission: build something from plans that Torvin refuses to explain. The blueprints show a mechanism Vasek has never seen before \u2014 not a weapon, not a tool, something else entirely. The work fascinates him, but the secrecy troubles his honest nature.\n\nHe lost his wife three years ago to the same fever that orphaned Senna. He has not spoken about it since the funeral.",
+        "archetype": "stoic",
+        "occupation": "carpenter",
+        "alive": true,
+        "mood": "angry",
+        "personality": "O:mid, C:high, E:low, A:mid, N:low",
+        "current_activity": "helping villagers",
+        "name": "Vasek the Carpenter",
+        "id": "npc-vasek",
+        "age": 38,
+        "goals": [
+          "complete the secret project with Torvin",
+          "understand what they are building",
+          "repair the chapel roof before winter"
+        ]
+      },
+      "location_id": "loc-smithy",
+      "relationships": [
+        {
+          "name": "Senna the Orphan",
+          "id": "npc-senna",
+          "sentiment": 0.2,
+          "reason": "reminds him of what his own daughter might have been"
+        },
+        {
+          "name": "Ivan the Gravedigger",
+          "id": "npc-ivan",
+          "sentiment": 0.3,
+          "reason": "vasek builds the coffins, ivan digs the graves \u2014 grim bond"
+        },
+        {
+          "name": "Captain Roderick",
+          "id": "npc-roderick",
+          "sentiment": 0.4,
+          "reason": "building barracks improvements and weapon racks"
+        },
+        {
+          "name": "Torvin the Smith",
+          "id": "npc-torvin",
+          "sentiment": 0.6,
+          "reason": "working on a secret project together, mutual respect between craftsmen"
+        }
+      ]
+    },
+    {
+      "npc": {
+        "gold": 4,
+        "backstory": "Petra's husband died two harvests ago when a tree fell on him during a storm. She inherited the farm, the debts, and three children under ten. She works from before dawn to after dark, and it is still not enough. Victor the moneylender holds the note on her land, and the interest grows faster than her crops.\n\nShe refuses help out of pride, snaps at kindness out of exhaustion, and cries alone at night when the children are asleep. Bran works her fields as a farmhand, and she pays him what she can, which is never enough. Nadia the beekeeper is her only real friend \u2014 they share the burden of farming alone.\n\nThe village council could help her, but she would rather lose the farm than beg.",
+        "archetype": "martyr",
+        "occupation": "farmer",
+        "alive": true,
+        "mood": "angry",
+        "personality": "O:low, C:high, E:mid, A:high, N:high",
+        "current_activity": "patrolling",
+        "name": "Petra the Farmer",
+        "id": "npc-petra",
+        "age": 44,
+        "goals": [
+          "pay off the debt to Victor",
+          "keep the farm for her children",
+          "survive until the next harvest"
+        ]
+      },
+      "location_id": "loc-farm",
+      "relationships": [
+        {
+          "name": "Oleg the Miller",
+          "id": "npc-oleg",
+          "sentiment": -0.3,
+          "reason": "the miller charges too much to grind her grain"
+        },
+        {
+          "name": "Elder Marta",
+          "id": "npc-marta",
+          "sentiment": 0.1,
+          "reason": "the elder could help but doesn't push the council hard enough"
+        },
+        {
+          "name": "Nadia the Beekeeper",
+          "id": "npc-nadia",
+          "sentiment": 0.6,
+          "reason": "only real friend, they help each other with farm work"
+        },
+        {
+          "name": "Bran the Farmhand",
+          "id": "npc-bran",
+          "sentiment": 0.6,
+          "reason": "recent interaction"
+        },
+        {
+          "name": "Victor the Moneylender",
+          "id": "npc-victor",
+          "sentiment": -0.7,
+          "reason": "he holds her debt and she sees him as a vulture circling her farm"
+        }
+      ]
+    },
+    {
+      "npc": {
+        "backstory": "Rolf was once Sergeant Rolf of the king's Third Border Company. He fought in two campaigns and led men through a siege that lasted forty days. He was decorated for bravery. Then the nightmares started.\n\nHe drinks to forget the faces of men he killed and men he failed to save. He came to Oakhollow because it was the farthest place from a battlefield he could find. But lately, he has been hearing troubling rumors from passing traders \u2014 an army is massing in the northern provinces, and it is not the king's.\n\nHe knows military secrets that could save the village, but sharing them means confronting the past he drowned in ale. Roderick suspects Rolf knows more than he lets on and keeps buying him drinks, hoping to loosen his tongue.",
+        "archetype": "hedonist",
+        "occupation": "former soldier",
+        "alive": true,
+        "personality": "O:mid, C:low, E:high, A:mid, N:high",
+        "mood": "excited",
+        "current_activity": "gossiping about Thessa the Bard",
+        "name": "Rolf the Drunk",
+        "id": "npc-rolf",
+        "age": 56,
+        "goals": [
+          "drink enough to forget",
+          "decide whether to warn the village about the northern army",
+          "make peace with his past"
+        ]
+      },
+      "location_id": "loc-tavern",
+      "relationships": [
+        {
+          "name": "Thessa the Bard",
+          "id": "npc-thessa",
+          "sentiment": 0.1,
+          "reason": "her songs sometimes make him weep, he's not sure if he hates or loves that"
+        },
+        {
+          "name": "Finn the Troublemaker",
+          "id": "npc-finn",
+          "sentiment": 0.3,
+          "reason": "good drinking companion, no judgment"
+        },
+        {
+          "name": "Magda the Cook",
+          "id": "npc-magda",
+          "sentiment": 0.4,
+          "reason": "she feeds him when he forgets to eat, nags him about the drinking"
+        },
+        {
+          "name": "Old Tom",
+          "id": "npc-old-tom",
+          "sentiment": 0.6,
+          "reason": "recent interaction"
+        },
+        {
+          "name": "Captain Roderick",
+          "id": "npc-roderick",
+          "sentiment": 0.2,
+          "reason": "fellow soldier, but roderick's eagerness for war disgusts him"
+        }
+      ]
+    },
+    {
+      "npc": {
+        "backstory": "Ilse has delivered every baby born in Oakhollow for the past eighteen years. She knows which couples are happy, which are struggling, and which are keeping secrets. She knows who the fathers really are when the mothers lie.\n\nThis knowledge is a burden she never asked for. She keeps every confidence sacred, but the weight of secrets \u2014 affairs, unwanted pregnancies, family lies passed down generations \u2014 has made her quiet and cautious. She works alongside Elara in the chapel's herb garden and assists Brother Aldric with pastoral care.\n\nShe is the only person in the village who knows that Nadia's unborn child is not from any man in Oakhollow. She will take that secret to her grave if she must.",
+        "archetype": "empath",
+        "occupation": "midwife",
+        "alive": true,
+        "mood": "excited",
+        "personality": "O:mid, C:mid, E:mid, A:high, N:mid",
+        "current_activity": "helping Sister Elara",
+        "name": "Ilse the Midwife",
+        "id": "npc-ilse",
+        "age": 41,
+        "goals": [
+          "keep the village's family secrets safe",
+          "help Elara with the chapel healing work",
+          "find someone she can confide in without betraying trust"
+        ]
+      },
+      "location_id": "loc-chapel",
+      "relationships": [
+        {
+          "name": "Hilde the Weaver",
+          "id": "npc-hilde",
+          "sentiment": -0.1,
+          "reason": "the weaver pries too much, ilse has to be careful around her"
+        },
+        {
+          "name": "Nadia the Beekeeper",
+          "id": "npc-nadia",
+          "sentiment": 0.4,
+          "reason": "carrying a heavy secret for her, feels protective"
+        },
+        {
+          "name": "Petra the Farmer",
+          "id": "npc-petra",
+          "sentiment": 0.5,
+          "reason": "delivered all three of her children, knows her pain intimately"
+        },
+        {
+          "name": "Brother Aldric",
+          "id": "npc-brother-aldric",
+          "sentiment": 0.3,
+          "reason": "she confides general worries in him, never specifics"
+        },
+        {
+          "name": "Sister Elara",
+          "id": "npc-elara",
+          "sentiment": 0.7,
+          "reason": "recent interaction"
+        }
+      ]
+    },
+    {
+      "npc": {
+        "backstory": "Korin grew up on the wrong side of the forest, son of a charcoal burner who died when a tree fell on his kiln. He has hunted since he could draw a bow, and he sees no difference between a deer killed by a warden and one killed by him \u2014 except that the wardens get paid and he gets prison.\n\nHe poaches the king's deer and sells the meat to anyone who can pay, including some of the merchants who publicly condemn poaching. The Forest Wardens know he operates in the deep woods but have never caught him. Goran has made it personal.\n\nKorin isn't evil \u2014 he feeds families who can't afford market prices. But he is reckless, and his contempt for authority runs deep. He has started working with the Whisperers, trading forest intelligence for protection.",
+        "archetype": "rebel",
+        "occupation": "poacher",
+        "alive": true,
+        "mood": "fearful",
+        "personality": "O:mid, C:low, E:mid, A:low, N:mid",
+        "current_activity": "sneaking",
+        "name": "Korin the Poacher",
+        "id": "npc-korin",
+        "age": 33,
+        "goals": [
+          "avoid getting caught by Goran",
+          "make enough to leave for the capital",
+          "bring down the wardens' monopoly on forest resources"
+        ]
+      },
+      "location_id": "loc-forest",
+      "relationships": [
+        {
+          "name": "Thessa the Bard",
+          "id": "npc-thessa",
+          "sentiment": -0.2,
+          "reason": "suspects she asks too many questions about forest routes"
+        },
+        {
+          "name": "Nadia the Beekeeper",
+          "id": "npc-nadia",
+          "sentiment": 0.3,
+          "reason": "she doesn't judge him and buys his game at fair prices"
+        },
+        {
+          "name": "Petra the Farmer",
+          "id": "npc-petra",
+          "sentiment": 0.4,
+          "reason": "sells her cheap venison because he feels sorry for her children"
+        },
+        {
+          "name": "Darya the Herbalist",
+          "id": "npc-darya",
+          "sentiment": 0.3,
+          "reason": "trades rare forest plants for her silence about his camps"
+        },
+        {
+          "name": "Goran the Hunter",
+          "id": "npc-goran",
+          "sentiment": -1.0,
+          "reason": "threatened by Goran the Hunter"
+        }
+      ]
+    },
+    {
+      "npc": {
+        "backstory": "Thessa arrived in Oakhollow six months ago, claiming to be a wandering bard collecting folk songs. She plays the lute beautifully, sings ballads that make grown men cry, and has a wit sharp enough to cut glass. The Rusty Flagon has never been more popular.\n\nIn truth, Thessa is an agent of the Crown's Intelligence Service, sent to investigate rumors of a secret organization operating in the rural villages. She reports to a handler she meets at a dead drop in the forest every two weeks. She has identified the Whisperers but has not yet found their leader.\n\nShe genuinely enjoys village life and sometimes forgets she is here to spy. The line between her cover identity and her real self is blurring, and that worries her.",
+        "archetype": "jester",
+        "occupation": "bard",
+        "mood": "excited",
+        "alive": true,
+        "personality": "O:high, C:mid, E:high, A:mid, N:low",
+        "current_activity": "gossiping about Rolf the Drunk",
+        "name": "Thessa the Bard",
+        "id": "npc-thessa",
+        "age": 26,
+        "goals": [
+          "identify the leader of the Whisperers",
+          "maintain her cover as a traveling bard",
+          "report back to her handler in the capital",
+          "decide where her true loyalty lies"
+        ]
+      },
+      "location_id": "loc-tavern",
+      "relationships": [
+        {
+          "name": "Korin the Poacher",
+          "id": "npc-korin",
+          "sentiment": 0.1,
+          "reason": "he might know forest routes useful for her dead drops"
+        },
+        {
+          "name": "Hilde the Weaver",
+          "id": "npc-hilde",
+          "sentiment": 0.2,
+          "reason": "the weaver is a useful gossip source but dangerously observant"
+        },
+        {
+          "name": "Rolf the Drunk",
+          "id": "npc-rolf",
+          "sentiment": 0.4,
+          "reason": "his reactions to her war ballads suggest he knows things about the northern army"
+        },
+        {
+          "name": "Senna the Orphan",
+          "id": "npc-senna",
+          "sentiment": 0.5,
+          "reason": "genuine affection for the girl, slips her coins and stories"
+        },
+        {
+          "name": "Finn the Troublemaker",
+          "id": "npc-finn",
+          "sentiment": 0.5,
+          "reason": "recent interaction"
+        }
+      ]
+    },
+    {
+      "npc": {
+        "backstory": "Victor came to Oakhollow twenty years ago with a small chest of gold and a large appetite for control. He lends money at rates that seem fair until the compounding interest begins. Over two decades, he has acquired liens on a third of the village's property.\n\nHe operates within the law \u2014 always. His contracts are meticulous, his terms technically transparent, and his patience infinite. He never threatens. He simply waits, and the debt grows, and eventually people come to him with desperate eyes and he takes what they offer.\n\nThe merchants guild tolerates him because he provides capital. The village council cannot act against him because he has broken no law. Petra's farm is his current prize, but he has his eyes on the mill next.\n\nOnly two people in the village have never borrowed from him: Elder Marta and Torvin the Smith. This bothers him more than he would admit.",
+        "archetype": "predator",
+        "occupation": "moneylender",
+        "alive": true,
+        "mood": "angry",
+        "personality": "O:mid, C:high, E:mid, A:low, N:low",
+        "current_activity": "gossiping about Lira the Merchant",
+        "name": "Victor the Moneylender",
+        "id": "npc-victor",
+        "age": 60,
+        "goals": [
+          "acquire Petra's farm through her debt",
+          "gain a seat on the village council",
+          "control the village's economy",
+          "never let anyone have power over him"
+        ]
+      },
+      "location_id": "loc-market",
+      "relationships": [
+        {
+          "name": "Hilde the Weaver",
+          "id": "npc-hilde",
+          "sentiment": -0.1,
+          "reason": "recent interaction"
+        },
+        {
+          "name": "Nadia the Beekeeper",
+          "id": "npc-nadia",
+          "sentiment": -0.4,
+          "reason": "her cooperative idea threatens his business model"
+        },
+        {
+          "name": "Elder Marta",
+          "id": "npc-marta",
+          "sentiment": -0.3,
+          "reason": "she blocks his council ambitions and cannot be bought"
+        },
+        {
+          "name": "Oleg the Miller",
+          "id": "npc-oleg",
+          "sentiment": 0.4,
+          "reason": "fellow profiteer, they coordinate pricing strategies"
+        },
+        {
+          "name": "Lira the Merchant",
+          "id": "npc-lira",
+          "sentiment": 0.2,
+          "reason": "useful business partner but she is getting too independent"
+        },
+        {
+          "name": "Petra the Farmer",
+          "id": "npc-petra",
+          "sentiment": 0.0,
+          "reason": "she is a debtor, nothing personal \u2014 just business"
+        }
+      ]
+    },
+    {
+      "npc": {
+        "backstory": "Yara tends the horses and mules at Millfield Farm \u2014 the draft animals that pull plows and carry goods to market. She is quiet, observant, and writes poetry in a leather journal she hides under her mattress.\n\nShe fell in love with Captain Roderick the first time she saw him riding through the village gate on his warhorse, dust-covered and stern-jawed. She has written twenty-three poems about him. He has never once looked at her as anything other than the girl who brushes his horse.\n\nShe confides in Bran, who understands unrequited love, and in Nadia, who tells her to focus on herself instead of a man who doesn't notice her. But the heart wants what it wants, and Yara's heart wants a soldier who only loves his duty.",
+        "archetype": "romantic",
+        "occupation": "stablehand",
+        "alive": true,
+        "mood": "excited",
+        "personality": "O:high, C:mid, E:mid, A:high, N:high",
+        "current_activity": "talking with Nadia the Beekeeper",
+        "name": "Yara the Stablehand",
+        "id": "npc-yara",
+        "age": 20,
+        "goals": [
+          "make Captain Roderick notice her",
+          "become a published poet someday",
+          "learn to ride properly, not just tend horses"
+        ]
+      },
+      "location_id": "loc-farm",
+      "relationships": [
+        {
+          "name": "Petra the Farmer",
+          "id": "npc-petra",
+          "sentiment": 0.4,
+          "reason": "helps with the horses out of kindness, feels for her situation"
+        },
+        {
+          "name": "Nadia the Beekeeper",
+          "id": "npc-nadia",
+          "sentiment": 0.6,
+          "reason": "close friend who gives her honest advice"
+        },
+        {
+          "name": "Bran the Farmhand",
+          "id": "npc-bran",
+          "sentiment": 0.5,
+          "reason": "fellow farm worker, they commiserate about unrequited feelings"
+        },
+        {
+          "name": "Captain Roderick",
+          "id": "npc-roderick",
+          "sentiment": 0.9,
+          "reason": "desperately in love with him, he doesn't notice"
+        }
+      ]
+    },
+    {
+      "npc": {
+        "backstory": "Zev sits on the same stone bench in the village square every day, wrapped in a patchwork cloak, tin cup in hand. Most people walk past without seeing him. This is exactly how he likes it.\n\nBefore Oakhollow, Zev was a clerk in a noble house who was dismissed for knowing too much about his master's finances. He wandered until his money ran out, then discovered that invisibility has its own currency. People talk freely in front of beggars. Lovers quarrel. Merchants whisper deals. Soldiers boast.\n\nHe is the Whisperers' most valuable asset \u2014 the one who sits at the center of the village and watches everything. He reports to dead drops and receives coin in return. He does not know who leads the network, and he prefers it that way.\n\nHe is smarter than anyone in the village suspects. He can read, write, and do arithmetic better than most merchants.",
+        "archetype": "gossip",
+        "occupation": "beggar",
+        "alive": true,
+        "personality": "O:high, C:low, E:mid, A:mid, N:mid",
+        "mood": "excited",
+        "current_activity": "gossiping about Elder Marta",
+        "name": "Zev the Beggar",
+        "id": "npc-zev",
+        "age": 65,
+        "goals": [
+          "maintain his invisible status",
+          "collect enough information to be indispensable",
+          "stay warm through winter",
+          "find out if Thessa is a threat"
+        ]
+      },
+      "location_id": "loc-square",
+      "relationships": [
+        {
+          "name": "Victor the Moneylender",
+          "id": "npc-victor",
+          "sentiment": -0.4,
+          "reason": "victor tried to have him removed from the square, treats him as vermin"
+        },
+        {
+          "name": "Thessa the Bard",
+          "id": "npc-thessa",
+          "sentiment": -0.2,
+          "reason": "the bard asks too many questions and watches too carefully \u2014 possible spy"
+        },
+        {
+          "name": "Elder Marta",
+          "id": "npc-marta",
+          "sentiment": 0.30000000000000004,
+          "reason": "recent interaction"
+        },
+        {
+          "name": "Hilde the Weaver",
+          "id": "npc-hilde",
+          "sentiment": 0.4,
+          "reason": "they trade gossip, she gives him cloth scraps for warmth"
+        },
+        {
+          "name": "Senna the Orphan",
+          "id": "npc-senna",
+          "sentiment": 0.5,
+          "reason": "fellow Whisperer contact, he mentors her in observation"
+        }
+      ]
+    },
+    {
+      "npc": {
+        "backstory": "Katya opened her apothecary stall in the market two years ago, undercutting Darya's prices by half. Her secret: she dilutes everything. Her healing salves are mostly goose fat, her fever tinctures are colored water with a drop of real medicine, and her love potions are cheap wine with lavender.\n\nShe learned the basics of herbalism from a traveling charlatan and supplemented with stolen glances at Darya's recipes. She is charming, persuasive, and utterly without scruples about the quality of her products. No one has died from her remedies \u2014 they simply don't work very well.\n\nShe sees Elara and Darya as gatekeepers hoarding knowledge that should be democratized \u2014 or rather, monetized. She wants to build a chain of apothecary stalls in every village on the trade road.",
+        "archetype": "schemer",
+        "occupation": "apothecary",
+        "alive": true,
+        "mood": "excited",
+        "personality": "O:high, C:mid, E:high, A:low, N:mid",
+        "current_activity": "gossiping about Lira the Merchant",
+        "name": "Katya the Apothecary",
+        "id": "npc-katya",
+        "age": 32,
+        "goals": [
+          "drive Darya out of the market",
+          "expand her business to other villages",
+          "learn real herbalism to improve her products",
+          "avoid getting caught selling fake remedies"
+        ]
+      },
+      "location_id": "loc-market",
+      "relationships": [
+        {
+          "name": "Hilde the Weaver",
+          "id": "npc-hilde",
+          "sentiment": 0.1,
+          "reason": "buys cloth for packaging, the weaver is a useful social connection"
+        },
+        {
+          "name": "Victor the Moneylender",
+          "id": "npc-victor",
+          "sentiment": 0.2,
+          "reason": "borrowed startup capital from him, owes him but manages the payments"
+        },
+        {
+          "name": "Lira the Merchant",
+          "id": "npc-lira",
+          "sentiment": 0.4,
+          "reason": "recent interaction"
+        },
+        {
+          "name": "Sister Elara",
+          "id": "npc-elara",
+          "sentiment": -0.3,
+          "reason": "the healer publicly warned people about diluted remedies"
+        },
+        {
+          "name": "Darya the Herbalist",
+          "id": "npc-darya",
+          "sentiment": -0.5,
+          "reason": "rival whose recipes she steals and whose reputation she undermines"
+        }
+      ]
+    },
+    {
+      "npc": {
+        "backstory": "Oleg controls the only mill in Oakhollow. Every grain of wheat that becomes flour passes through his stones, and he takes his cut \u2014 a generous one. He inherited the mill from his father and considers it his birthright to profit from every loaf of bread the village eats.\n\nHe coordinates with Lira on grain prices: she controls what comes in from the trade routes, he controls what gets processed locally. Together, they have quietly raised the price of flour by a third over two years. Most villagers blame bad harvests.\n\nHe is not cruel, exactly \u2014 he simply sees the world in ledgers and margins. Petra's struggles are a line item. Nadia's cooperative idea is a threat to his monopoly. Victor's loans are a useful tool. His wife left him five years ago, tired of living with a man who counted coins in his sleep.",
+        "archetype": "merchant_soul",
+        "occupation": "miller",
+        "alive": true,
+        "mood": "content",
+        "personality": "O:low, C:high, E:mid, A:low, N:low",
+        "name": "Oleg the Miller",
+        "id": "npc-oleg",
+        "age": 47,
+        "goals": [
+          "maintain his monopoly on flour production",
+          "block Nadia's cooperative idea",
+          "acquire more farmland through Victor's lending",
+          "secure his position in the merchants guild"
+        ]
+      },
+      "location_id": "loc-mill",
+      "relationships": [
+        {
+          "name": "Bran the Farmhand",
+          "id": "npc-bran",
+          "sentiment": 0.0,
+          "reason": "the farmhand delivers grain, nothing more"
+        },
+        {
+          "name": "Nadia the Beekeeper",
+          "id": "npc-nadia",
+          "sentiment": -0.5,
+          "reason": "her cooperative would undermine everything he has built"
+        },
+        {
+          "name": "Petra the Farmer",
+          "id": "npc-petra",
+          "sentiment": -0.1,
+          "reason": "she can barely afford his milling fees, but business is business"
+        },
+        {
+          "name": "Victor the Moneylender",
+          "id": "npc-victor",
+          "sentiment": 0.4,
+          "reason": "fellow profiteer, victor's loans help drive farmers to sell grain cheap"
+        },
+        {
+          "name": "Lira the Merchant",
+          "id": "npc-lira",
+          "sentiment": 0.5,
+          "reason": "price-fixing partner, they coordinate grain and flour prices"
+        }
+      ]
+    },
+    {
+      "npc": {
+        "backstory": "Ivan has dug graves behind the Chapel of the Dawn for forty years. He started as a young man with strong arms and no better prospects, and somewhere along the way, the dead became better company than the living.\n\nHe claims to hear the dead whispering to him from their graves. Brother Aldric calls this heresy. Sister Elara calls it grief. Ivan calls it Tuesday. Whether his gift is real or the product of decades of solitude is a matter of debate, but his knowledge of the village's history is undeniable \u2014 he has buried three generations and remembers every name on every stone.\n\nHe knows things that should have been forgotten. He knows where the old lord's treasure was buried. He knows which family lines are not what they claim. He knows the real reason the forest is corrupted, because the dead told him, and no one alive wants to hear it.",
+        "archetype": "hermit",
+        "occupation": "gravedigger",
+        "alive": true,
+        "mood": "melancholic",
+        "personality": "O:high, C:mid, E:low, A:mid, N:mid",
+        "name": "Ivan the Gravedigger",
+        "id": "npc-ivan",
+        "age": 62,
+        "goals": [
+          "tend the graves properly",
+          "find someone willing to listen to what the dead say",
+          "record the village's true history before he joins the buried"
+        ]
+      },
+      "location_id": "loc-chapel",
+      "relationships": [
+        {
+          "name": "Vasek the Carpenter",
+          "id": "npc-vasek",
+          "sentiment": 0.3,
+          "reason": "the carpenter builds the coffins, they share a grim professional bond"
+        },
+        {
+          "name": "Old Tom",
+          "id": "npc-old-tom",
+          "sentiment": 0.5,
+          "reason": "tom remembers the same history, they validate each other's memories"
+        },
+        {
+          "name": "Brother Aldric",
+          "id": "npc-brother-aldric",
+          "sentiment": -0.3,
+          "reason": "the priest calls his gift heresy and wants him to stop talking to parishioners"
+        },
+        {
+          "name": "Sister Elara",
+          "id": "npc-elara",
+          "sentiment": 0.4,
+          "reason": "she listens to him without judgment, even if she doesn't believe"
+        }
+      ]
+    },
+    {
+      "npc": {
+        "backstory": "Nadia keeps twelve hives on the edge of Millfield Farm, producing honey that she sells at the market. She is young, fierce, and angry about the way Victor and Oleg squeeze the village's farmers and workers.\n\nShe has been organizing quietly \u2014 talking to Petra, to Bran, to other farmhands \u2014 about forming a workers' cooperative that would buy grain directly and mill it communally, cutting out Oleg's monopoly. Victor sees her as a threat to the entire economic order he has built. Oleg wants her gone.\n\nShe is pregnant, a fact she has shared only with Ilse the midwife. The father is a traveling merchant who passed through two months ago and will not return. She is not ashamed, but she knows the village will talk. She plans to raise the child alone, like Petra, but with a community behind her instead of debt.\n\nHer bees are her metaphor: small things working together can build something sweet.",
+        "archetype": "idealist",
+        "occupation": "beekeeper",
+        "alive": true,
+        "mood": "excited",
+        "personality": "O:high, C:mid, E:high, A:high, N:mid",
+        "name": "Nadia the Beekeeper",
+        "id": "npc-nadia",
+        "age": 29,
+        "goals": [
+          "establish a workers' cooperative",
+          "break Victor and Oleg's economic stranglehold",
+          "raise her child in a fairer village",
+          "convince the council to regulate moneylending"
+        ]
+      },
+      "location_id": "loc-farm",
+      "relationships": [
+        {
+          "name": "Ilse the Midwife",
+          "id": "npc-ilse",
+          "sentiment": 0.6,
+          "reason": "the midwife carries her secret and she trusts her completely"
+        },
+        {
+          "name": "Yara the Stablehand",
+          "id": "npc-yara",
+          "sentiment": 0.5,
+          "reason": "gives her honest advice about life and love, sisterly bond"
+        },
+        {
+          "name": "Oleg the Miller",
+          "id": "npc-oleg",
+          "sentiment": -0.6,
+          "reason": "his flour monopoly is what she wants to break first"
+        },
+        {
+          "name": "Victor the Moneylender",
+          "id": "npc-victor",
+          "sentiment": -0.8,
+          "reason": "he represents everything wrong with the village's economy"
+        },
+        {
+          "name": "Petra the Farmer",
+          "id": "npc-petra",
+          "sentiment": 0.7,
+          "reason": "closest ally, they share the burden of farming alone"
+        }
+      ]
+    }
+  ],
+  "scenarios": [
+    {
+      "tension_level": "climax",
+      "current_phase_index": 3,
+      "involved_npc_ids": [
+        "Brother Aldric",
+        "Katya the Apothecary",
+        "Sister Elara"
+      ],
+      "start_day": 1,
+      "description": "A mysterious illness starts affecting villagers, causing fear and blame to spread faster than the disease itself.",
+      "active": true,
+      "id": "sc-1e038e1e",
+      "title": "The Spreading Sickness",
+      "scenario_type": "main",
+      "phases": [
+        {
+          "phase_id": "phase-0",
+          "name": "The Inciting Incident",
+          "description": "The first signs of a mysterious illness appear among the villagers, causing concern and confusion.",
+          "trigger_day": 1,
+          "events_to_inject": [
+            {
+              "description": "Villager Petra the Farmer falls ill, showing symptoms of an unknown disease.",
+              "type": "conflict",
+              "severity": "low"
+            }
+          ],
+          "npc_directives": {
+            "Brother Aldric": "You notice the symptoms and feel compelled to investigate the cause of the illness.",
+            "Katya the Apothecary": "You are secretly working on a cure but need more time to test it.",
+            "Sister Elara": "You are treating the affected villagers and feel the pressure to find the cause of the disease."
+          },
+          "completed": false
+        },
+        {
+          "phase_id": "phase-1",
+          "name": "Fear and Blame",
+          "description": "The illness spreads, and villagers begin to point fingers, causing fear and division.",
+          "trigger_day": 3,
+          "events_to_inject": [
+            {
+              "description": "Villagers start accusing outsiders, such as travelers and merchants, of bringing the disease.",
+              "type": "conflict",
+              "severity": "medium"
+            }
+          ],
+          "npc_directives": {
+            "Brother Aldric": "You try to calm the villagers and prevent violence from breaking out.",
+            "Katya the Apothecary": "You work tirelessly to find a cure but struggle to keep up with the growing number of patients.",
+            "Sister Elara": "You treat the sick while trying to identify the cause of the illness."
+          },
+          "completed": false
+        },
+        {
+          "phase_id": "phase-2",
+          "name": "The Turning Point",
+          "description": "Katya discovers the cause of the illness and works on a cure, but time is running out.",
+          "trigger_day": 7,
+          "events_to_inject": [
+            {
+              "description": "Katya discovers that the illness is caused by contaminated water from the nearby river.",
+              "type": "discovery",
+              "severity": "high"
+            }
+          ],
+          "npc_directives": {
+            "Brother Aldric": "You organize a meeting to inform the villagers of the discovery and plan for action.",
+            "Katya the Apothecary": "You work on a cure using local herbs and remedies, racing against time.",
+            "Sister Elara": "You continue to treat the sick while helping to distribute the cure."
+          },
+          "completed": false
+        },
+        {
+          "phase_id": "phase-3",
+          "name": "Resolution",
+          "description": "The village rallies together to clean the river and distribute the cure, bringing hope and unity.",
+          "trigger_day": 10,
+          "events_to_inject": [
+            {
+              "description": "The village unites to clean the river and distribute the cure, effectively stopping the spread of the illness.",
+              "type": "resolution",
+              "severity": "high"
+            }
+          ],
+          "npc_directives": {
+            "Brother Aldric": "You lead the village in a prayer for the sick and the recovered.",
+            "Katya the Apothecary": "You share your knowledge about preventing the disease in the future.",
+            "Sister Elara": "You continue to care for the sick and work on strengthening the village's medical facilities."
+          },
+          "completed": false
+        }
+      ]
+    }
+  ],
+  "quests": [
+    {
+      "difficulty": "easy",
+      "giver_npc_id": "Elder_Marta",
+      "reward_gold": 25,
+      "description": "Elder Marta is worried about the spreading sickness and asks you to gather herbs from Darya the Herbalist to help Sister Elara prepare a cure.",
+      "id": "quest-bc5ac001",
+      "reward_description": "Sister Elara praises your efforts and provides you with a vial of the newly prepared medicine, which can be used to treat the sick.",
+      "title": "Seeking a Cure",
+      "scenario_id": "sc-1e038e1e",
+      "giver_npc_name": "Elder Marta",
+      "status": "available",
+      "objectives": [
+        {
+          "description": "Visit Darya the Herbalist and collect the necessary herbs."
+        },
+        {
+          "description": "Deliver the herbs to Sister Elara at the healer's cottage."
+        }
+      ]
+    }
+  ],
+  "world_log": [
+    {
+      "day": 1,
+      "events": [
+        {
+          "description": "A sudden heavy rainstorm causes the Millfield Farm's crops to be damaged, leading to concerns about food supply in the village.",
+          "type": "natural"
+        },
+        {
+          "description": "A group of travelers arrives at the Village Square, seeking shelter and supplies after a long journey. They bring news and rumors from distant lands, sparking curiosity among the villagers.",
+          "type": "social"
+        },
+        {
+          "description": "Villager Petra the Farmer falls ill, showing symptoms of an unknown disease.",
+          "type": "conflict"
+        }
+      ],
+      "npc_actions": [
+        {
+          "npc_id": "npc-thessa",
+          "npc_name": "Thessa the Bard",
+          "action": "gossip",
+          "target": "Rolf the Drunk",
+          "dialogue": "Hey Rolf, what's the latest buzz from the battlefield? I heard some folks in here were soldiers once, and you're no exception, right?",
+          "reasoning": "I want to learn more about the northern army and the current state of the village. Rolf seems to know things and might let slip some valuable information if I flatter him a bit."
+        },
+        {
+          "npc_id": "npc-rolf",
+          "npc_name": "Rolf the Drunk",
+          "action": "talk",
+          "target": "Old Tom",
+          "dialogue": "Hey Tom, fancy a drink to remember the old days? The ale's on me today.",
+          "reasoning": "Rolf feels a twinge of melancholy and wants to reminisce with an old friend who understands his past."
+        },
+        {
+          "npc_id": "npc-magda",
+          "npc_name": "Magda the Cook",
+          "action": "gossip",
+          "target": "Thessa the Bard",
+          "dialogue": "Thessa, have you heard about the travelers? What news do they bring from the far lands?",
+          "reasoning": "As a caretaker, it's important to know what's happening in the village. Thessa often knows the latest news."
+        },
+        {
+          "npc_id": "npc-senna",
+          "npc_name": "Senna the Orphan",
+          "action": "help",
+          "target": "Magda the Cook",
+          "dialogue": "Magda, do you need any help in the kitchen? I could wash some dishes or chop some vegetables.",
+          "reasoning": "Magda is one of the few people I trust, and she often looks overwhelmed. Helping her might earn me some favor and maybe a bit of food."
+        },
+        {
+          "npc_id": "npc-old-tom",
+          "npc_name": "Old Tom",
+          "action": "talk",
+          "target": "Rolf the Drunk",
+          "dialogue": "Ah, Rolf, tell me another tale of your war days. I've got a story or two of my own to share.",
+          "reasoning": "I want to reminisce and perhaps make Rolf feel nostalgic as well. It's a safe, low-risk activity that brings comfort and warmth."
+        },
+        {
+          "npc_id": "npc-finn",
+          "npc_name": "Finn the Troublemaker",
+          "action": "gossip",
+          "target": "Thessa the Bard",
+          "dialogue": "Hey Thessa, have you heard about the travelers in the village square? They're spreading some wild tales from afar.",
+          "reasoning": "I'm always up for some juicy gossip, and Thessa's got a knack for embellishing stories. This could be fun."
+        },
+        {
+          "npc_id": "npc-marta",
+          "npc_name": "Elder Marta",
+          "action": "talk",
+          "target": "Zev the Beggar",
+          "dialogue": "Good morning, Zev. Have you heard about the travelers that arrived yesterday? Any news that might be useful to the village?",
+          "reasoning": "Given the recent rainstorm and the unknown illness, it's important to gather as much information as possible. Zev, despite his situation, often has insights that others might miss."
+        },
+        {
+          "npc_id": "npc-torvin",
+          "npc_name": "Torvin the Smith",
+          "action": "craft",
+          "target": null,
+          "dialogue": null,
+          "reasoning": "Today's a good day to push forward on the masterwork blade. I've got a clear head and the forge is warm."
+        },
+        {
+          "npc_id": "npc-lira",
+          "npc_name": "Lira the Merchant",
+          "action": "trade",
+          "target": "Victor the Moneylender",
+          "dialogue": "Victor, I've got some goods that could use a bit of quick credit. How much can you offer for a batch of rare spices?",
+          "reasoning": "I need to pay off debts and the rare spices are a high-risk, high-reward item. Trading with Victor could be profitable but I need to be careful not to overextend myself."
+        },
+        {
+          "npc_id": "npc-bran",
+          "npc_name": "Bran the Farmhand",
+          "action": "talk",
+          "target": "Yara the Stablehand",
+          "dialogue": "Hey Yara, heard about Petra being sick. Think we can do something to help?",
+          "reasoning": "I feel restless and want to do something meaningful. Helping out might give me a sense of purpose and impress Anya."
+        },
+        {
+          "npc_id": "npc-anya",
+          "npc_name": "Anya the Baker",
+          "action": "help",
+          "target": "Petra the Farmer",
+          "dialogue": "Petra, I heard you're not feeling well. Is there anything I can do to help you?",
+          "reasoning": "Given that one of the villagers is sick and my character is known to prioritize others' needs, it feels natural to offer help to Petra."
+        },
+        {
+          "npc_id": "npc-elara",
+          "npc_name": "Sister Elara",
+          "action": "help",
+          "target": "Petra the Farmer",
+          "dialogue": "I hear you're not feeling well, Petra. Let me take a look at what's troubling you.",
+          "reasoning": "Petra's illness is urgent and needs immediate attention. As a healer, it's my duty to help her."
+        },
+        {
+          "npc_id": "npc-goran",
+          "npc_name": "Goran the Hunter",
+          "action": "patrol",
+          "target": "Whispering Woods",
+          "dialogue": null,
+          "reasoning": "I need to check the forest for signs of the mysterious predator that has been killing deer. It's my duty to protect the village."
+        },
+        {
+          "npc_id": "npc-darya",
+          "npc_name": "Darya the Herbalist",
+          "action": "forage",
+          "target": null,
+          "dialogue": null,
+          "reasoning": "The morning light is the best for gathering herbs, and the woods are full of secrets and remedies waiting to be discovered."
+        },
+        {
+          "npc_id": "npc-hilde",
+          "npc_name": "Hilde the Weaver",
+          "action": "craft",
+          "target": null,
+          "dialogue": null,
+          "reasoning": "Today's morning is perfect for weaving, and I have a new pattern in mind for the tapestry that tells Oakhollow's true history. It's important to preserve the village's legacy."
+        },
+        {
+          "npc_id": "npc-roderick",
+          "npc_name": "Captain Roderick",
+          "action": "patrol",
+          "target": null,
+          "dialogue": null,
+          "reasoning": "With the village facing potential threats, it's my duty to maintain vigilance and ensure everyone's safety. I need to check the perimeter and speak with my men about our current state of readiness."
+        },
+        {
+          "npc_id": "npc-brother-aldric",
+          "npc_name": "Brother Aldric",
+          "action": "gossip",
+          "target": "Ilse the Midwife",
+          "dialogue": "Ilse, have you heard any rumors about Elara's methods lately? I've been hearing some troubling whispers around town.",
+          "reasoning": "I'm deeply troubled by Elara's growing influence and want to gather more information about her practices. Ilse is a trusted confidante who might have insights."
+        },
+        {
+          "npc_id": "npc-vasek",
+          "npc_name": "Vasek the Carpenter",
+          "action": "craft",
+          "target": null,
+          "dialogue": null,
+          "reasoning": "I feel content with the day's start and want to focus on my work. Torvin and I are working on a secret project, and I should contribute to it."
+        },
+        {
+          "npc_id": "npc-petra",
+          "npc_name": "Petra the Farmer",
+          "action": "work",
+          "target": null,
+          "dialogue": null,
+          "reasoning": "I need to get the harvest ready before the next rain. I can't afford to lose any more crops."
+        },
+        {
+          "npc_id": "npc-ilse",
+          "npc_name": "Ilse the Midwife",
+          "action": "help",
+          "target": "Petra the Farmer",
+          "dialogue": "Ivan, do you know how Petra is faring? I should check on her.",
+          "reasoning": "I feel responsible for everyone's wellbeing, especially given the recent illness of Petra. As an empath, I need to connect with others and help where I can."
+        },
+        {
+          "npc_id": "npc-korin",
+          "npc_name": "Korin the Poacher",
+          "action": "forage",
+          "target": null,
+          "dialogue": null,
+          "reasoning": "I should gather supplies early in the morning before Goran the Hunter comes snooping around."
+        },
+        {
+          "npc_id": "npc-victor",
+          "npc_name": "Victor the Moneylender",
+          "action": "gossip",
+          "target": "Lira the Merchant",
+          "dialogue": "Lira, have you heard about Petra the Farmer? It seems her illness is causing quite a stir in the village.",
+          "reasoning": "Petra's illness presents an opportunity to exploit her weakened state and gain control over her farm. Spreading rumors will keep Lira on edge and possibly drive a wedge between Petra and her support network."
+        },
+        {
+          "npc_id": "npc-yara",
+          "npc_name": "Yara the Stablehand",
+          "action": "talk",
+          "target": "Nadia the Beekeeper",
+          "dialogue": "Nadia, I've been feeling so blue lately. Do you think Captain Roderick might notice me if I learn to ride properly?",
+          "reasoning": "I'm feeling melancholic and want to confide in Nadia about my feelings for Captain Roderick. She's always been a good listener and might offer some advice."
+        },
+        {
+          "npc_id": "npc-zev",
+          "npc_name": "Zev the Beggar",
+          "action": "gossip",
+          "target": "Elder Marta",
+          "dialogue": "Hey Elder Marta, heard the travelers in the square brought news from far away. Got any interesting tidbits to share?",
+          "reasoning": "I need to keep my ear to the ground for any news that could be useful or entertaining."
+        },
+        {
+          "npc_id": "npc-katya",
+          "npc_name": "Katya the Apothecary",
+          "action": "gossip",
+          "target": "Lira the Merchant",
+          "dialogue": "Hey Lira, have you heard about the travelers? They say there are new herbs in distant lands that could be quite potent!",
+          "reasoning": "Katya is excited and wants to spread rumors about new herbs to stir interest and competition."
+        }
+      ],
+      "interactions": [
+        {
+          "npc_a": "Magda the Cook",
+          "npc_b": "Thessa the Bard",
+          "summary": "Magda and Thessa exchange pleasantries and discuss the recent events in the village, but there's no real connection between them.",
+          "interaction_type": "conversation",
+          "action": "none"
+        },
+        {
+          "npc_a": "Senna the Orphan",
+          "npc_b": "Rolf the Drunk",
+          "summary": "Senna and Rolf have a brief exchange at The Rusty Flagon. Senna asks Rolf about the Whisperers, and Rolf, in his drunken state, gives vague answers.",
+          "interaction_type": "conversation",
+          "action": "none"
+        },
+        {
+          "npc_a": "Old Tom",
+          "npc_b": "Finn the Troublemaker",
+          "summary": "Old Tom shares a nostalgic tale with Finn the Troublemaker, who listens with amusement, buying Old Tom a drink in exchange for the story.",
+          "interaction_type": "conversation",
+          "action": "none"
+        },
+        {
+          "npc_a": "Zev the Beggar",
+          "npc_b": "Elder Marta",
+          "summary": "Zev the Beggar and Elder Marta discuss the village's winter preparations and the recent mysterious sickness spreading around.",
+          "interaction_type": "conversation",
+          "action": "none"
+        },
+        {
+          "npc_a": "Vasek the Carpenter",
+          "npc_b": "Torvin the Smith",
+          "summary": "Vasek the Carpenter and Torvin the Smith meet at Ironheart Smithy to discuss their secret project and catch up on recent happenings in the village.",
+          "interaction_type": "conversation",
+          "action": "none"
+        },
+        {
+          "npc_a": "Hilde the Weaver",
+          "npc_b": "Victor the Moneylender",
+          "summary": "Hilde the Weaver and Victor the Moneylender meet at the market. Hilde is bitter towards Victor, but they have a brief, tense conversation about the village's economy.",
+          "interaction_type": "conversation",
+          "action": "none"
+        },
+        {
+          "npc_a": "Lira the Merchant",
+          "npc_b": "Anya the Baker",
+          "summary": "Lira the Merchant and Anya the Baker meet in the market and have a neutral conversation about the spreading sickness.",
+          "interaction_type": "conversation",
+          "action": "none"
+        },
+        {
+          "npc_a": "Petra the Farmer",
+          "npc_b": "Bran the Farmhand",
+          "summary": "Petra and Bran discuss the recent challenges at the farm and the spreading sickness in the area. Petra expresses her worries about the farm's survival and the debt she needs to pay off, while Bran shares his desire to leave the village and his recent encounters with the sickness.",
+          "interaction_type": "conversation",
+          "action": "none"
+        },
+        {
+          "npc_a": "Sister Elara",
+          "npc_b": "Brother Aldric",
+          "summary": "Sister Elara and Brother Aldric argue about the nature of her healing powers and the recent incidents in the forest.",
+          "interaction_type": "argument",
+          "action": "threaten"
+        },
+        {
+          "npc_a": "Goran the Hunter",
+          "npc_b": "Korin the Poacher",
+          "summary": "Goran the Hunter and Korin the Poacher confront each other in the Whispering Woods, arguing over the destruction of the forest and Korin's illegal activities.",
+          "interaction_type": "argument",
+          "action": "threaten"
+        }
+      ],
+      "active_scenarios": [
+        {
+          "title": "The Spreading Sickness",
+          "description": "A mysterious illness starts affecting villagers, causing fear and blame to spread faster than the disease itself.",
+          "phase_name": "The Inciting Incident",
+          "tension_level": "high",
+          "narrative_update": "A new story begins: The Spreading Sickness"
+        }
+      ]
+    },
+    {
+      "day": 3,
+      "events": [
+        {
+          "description": "A mysterious merchant arrives at the Village Market, offering rare and exotic goods from far-off lands, including a strange herb claimed to cure Petra's illness.",
+          "type": "trade"
+        },
+        {
+          "description": "As the sun sets, a pack of wolves is spotted near the edge of Whispering Woods, howling eerily and causing some villagers to fear for the safety of nearby farms and livestock.",
+          "type": "natural"
+        },
+        {
+          "description": "Katya starts investigating the origins of the illness, focusing on the recent events in the village.",
+          "type": "conflict"
+        },
+        {
+          "description": "Villagers begin to distrust and fear the newcomers from the merchant caravan, leading to social unrest.",
+          "type": "social"
+        }
+      ],
+      "npc_actions": [
+        {
+          "npc_id": "npc-thessa",
+          "npc_name": "Thessa the Bard",
+          "action": "gossip",
+          "target": "Rolf the Drunk",
+          "dialogue": "Hey Rolf, did you hear about the merchant selling some strange herbs? Wonder if he's got any tales to tell!",
+          "reasoning": "I'm excited and eager to gather information. Rolf might know more about the merchant's goods than he lets on."
+        },
+        {
+          "npc_id": "npc-rolf",
+          "npc_name": "Rolf the Drunk",
+          "action": "gossip",
+          "target": "Thessa the Bard",
+          "dialogue": "Hey Thessa, heard there's a new merchant in town with some strange herbs. Any songs about mysterious strangers yet?",
+          "reasoning": "Rolf's curiosity gets the better of him, and he wants to know if Thessa has heard any tales about the mysterious merchant."
+        },
+        {
+          "npc_id": "npc-magda",
+          "npc_name": "Magda the Cook",
+          "action": "gossip",
+          "target": "Thessa the Bard",
+          "dialogue": "Have you heard about the strange merchant in the village market? They say they have a cure for Petra's illness!",
+          "reasoning": "Magda's curiosity about the mysterious merchant and the potential cure for Petra's illness is piquing her interest. She wants to gather more information."
+        },
+        {
+          "npc_id": "npc-senna",
+          "npc_name": "Senna the Orphan",
+          "action": "help",
+          "target": "Magda the Cook",
+          "dialogue": "Magda, can I help you with anything tonight? I noticed you've been working hard.",
+          "reasoning": "Magda is the only person in the village who treats me with kindness, and she's always busy. Helping her might earn me some food and her trust."
+        },
+        {
+          "npc_id": "npc-old-tom",
+          "npc_name": "Old Tom",
+          "action": "talk",
+          "target": "Rolf the Drunk",
+          "dialogue": "Ah, Rolf! Care for another round? I've got a new tale to share, one that'll make your head spin.",
+          "reasoning": "I'm feeling excited and want to share my stories with someone who appreciates them. Rolf always enjoys a good drink and a better story than the last one."
+        },
+        {
+          "npc_id": "npc-finn",
+          "npc_name": "Finn the Troublemaker",
+          "action": "gossip",
+          "target": "Thessa the Bard",
+          "dialogue": "Hey Thessa, I heard some interesting rumors about the merchant and the strange herb. Have you heard anything about it?",
+          "reasoning": "I'm always eager to spread and gather rumors, and Thessa is a good source of information."
+        },
+        {
+          "npc_id": "npc-marta",
+          "npc_name": "Elder Marta",
+          "action": "investigate",
+          "target": "mysterious merchant",
+          "dialogue": "Excuse me, I'm Elder Marta. I've heard about the strange herb you're selling. Can you tell me more about it and where it comes from?",
+          "reasoning": "The village is in a state of unrest, and the mysterious merchant could be a potential threat or a source of hope for healing Petra's illness. I need to gather more information."
+        },
+        {
+          "npc_id": "npc-torvin",
+          "npc_name": "Torvin the Smith",
+          "action": "craft",
+          "target": null,
+          "dialogue": null,
+          "reasoning": "I feel content and the day's work is almost over. It's a good time to focus on crafting something of quality."
+        },
+        {
+          "npc_id": "npc-lira",
+          "npc_name": "Lira the Merchant",
+          "action": "gossip",
+          "target": "Katya the Apothecary",
+          "dialogue": "I hear the new merchant is offering a cure for Petra's sickness, but I'm curious about the herb's true value and origins.",
+          "reasoning": "I should gather more information from Katya since she's likely investigating the same thing."
+        },
+        {
+          "npc_id": "npc-bran",
+          "npc_name": "Bran the Farmhand",
+          "action": "talk",
+          "target": "Yara the Stablehand",
+          "dialogue": "Hey Yara, heard about the wolves near the woods. You think they'll come this way?",
+          "reasoning": "I'm feeling a bit scared and want to see if Yara has any advice or if she's worried too."
+        },
+        {
+          "npc_id": "npc-anya",
+          "npc_name": "Anya the Baker",
+          "action": "investigate",
+          "target": "mysterious merchant",
+          "dialogue": "Excuse me, I heard you have a herb that could cure illnesses. I'm here to learn more about it.",
+          "reasoning": "A mysterious herb that could cure the illness? I must see if it can help Petra and others."
+        },
+        {
+          "npc_id": "npc-elara",
+          "npc_name": "Sister Elara",
+          "action": "investigate",
+          "target": "mysterious merchant",
+          "dialogue": "Excuse me, merchant, I'm Sister Elara. I've heard about the strange herb you're selling. Could you tell me more about it?",
+          "reasoning": "I feel the need to understand the nature of this herb and its source, especially in light of the strange happenings in the village. My fear is overshadowed by a strong sense of duty to protect my village."
+        },
+        {
+          "npc_id": "npc-goran",
+          "npc_name": "Goran the Hunter",
+          "action": "patrol",
+          "target": "Whispering Woods",
+          "dialogue": null,
+          "reasoning": "The woods are eerie at night, and there's a pack of wolves nearby. I need to ensure the village's safety."
+        },
+        {
+          "npc_id": "npc-darya",
+          "npc_name": "Darya the Herbalist",
+          "action": "investigate",
+          "target": "mysterious herb in merchant's caravan",
+          "dialogue": "Excuse me, I couldn't help but notice the strange herb you're selling. Could you tell me more about it?",
+          "reasoning": "The mysterious merchant's arrival piques my curiosity, and the claimed herb's ability to cure Petra's illness is intriguing."
+        },
+        {
+          "npc_id": "npc-hilde",
+          "npc_name": "Hilde the Weaver",
+          "action": "gossip",
+          "target": "Katya the Apothecary",
+          "dialogue": "Katya, have you heard about the strange merchant and the herb he claims can cure Petra's illness? It's all the talk in the village.",
+          "reasoning": "As angry as I am, gossiping with Katya might help me learn more about the mysterious merchant and the herb, as well as perhaps alleviate some of my anger."
+        },
+        {
+          "npc_id": "npc-roderick",
+          "npc_name": "Captain Roderick",
+          "action": "patrol",
+          "target": null,
+          "dialogue": null,
+          "reasoning": "The village is on high alert, and as the militia captain, it's my duty to maintain vigilance and ensure the safety of our people. I should make rounds to calm the villagers' fears and ensure that no threats are looming."
+        },
+        {
+          "npc_id": "npc-brother-aldric",
+          "npc_name": "Brother Aldric",
+          "action": "pray",
+          "target": null,
+          "dialogue": "Lord of the Dawn, guide my doubts and strengthen my faith.",
+          "reasoning": "The mysterious events in the village, coupled with Sister Elara's powers, have left me questioning my beliefs. Prayer will help me find clarity."
+        },
+        {
+          "npc_id": "npc-vasek",
+          "npc_name": "Vasek the Carpenter",
+          "action": "craft",
+          "target": null,
+          "dialogue": null,
+          "reasoning": "Today, I feel content and focused. I should continue working on my secret project with Torvin, as it's important to both of us."
+        },
+        {
+          "npc_id": "npc-petra",
+          "npc_name": "Petra the Farmer",
+          "action": "investigate",
+          "target": "mysterious merchant",
+          "dialogue": "Excuse me, I've heard about the strange herb you're selling. Can you tell me more about it?",
+          "reasoning": "The rainstorm and my illness have me worried, and the merchant's cure sounds promising. I must investigate to see if it can help my farm and my family."
+        },
+        {
+          "npc_id": "npc-ilse",
+          "npc_name": "Ilse the Midwife",
+          "action": "talk",
+          "target": "Sister Elara",
+          "dialogue": "Elara, have you heard about the mysterious merchant? I'm curious about the strange herb they claim can cure Petra's illness.",
+          "reasoning": "As an empath, Ilse often feels drawn to others' concerns and wants to help. Petra's illness is a shared worry with Elara, and Ilse believes discussing it could lead to a solution."
+        },
+        {
+          "npc_id": "npc-korin",
+          "npc_name": "Korin the Poacher",
+          "action": "sneak",
+          "target": "Whispering Woods",
+          "dialogue": null,
+          "reasoning": "I need to be extra careful tonight. Goran the Hunter is around, and I don't want to get caught."
+        },
+        {
+          "npc_id": "npc-victor",
+          "npc_name": "Victor the Moneylender",
+          "action": "gossip",
+          "target": "Lira the Merchant",
+          "dialogue": "I've heard whispers about that mysterious merchant. People are talking, Lira. They say his goods are curing the sick, but where did he come from?",
+          "reasoning": "I should keep an eye on Lira and the mysterious merchant. Gossiping will help me stay ahead of the game and possibly find out something useful."
+        },
+        {
+          "npc_id": "npc-yara",
+          "npc_name": "Yara the Stablehand",
+          "action": "gossip",
+          "target": "Nadia the Beekeeper",
+          "dialogue": "Nadia, have you heard about the mysterious merchant? I can't help but wonder if the strange herb they're selling could be something special, like a muse for my poetry.",
+          "reasoning": "I'm excited about the idea of discovering something new that could inspire my poetry and help my friend Petra at the same time."
+        },
+        {
+          "npc_id": "npc-zev",
+          "npc_name": "Zev the Beggar",
+          "action": "gossip",
+          "target": "village square",
+          "dialogue": "Hey there, anyone heard anything about the mysterious merchant's claims? Is that really a cure for Petra's illness?",
+          "reasoning": "I'm feeling excited and curious about the mysterious merchant and the strange herb. Gossiping will give me more insight and keep me in the loop."
+        },
+        {
+          "npc_id": "npc-katya",
+          "npc_name": "Katya the Apothecary",
+          "action": "investigate",
+          "target": "mysterious merchant",
+          "dialogue": "Excuse me, I've heard you have a special herb that can cure illnesses. I'd like to know more about its origins and effects.",
+          "reasoning": "I'm intrigued by the herb and want to learn more to improve my remedies. I can't afford to miss an opportunity to gain knowledge or leverage."
+        }
+      ],
+      "interactions": [
+        {
+          "npc_a": "Thessa the Bard",
+          "npc_b": "Finn the Troublemaker",
+          "summary": "Thessa the Bard and Finn the Troublemaker exchange playful banter and share rumors about the spreading sickness in the village.",
+          "interaction_type": "conversation",
+          "action": "none"
+        },
+        {
+          "npc_a": "Rolf the Drunk",
+          "npc_b": "Old Tom",
+          "summary": "Rolf the Drunk and Old Tom share drinks and reminisce about their past, discussing old battles and the current state of the village.",
+          "interaction_type": "conversation",
+          "action": "none"
+        },
+        {
+          "npc_a": "Magda the Cook",
+          "npc_b": "Senna the Orphan",
+          "summary": "Magda the Cook and Senna the Orphan share a warm conversation about the day's events and discuss the rumors about the spreading sickness in Oakhollow.",
+          "interaction_type": "conversation",
+          "action": "none"
+        },
+        {
+          "npc_a": "Zev the Beggar",
+          "npc_b": "Elder Marta",
+          "summary": "Zev the Beggar and Elder Marta exchange information about recent events in the village, with Zev providing details of gossip he has overheard and Elder Marta inquiring about potential threats to the village's safety.",
+          "interaction_type": "conversation",
+          "action": "none"
+        },
+        {
+          "npc_a": "Torvin the Smith",
+          "npc_b": "Vasek the Carpenter",
+          "summary": "Torvin the Smith and Vasek the Carpenter meet at the smithy to discuss the progress of their secret project, sharing updates and concerns about the upcoming winter work.",
+          "interaction_type": "conversation",
+          "action": "none"
+        },
+        {
+          "npc_a": "Anya the Baker",
+          "npc_b": "Victor the Moneylender",
+          "summary": "Anya the Baker and Victor the Moneylender exchange pleasantries and some market news, but their conversation remains neutral and brief.",
+          "interaction_type": "conversation",
+          "action": "none"
+        },
+        {
+          "npc_a": "Katya the Apothecary",
+          "npc_b": "Lira the Merchant",
+          "summary": "Katya the Apothecary and Lira the Merchant share information about the recent sickness spreading in the village, with Lira offering to help Katya gather ingredients from her trade network.",
+          "interaction_type": "conversation",
+          "action": "none"
+        },
+        {
+          "npc_a": "Yara the Stablehand",
+          "npc_b": "Bran the Farmhand",
+          "summary": "Yara and Bran exchange pleasantries and discuss the recent sickness spreading among the villagers, with Yara sharing some hopeful verses she has written.",
+          "interaction_type": "conversation",
+          "action": "none"
+        },
+        {
+          "npc_a": "Sister Elara",
+          "npc_b": "Brother Aldric",
+          "summary": "Sister Elara and Brother Aldric argue about the source of the village's recent sickness. Aldric accuses Elara of using dark magic, while Elara defends her healing abilities as divine.",
+          "interaction_type": "argument",
+          "action": "threaten"
+        },
+        {
+          "npc_a": "Korin the Poacher",
+          "npc_b": "Goran the Hunter",
+          "summary": "Korin and Goran confront each other in the Whispering Woods, each believing the other is responsible for the recent disturbances. Their argument escalates as they accuse each other of disrupting the forest's balance and harming local wildlife.",
+          "interaction_type": "argument",
+          "action": "threaten"
+        }
+      ],
+      "active_scenarios": [
+        {
+          "title": "The Spreading Sickness",
+          "description": "A mysterious illness starts affecting villagers, causing fear and blame to spread faster than the disease itself.",
+          "phase_name": "Fear and Blame",
+          "tension_level": "rising",
+          "narrative_update": "Katya, a local herbalist, begins to notice patterns among the sick villagers and suspects a link between their ailments and the recent arrival of a merchant caravan from a distant, war-torn region."
+        }
+      ]
+    },
+    {
+      "day": 4,
+      "events": [
+        {
+          "description": "The night's blood-red moon causes a rare celestial event, leading to a sudden drop in temperature and a heavy frost settling over the fields, threatening the young crops.",
+          "type": "natural"
+        },
+        {
+          "description": "At the Rusty Flagon, a heated argument breaks out between two groups of villagers over the cause of the illness, with accusations flying and tempers flaring, but no physical violence occurs yet.",
+          "type": "social"
+        },
+        {
+          "description": "A group of panicked villagers accuse Katya of being a witch and demand she be punished.",
+          "type": "social"
+        },
+        {
+          "description": "The river, the source of the sickness, begins to show signs of worsening contamination.",
+          "type": "natural"
+        }
+      ],
+      "npc_actions": [
+        {
+          "npc_id": "npc-rolf",
+          "npc_name": "Rolf the Drunk",
+          "action": "gossip",
+          "target": "Thessa the Bard",
+          "dialogue": "Hey there, Thessa! Got any juicy rumors from your travels?",
+          "reasoning": "I'm feeling excited and want to hear some news from Thessa, who always has interesting stories."
+        },
+        {
+          "npc_id": "npc-magda",
+          "npc_name": "Magda the Cook",
+          "action": "help",
+          "target": "Senna the Orphan",
+          "dialogue": "Senna, it's cold tonight, why don't you come inside and warm up by the fire?",
+          "reasoning": "Senna is like a daughter to me, and with the night's frost, I'm worried about her being out in the cold."
+        },
+        {
+          "npc_id": "npc-senna",
+          "npc_name": "Senna the Orphan",
+          "action": "rest",
+          "target": null,
+          "dialogue": null,
+          "reasoning": "The cold night air and the hard day's work have left me exhausted. It's best to conserve energy for tomorrow's challenges."
+        },
+        {
+          "npc_id": "npc-finn",
+          "npc_name": "Finn the Troublemaker",
+          "action": "gossip",
+          "target": "Thessa the Bard",
+          "dialogue": "Hey Thessa, have you heard about the blood-red moon last night? They say it brings misfortune, but I think it's just a chance for some good old-fashioned mischief!",
+          "reasoning": "The rare celestial event seems like a perfect excuse to stir up some excitement and test the villagers' superstitions."
+        },
+        {
+          "npc_id": "npc-marta",
+          "npc_name": "Elder Marta",
+          "action": "patrol",
+          "target": "Village Square",
+          "dialogue": "Elder Marta calls out, 'I'll check the perimeter, keep an eye on the village while I'm gone.'",
+          "reasoning": "The sudden frost and the travelers' tales of distant troubles have put me on edge. I must ensure that no danger threatens our village tonight."
+        },
+        {
+          "npc_id": "npc-torvin",
+          "npc_name": "Torvin the Smith",
+          "action": "work",
+          "target": null,
+          "dialogue": null,
+          "reasoning": "The sudden frost demands that I keep the forge warm and continue working, ensuring that any orders from the village are completed despite the harsh conditions."
+        },
+        {
+          "npc_id": "npc-lira",
+          "npc_name": "Lira the Merchant",
+          "action": "sneak",
+          "target": null,
+          "dialogue": null,
+          "reasoning": "The night is dark and full of terrors, and I have a bad feeling about everything. It's best to stay out of sight and avoid trouble."
+        },
+        {
+          "npc_id": "npc-bran",
+          "npc_name": "Bran the Farmhand",
+          "action": "patrol",
+          "target": "Millfield Farm",
+          "dialogue": null,
+          "reasoning": "With the blood-red moon and the frost settling over the fields, I want to make sure no one tries to damage the crops or the farm. It's my duty to protect the village's food supply."
+        },
+        {
+          "npc_id": "npc-elara",
+          "npc_name": "Sister Elara",
+          "action": "pray",
+          "target": null,
+          "dialogue": "Divine protector, guide me and keep the village safe from the shadows that lurk in the dark.",
+          "reasoning": "The blood-red moon and the villagers' fears have heightened my sense of vulnerability. It is best to seek divine guidance and protection."
+        },
+        {
+          "npc_id": "npc-roderick",
+          "npc_name": "Captain Roderick",
+          "action": "patrol",
+          "target": null,
+          "dialogue": null,
+          "reasoning": "With the blood-red moon causing a drop in temperature and a heavy frost, the village is at an increased risk. My duty as the militia captain demands I ensure the village's safety during these troubled times."
+        },
+        {
+          "npc_id": "npc-brother-aldric",
+          "npc_name": "Brother Aldric",
+          "action": "threaten",
+          "target": "Sister Elara",
+          "dialogue": "I know your secrets, Elara. If you continue to spread darkness, I will expose you to the village.",
+          "reasoning": "Elara's strange powers unsettle me, and I feel compelled to protect the village from her influence. Tonight, I must make it clear that I am watching her closely."
+        },
+        {
+          "npc_id": "npc-petra",
+          "npc_name": "Petra the Farmer",
+          "action": "patrol",
+          "target": "Millfield Farm",
+          "dialogue": null,
+          "reasoning": "With the blood-red moon causing a frost, I need to ensure the crops are protected and check for any signs of the spreading sickness. As a martyr, I feel a duty to protect my land and my community."
+        },
+        {
+          "npc_id": "npc-korin",
+          "npc_name": "Korin the Poacher",
+          "action": "sneak",
+          "target": "Whispering Woods",
+          "dialogue": null,
+          "reasoning": "With the blood-red moon causing a chill, the woods are eerily silent. I need to gather more resources tonight, but I have to be extra careful. Goran is likely patrolling the edges, and the strange whispers in the woods make me uneasy."
+        },
+        {
+          "npc_id": "npc-victor",
+          "npc_name": "Victor the Moneylender",
+          "action": "gossip",
+          "target": "Lira the Merchant",
+          "dialogue": "Lira, have you heard the latest news about the travelers? They say the crops in distant lands are failing due to a similar sickness. This could be a disaster for our trade if it spreads here.",
+          "reasoning": "I want to keep Lira on edge about the potential economic impact, making her more dependent on my loans and advice."
+        },
+        {
+          "npc_id": "npc-katya",
+          "npc_name": "Katya the Apothecary",
+          "action": "gossip",
+          "target": "Lira the Merchant",
+          "dialogue": "Lira, I've heard some interesting news about the travelers who arrived. They're talking about rare herbs from distant lands. Do you think there's a chance they might trade some with us?",
+          "reasoning": "Excited and eager to expand my network, I want to see if I can get my hands on some exotic herbs from the travelers. Lira's connections might be the key."
+        }
+      ],
+      "interactions": [
+        {
+          "npc_a": "Old Tom",
+          "npc_b": "Senna the Orphan",
+          "summary": "Old Tom and Senna the Orphan have a brief chat at The Rusty Flagon. Old Tom shares a story about his younger days, while Senna listens politely and offers a few comments.",
+          "interaction_type": "conversation",
+          "action": "none"
+        },
+        {
+          "npc_a": "Magda the Cook",
+          "npc_b": "Rolf the Drunk",
+          "summary": "Magda and Rolf chat about the village's current state, with Magda expressing concern over the sickness while Rolf tries to lighten the mood with jokes.",
+          "interaction_type": "conversation",
+          "action": "none"
+        },
+        {
+          "npc_a": "Thessa the Bard",
+          "npc_b": "Finn the Troublemaker",
+          "summary": "Thessa the Bard and Finn the Troublemaker meet at The Rusty Flagon, sharing stories about their recent adventures in the village.",
+          "interaction_type": "conversation",
+          "action": "none"
+        },
+        {
+          "npc_a": "Zev the Beggar",
+          "npc_b": "Elder Marta",
+          "summary": "Zev the Beggar and Elder Marta have a friendly conversation in the village square. Zev shares some recent gossip and information about the village, while Elder Marta provides advice and updates on the village's preparations for winter.",
+          "interaction_type": "conversation",
+          "action": "none"
+        },
+        {
+          "npc_a": "Torvin the Smith",
+          "npc_b": "Vasek the Carpenter",
+          "summary": "Torvin the Smith and Vasek the Carpenter meet to discuss the progress of their secret project, both feeling positive towards each other.",
+          "interaction_type": "conversation",
+          "action": "none"
+        },
+        {
+          "npc_a": "Victor the Moneylender",
+          "npc_b": "Hilde the Weaver",
+          "summary": "Victor and Hilde exchange a tense conversation about the village's financial and social issues, with Hilde subtly trying to gather information on Victor's intentions.",
+          "interaction_type": "conversation",
+          "action": "none"
+        },
+        {
+          "npc_a": "Katya the Apothecary",
+          "npc_b": "Lira the Merchant",
+          "summary": "Katya the Apothecary and Lira the Merchant exchange pleasantries and discuss the market's trade, with Katya expressing her excitement about potential new herbal remedies.",
+          "interaction_type": "conversation",
+          "action": "none"
+        },
+        {
+          "npc_a": "Yara the Stablehand",
+          "npc_b": "Bran the Farmhand",
+          "summary": "Yara and Bran discuss their aspirations and share news about the sickness affecting the village.",
+          "interaction_type": "conversation",
+          "action": "none"
+        },
+        {
+          "npc_a": "Sister Elara",
+          "npc_b": "Ilse the Midwife",
+          "summary": "Sister Elara and Ilse the Midwife discuss the recent spread of sickness and the dark energy from the forest. Ilse expresses her excitement about their collaborative work and her desire to share more secrets with Elara.",
+          "interaction_type": "conversation",
+          "action": "none"
+        },
+        {
+          "npc_a": "Korin the Poacher",
+          "npc_b": "Goran the Hunter",
+          "summary": "Korin and Goran confront each other in Whispering Woods, each wary of the other's presence. Despite their mutual fear, their hostility towards each other escalates into a heated argument.",
+          "interaction_type": "argument",
+          "action": "threaten"
+        }
+      ],
+      "active_scenarios": [
+        {
+          "title": "The Spreading Sickness",
+          "description": "A mysterious illness starts affecting villagers, causing fear and blame to spread faster than the disease itself.",
+          "phase_name": "The Turning Point",
+          "tension_level": "climax",
+          "narrative_update": "Katya has successfully identified the cause of the illness and is racing against time to complete her cure before the sickness spreads further, but her efforts are hindered by the village's growing unrest and fear."
+        }
+      ]
+    }
+  ]
+}

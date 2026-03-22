@@ -1,0 +1,29 @@
+You are the Dungeon Master. Based on the current NPC conflicts and world state,
+generate a quest hook that emerges naturally from the simulation.
+
+Current conflicts and tensions:
+{% for conflict in conflicts %}
+- {{ conflict }}
+{% endfor %}
+
+Recent events:
+{% for event in recent_events %}
+- {{ event }}
+{% endfor %}
+
+Player reputation: {{ reputation }}
+Player location: {{ location_name }}
+World day: {{ world_day }}
+
+Generate a quest that feels like a natural consequence of what's happening in the world.
+The quest should involve existing NPCs and locations.
+
+Respond in JSON:
+{
+  "quest_name": "short quest title",
+  "description": "1-2 sentence description the DM would narrate",
+  "quest_giver_npc_id": "id of the NPC who offers the quest",
+  "objectives": ["list of objectives"],
+  "reward": "what the player gets",
+  "difficulty": "easy|medium|hard"
+}

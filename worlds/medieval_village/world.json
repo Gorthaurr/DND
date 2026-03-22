@@ -1,0 +1,142 @@
+{
+  "name": "Oakhollow Village",
+  "description": "A small medieval village nestled between ancient oak forests and rolling hills. Trade routes connect it to distant cities, but life here revolves around the harvest, the tavern, and old superstitions.",
+  "start_location": "loc-tavern",
+  "day": 1,
+  "locations": [
+    {
+      "id": "loc-tavern",
+      "name": "The Rusty Flagon",
+      "type": "tavern",
+      "description": "A warm, smoky tavern with low oak beams and a crackling fireplace. The smell of roasted meat and spilled ale fills the air. Locals gather here every evening to trade gossip and drown their worries."
+    },
+    {
+      "id": "loc-market",
+      "name": "Village Market",
+      "type": "market",
+      "description": "An open square with wooden stalls selling produce, cloth, and trinkets. Farmers haggle with merchants under faded canvas awnings. A stone well stands in the center."
+    },
+    {
+      "id": "loc-smithy",
+      "name": "Ironheart Smithy",
+      "type": "smithy",
+      "description": "The ring of hammer on anvil echoes from this stone workshop. Soot-blackened walls surround a blazing forge. Weapons and tools hang from iron hooks along the walls."
+    },
+    {
+      "id": "loc-square",
+      "name": "Village Square",
+      "type": "square",
+      "description": "The heart of Oakhollow. A large oak tree, said to be centuries old, stands at the center. A wooden notice board displays decrees from the village elder. Paths lead in every direction."
+    },
+    {
+      "id": "loc-forest",
+      "name": "Whispering Woods",
+      "type": "forest",
+      "description": "Dense, ancient forest where sunlight barely reaches the mossy floor. Strange sounds echo between the twisted trunks. Hunters venture here, but few go deep — old legends speak of things that lurk in the shadows."
+    },
+    {
+      "id": "loc-chapel",
+      "name": "Chapel of the Dawn",
+      "type": "chapel",
+      "description": "A modest stone chapel with stained glass windows depicting the sun rising over mountains. Candles flicker in the quiet interior. The village healer tends a small herb garden behind it."
+    },
+    {
+      "id": "loc-farm",
+      "name": "Millfield Farm",
+      "type": "farm",
+      "description": "Rolling fields of wheat and barley stretch toward the horizon. A weathered farmhouse sits beside a creaking windmill. Chickens scratch in the dirt near a wooden fence."
+    },
+    {
+      "id": "loc-barracks",
+      "name": "Village Barracks",
+      "type": "barracks",
+      "description": "A squat stone building with a thatched roof reinforced by iron bands. Inside, wooden bunks line the walls alongside weapon racks holding spears and leather shields. A sand-filled training yard stretches behind the building where the village militia drills at dawn. The captain's quarters occupy a small corner room with maps of the surrounding region pinned to every wall."
+    },
+    {
+      "id": "loc-mill",
+      "name": "Oakhollow Mill",
+      "type": "mill",
+      "description": "A large stone watermill built where a stream curves past the farmland. The great wooden wheel turns day and night, grinding wheat into flour that feeds the entire village. Sacks of grain pile high in the dusty interior, and the rhythmic thud of the millstone can be heard from a distance. A narrow loft above serves as the miller's office, where ledgers track every bushel that passes through."
+    }
+  ],
+  "connections": [
+    {"from": "loc-square", "to": "loc-tavern", "distance": 1},
+    {"from": "loc-square", "to": "loc-market", "distance": 1},
+    {"from": "loc-square", "to": "loc-smithy", "distance": 1},
+    {"from": "loc-square", "to": "loc-chapel", "distance": 1},
+    {"from": "loc-square", "to": "loc-forest", "distance": 2},
+    {"from": "loc-square", "to": "loc-farm", "distance": 2},
+    {"from": "loc-tavern", "to": "loc-market", "distance": 1},
+    {"from": "loc-market", "to": "loc-smithy", "distance": 1},
+    {"from": "loc-farm", "to": "loc-forest", "distance": 2},
+    {"from": "loc-chapel", "to": "loc-farm", "distance": 1},
+    {"from": "loc-barracks", "to": "loc-square", "distance": 1},
+    {"from": "loc-mill", "to": "loc-farm", "distance": 1}
+  ],
+  "factions": [
+    {
+      "id": "fac-village-council",
+      "name": "Village Council",
+      "description": "The governing body of Oakhollow, led by Elder Marta. They make decisions about taxes, festivals, and defense.",
+      "goals": ["maintain order", "protect the village", "increase trade"]
+    },
+    {
+      "id": "fac-forest-wardens",
+      "name": "Forest Wardens",
+      "description": "A small group of hunters and rangers who patrol the Whispering Woods and protect the village from beasts.",
+      "goals": ["protect the forest border", "hunt dangerous beasts", "uncover forest secrets"]
+    },
+    {
+      "id": "fac-merchants-guild",
+      "name": "Merchants Guild",
+      "description": "Traders who want to expand Oakhollow into a proper trading post on the route between cities.",
+      "goals": ["increase trade", "build a road to the capital", "acquire rare goods"]
+    },
+    {
+      "id": "fac-militia",
+      "name": "Village Militia",
+      "description": "The armed defenders of Oakhollow, led by Captain Roderick. A dozen men and women trained to hold a shield wall and patrol the roads. They answer to the Village Council in theory, but Roderick increasingly acts on his own judgment.",
+      "goals": ["protect the village from external threats", "expand militia authority", "fortify village defenses", "establish a permanent guard rotation"]
+    },
+    {
+      "id": "fac-underground",
+      "name": "The Whisperers",
+      "description": "A secret network of information brokers, eavesdroppers, and opportunists who trade in secrets and rumors. No one knows who leads them, and membership is never openly acknowledged. They meet in back rooms, forest clearings, and shadowed corners, exchanging whispers that can topple reputations or save lives.",
+      "goals": ["accumulate hidden power through information", "maintain anonymity of members", "influence village decisions from the shadows", "establish contacts in the capital"]
+    }
+  ],
+  "items": [
+    {
+      "id": "item-rusty-sword",
+      "name": "Rusty Sword",
+      "type": "weapon",
+      "description": "A chipped and rusted short sword. Seen better days, but still sharp enough.",
+      "value": 5,
+      "owner_id": "npc-bran"
+    },
+    {
+      "id": "item-healing-herbs",
+      "name": "Healing Herbs",
+      "type": "consumable",
+      "description": "A pouch of dried herbs with soothing properties. Sister Elara swears by them.",
+      "value": 10,
+      "owner_id": "npc-elara"
+    },
+    {
+      "id": "item-silver-locket",
+      "name": "Silver Locket",
+      "type": "quest_item",
+      "description": "A tarnished silver locket with a faded portrait inside. Someone might be looking for this.",
+      "value": 25,
+      "owner_id": "npc-marta"
+    },
+    {
+      "id": "item-master-hammer",
+      "name": "Master's Hammer",
+      "type": "tool",
+      "description": "A perfectly balanced smithing hammer, passed down through generations.",
+      "value": 50,
+      "owner_id": "npc-torvin"
+    }
+  ]
+}

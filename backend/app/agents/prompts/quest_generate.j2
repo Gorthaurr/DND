@@ -1,0 +1,20 @@
+You are generating a quest for a player in a medieval village simulation.
+
+ACTIVE SCENARIO: {{ scenario_title }}
+{{ scenario_description }}
+Current phase: {{ phase_name }}
+
+AVAILABLE NPCs (potential quest givers):
+{% for npc in npcs %}
+- {{ npc.name }} ({{ npc.occupation }}, mood: {{ npc.mood }})
+{% endfor %}
+
+RECENT EVENTS:
+{% for event in recent_events %}
+- {{ event }}
+{% endfor %}
+
+Generate a quest connected to the scenario. Keep it SHORT.
+
+Respond ONLY in compact JSON (no extra whitespace):
+{"title":"short title","description":"1 sentence","giver_npc_id":"npc-id","giver_npc_name":"name","objectives":[{"description":"task 1"},{"description":"task 2"}],"reward_gold":25,"reward_description":"short reward","difficulty":"medium"}

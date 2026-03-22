@@ -1,0 +1,180 @@
+{
+  "events": [
+    {
+      "id": "evt-wolf-sighting",
+      "type": "natural",
+      "description": "A pack of wolves was spotted near the forest edge, closer to the village than usual.",
+      "location_id": "loc-forest",
+      "severity": "medium",
+      "tags": ["danger", "animals", "forest"]
+    },
+    {
+      "id": "evt-merchant-caravan",
+      "type": "trade",
+      "description": "A merchant caravan arrived from the capital, bringing exotic goods and news from afar.",
+      "location_id": "loc-market",
+      "severity": "low",
+      "tags": ["trade", "visitors", "news"]
+    },
+    {
+      "id": "evt-barn-fire",
+      "type": "natural",
+      "description": "A small fire broke out in one of the farm barns. The cause is unknown.",
+      "location_id": "loc-farm",
+      "severity": "high",
+      "tags": ["disaster", "fire", "farm"]
+    },
+    {
+      "id": "evt-strange-tracks",
+      "type": "natural",
+      "description": "Strange, large tracks were found in the mud near the forest path. They don't match any known animal.",
+      "location_id": "loc-forest",
+      "severity": "medium",
+      "tags": ["mystery", "forest", "danger"]
+    },
+    {
+      "id": "evt-tavern-brawl",
+      "type": "social",
+      "description": "A heated argument in the tavern escalated into a brawl between two farmers over a land dispute.",
+      "location_id": "loc-tavern",
+      "severity": "low",
+      "tags": ["conflict", "social", "tavern"]
+    },
+    {
+      "id": "evt-harvest-festival",
+      "type": "social",
+      "description": "The village is preparing for the annual harvest festival. Spirits are high and decorations are going up.",
+      "location_id": "loc-square",
+      "severity": "low",
+      "tags": ["festival", "social", "celebration"]
+    },
+    {
+      "id": "evt-sick-livestock",
+      "type": "natural",
+      "description": "Several cows at Millfield Farm have fallen ill with a mysterious disease.",
+      "location_id": "loc-farm",
+      "severity": "medium",
+      "tags": ["disease", "animals", "farm"]
+    },
+    {
+      "id": "evt-stolen-goods",
+      "type": "conflict",
+      "description": "A merchant reported goods stolen from their stall overnight. Suspicion falls on several villagers.",
+      "location_id": "loc-market",
+      "severity": "medium",
+      "tags": ["theft", "conflict", "mystery"]
+    },
+    {
+      "id": "evt-wandering-knight",
+      "type": "social",
+      "description": "A lone knight in battered armor arrived at the village, seeking rest and claiming to be on a quest.",
+      "location_id": "loc-tavern",
+      "severity": "low",
+      "tags": ["visitors", "adventure", "mystery"]
+    },
+    {
+      "id": "evt-well-poisoned",
+      "type": "conflict",
+      "description": "The village well water tastes strange. Some fear it has been poisoned, others blame the recent rains.",
+      "location_id": "loc-square",
+      "severity": "high",
+      "tags": ["danger", "mystery", "village"]
+    },
+    {
+      "id": "evt-forest-glow",
+      "type": "natural",
+      "description": "An eerie green glow was seen deep in the Whispering Woods at midnight. The hunters are spooked.",
+      "location_id": "loc-forest",
+      "severity": "medium",
+      "tags": ["supernatural", "forest", "mystery"]
+    },
+    {
+      "id": "evt-tax-collector",
+      "type": "social",
+      "description": "The king's tax collector is expected to arrive soon. Villagers are anxious about the new rates.",
+      "location_id": "loc-square",
+      "severity": "medium",
+      "tags": ["politics", "money", "tension"]
+    },
+    {
+      "id": "evt-forge-accident",
+      "type": "natural",
+      "description": "An accident at the smithy sent sparks flying and nearly set fire to the roof. No one was hurt.",
+      "location_id": "loc-smithy",
+      "severity": "low",
+      "tags": ["accident", "smithy"]
+    },
+    {
+      "id": "evt-love-letter",
+      "type": "social",
+      "description": "A love letter was found in the market square. The author is unknown, sparking village gossip.",
+      "location_id": "loc-market",
+      "severity": "low",
+      "tags": ["romance", "gossip", "social"]
+    },
+    {
+      "id": "evt-herb-shortage",
+      "type": "trade",
+      "description": "The usual supply of medicinal herbs has dried up. The herbalists are struggling to find alternatives.",
+      "location_id": "loc-chapel",
+      "severity": "medium",
+      "tags": ["scarcity", "healing", "trade"]
+    },
+    {
+      "id": "evt-missing-child",
+      "type": "conflict",
+      "description": "A farmer's child went missing near the forest edge. Search parties are being organized.",
+      "location_id": "loc-forest",
+      "severity": "high",
+      "tags": ["danger", "missing", "urgent"]
+    },
+    {
+      "id": "evt-drought-warning",
+      "type": "natural",
+      "description": "The river is running low and the well level is dropping. If rain doesn't come soon, the crops will suffer.",
+      "location_id": "loc-farm",
+      "severity": "medium",
+      "tags": ["weather", "farm", "scarcity"]
+    },
+    {
+      "id": "evt-old-ruins",
+      "type": "natural",
+      "description": "A landslide near the forest revealed the entrance to what appears to be ancient ruins.",
+      "location_id": "loc-forest",
+      "severity": "medium",
+      "tags": ["discovery", "adventure", "mystery"]
+    },
+    {
+      "id": "evt-council-dispute",
+      "type": "social",
+      "description": "The village council is split over whether to spend gold on new defenses or on improving the market road.",
+      "location_id": "loc-square",
+      "severity": "low",
+      "tags": ["politics", "conflict", "decision"]
+    },
+    {
+      "id": "evt-full-moon",
+      "type": "natural",
+      "description": "A blood-red full moon rises tonight. The superstitious villagers bar their doors and mutter prayers.",
+      "location_id": "loc-chapel",
+      "severity": "low",
+      "tags": ["supernatural", "atmosphere", "fear"]
+    },
+    {
+      "id": "evt-bandits-road",
+      "type": "conflict",
+      "description": "Reports of bandits on the trade road to the capital. Merchant traffic has slowed to a trickle.",
+      "location_id": "loc-market",
+      "severity": "high",
+      "tags": ["danger", "bandits", "trade"]
+    },
+    {
+      "id": "evt-newcomer",
+      "type": "social",
+      "description": "A hooded stranger arrived at the village and took a room at the tavern without saying a word.",
+      "location_id": "loc-tavern",
+      "severity": "low",
+      "tags": ["mystery", "visitors", "suspicion"]
+    }
+  ]
+}

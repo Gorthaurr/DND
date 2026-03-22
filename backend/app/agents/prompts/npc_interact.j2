@@ -1,0 +1,87 @@
+Two NPCs meet at {{ location_name }}. Determine what happens between them.
+
+===== NPC A: {{ npc_a.name }} =====
+Occupation: {{ npc_a.occupation }}
+Personality: {{ npc_a.personality }}
+Mood: {{ npc_a.mood }}
+Goals: {{ npc_a.goals | join(', ') if npc_a.goals else 'none' }}
+{% if npc_a.combat_capability %}Combat: {{ npc_a.combat_capability }}{% endif %}
+{% if npc_a.gold %}Gold: {{ npc_a.gold }}gp{% endif %}
+{% if npc_a.current_hp is defined %}HP: {{ npc_a.current_hp }}/{{ npc_a.max_hp }}{% endif %}
+{% if npc_a.archetype %}Archetype: {{ npc_a.archetype }}{% endif %}
+
+===== NPC B: {{ npc_b.name }} =====
+Occupation: {{ npc_b.occupation }}
+Personality: {{ npc_b.personality }}
+Mood: {{ npc_b.mood }}
+Goals: {{ npc_b.goals | join(', ') if npc_b.goals else 'none' }}
+{% if npc_b.combat_capability %}Combat: {{ npc_b.combat_capability }}{% endif %}
+{% if npc_b.gold %}Gold: {{ npc_b.gold }}gp{% endif %}
+{% if npc_b.current_hp is defined %}HP: {{ npc_b.current_hp }}/{{ npc_b.max_hp }}{% endif %}
+{% if npc_b.archetype %}Archetype: {{ npc_b.archetype }}{% endif %}
+
+===== THEIR RELATIONSHIP =====
+{% if a_to_b %}
+{{ npc_a.name }} feels {{ "very positive" if a_to_b.sentiment > 0.5 else "positive" if a_to_b.sentiment > 0 else "HOSTILE" if a_to_b.sentiment < -0.5 else "negative" if a_to_b.sentiment < 0 else "neutral" }} toward {{ npc_b.name }} ({{ a_to_b.reason }})
+{% else %}
+{{ npc_a.name }} has no strong feelings about {{ npc_b.name }}
+{% endif %}
+{% if b_to_a %}
+{{ npc_b.name }} feels {{ "very positive" if b_to_a.sentiment > 0.5 else "positive" if b_to_a.sentiment > 0 else "HOSTILE" if b_to_a.sentiment < -0.5 else "negative" if b_to_a.sentiment < 0 else "neutral" }} toward {{ npc_a.name }} ({{ b_to_a.reason }})
+{% else %}
+{{ npc_b.name }} has no strong feelings about {{ npc_a.name }}
+{% endif %}
+
+{% if scenario_context %}
+===== ONGOING STORY =====
+{{ scenario_context }}
+{% endif %}
+
+===== INTERACTION RULES =====
+The interaction MUST match the relationship and moods. Follow these STRICTLY:
+
+HOSTILE ENCOUNTERS (sentiment < -0.3 for either NPC):
+- If BOTH are hostile → "fight" or "threaten" (70% fight, 30% threaten)
+- If one is hostile and stronger → "threaten"
+- If one is hostile and weaker → "rob" (if thief archetype) or "threaten"
+- Hostile NPCs NEVER have polite conversations. They argue, fight, or threaten.
+
+CRIMINAL ENCOUNTERS:
+- If one has thief/rogue/criminal archetype and the other has gold → possible "rob"
+- If caught stealing before → escalates to "fight"
+
+FRIENDLY ENCOUNTERS (both sentiment > 0.3):
+- "help", "trade", or "gift" are preferred
+- Share information, make plans, support each other
+
+NEUTRAL ENCOUNTERS (sentiment near 0):
+- "trade" if either is a merchant, craftsperson, or farmer
+- "help" if one seems to need assistance
+- "gift" if one is generous and the other is poor/struggling
+
+EMERGENCY (scenario context mentions danger/threat):
+- Both may "help" each other regardless of sentiment
+- Or one may betray the other ("rob", "threaten") if evil archetype
+
+CRITICAL: You MUST choose an action other than "none". Every encounter has consequences!
+- Two villagers meeting? They trade goods, share help, or gift something.
+- A merchant meets anyone? They trade.
+- A priest meets anyone? They help or comfort.
+- Strangers? They trade information (counts as "help").
+- The ONLY time "none" is acceptable is if both NPCs literally have nothing to say and no relationship.
+- When in doubt, choose "help" or "trade" — villagers support each other.
+
+Respond ONLY in JSON:
+{
+  "interaction_type": "conversation|argument|trade|fight|robbery|help|alliance|betrayal|warning",
+  "summary": "2-3 sentences describing what happened between them",
+  "dialogue_a": "what {{ npc_a.name }} says (1-2 sentences)",
+  "dialogue_b": "what {{ npc_b.name }} says (1-2 sentences)",
+  "action": "fight|trade|rob|help|threaten|gift|none",
+  "action_initiator": "a|b|none",
+  "action_details": {"gold_amount": 0},
+  "a_sentiment_change": 0.0,
+  "b_sentiment_change": 0.0,
+  "a_mood_change": "same|better|worse",
+  "b_mood_change": "same|better|worse"
+}

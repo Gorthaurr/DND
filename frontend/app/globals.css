@@ -1,0 +1,545 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ========== CSS CUSTOM PROPERTIES ========== */
+:root {
+  --gold: #C23A2E;
+  --parchment: #E6EDF3;
+  --bg-dark: #0D1117;
+}
+
+/* ========== BASE — Dark Blue-Black Aesthetic ========== */
+@layer base {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(194, 58, 46, 0.2) transparent;
+  }
+
+  html {
+    font-size: 17px;
+  }
+
+  body {
+    background: #0D1117;
+    color: #E6EDF3;
+    font-family: "Crimson Text", Georgia, serif;
+    font-size: 1rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background: rgba(194, 58, 46, 0.3);
+    color: #fff;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "Cinzel", Georgia, serif;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+}
+
+/* ========== SCROLLBAR ========== */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #30363D;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #484F58;
+}
+
+/* ========== COMPONENTS ========== */
+@layer components {
+  /* Glass panel */
+  .glass-panel {
+    background: rgba(22, 27, 34, 0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid #30363D;
+    border-radius: 8px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  }
+
+  .glass-panel:hover {
+    border-color: rgba(48, 54, 61, 0.8);
+  }
+
+  /* Game card */
+  .game-card {
+    @apply relative overflow-hidden;
+    background: #161B22;
+    border: 1px solid #30363D;
+    border-radius: 6px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
+  }
+
+  .game-card:hover {
+    border-color: rgba(194, 58, 46, 0.2);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(194, 58, 46, 0.1);
+    transform: translateY(-2px) scale(1.005);
+  }
+
+  .game-card.selected {
+    border-color: rgba(194, 58, 46, 0.5);
+    box-shadow: 0 0 30px rgba(194, 58, 46, 0.12), 0 0 0 1px rgba(194, 58, 46, 0.3);
+  }
+
+  /* Gold gradient text */
+  .text-gradient-gold {
+    background: linear-gradient(135deg, #C23A2E 0%, #E04A3E 50%, #B89A3C 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Accent line — gold divider */
+  .accent-line {
+    width: 80px;
+    height: 3px;
+    background: rgba(194, 58, 46, 0.5);
+    border-radius: 2px;
+  }
+
+  /* Section title */
+  .section-title {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(194, 58, 46, 0.7);
+  }
+
+  /* Ghost button */
+  .ghost-btn {
+    @apply relative px-5 py-2.5 text-sm font-medieval uppercase tracking-wider;
+    background: transparent;
+    border: 2px solid rgba(194, 58, 46, 0.3);
+    color: rgba(230, 237, 243, 0.8);
+    transition: all 0.25s ease;
+    border-radius: 4px;
+    letter-spacing: 0.15em;
+  }
+
+  .ghost-btn:hover:not(:disabled) {
+    background: rgba(194, 58, 46, 0.06);
+    border-color: rgba(194, 58, 46, 0.6);
+    color: #E6EDF3;
+  }
+
+  .ghost-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  /* Fantasy button — ghost with gold tint */
+  .btn-fantasy {
+    @apply relative px-5 py-2.5 text-sm font-medieval uppercase tracking-wider;
+    background: transparent;
+    border: 2px solid rgba(194, 58, 46, 0.4);
+    color: #C23A2E;
+    transition: all 0.25s ease;
+    border-radius: 4px;
+    letter-spacing: 0.15em;
+  }
+
+  .btn-fantasy:hover:not(:disabled) {
+    background: rgba(194, 58, 46, 0.08);
+    border-color: rgba(194, 58, 46, 0.7);
+    color: #E04A3E;
+  }
+
+  .btn-fantasy:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  /* Input — dark style */
+  .input-fantasy {
+    @apply w-full px-4 py-3 text-base;
+    background: #161B22;
+    border: 1px solid #30363D;
+    color: #E6EDF3;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    font-size: 16px;
+  }
+
+  .input-fantasy::placeholder {
+    color: #8B949E;
+  }
+
+  .input-fantasy:focus {
+    outline: none;
+    border-color: rgba(194, 58, 46, 0.5);
+    box-shadow: 0 0 0 2px rgba(194, 58, 46, 0.08), 0 0 15px rgba(194, 58, 46, 0.05);
+  }
+
+  /* Badge — small pill */
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 text-xs font-medium;
+    border-radius: 3px;
+  }
+
+  /* Divider ornament — gradient line */
+  .divider-ornament {
+    @apply relative h-px my-4;
+    background: linear-gradient(90deg, transparent 0%, rgba(194, 58, 46, 0.25) 50%, transparent 100%);
+  }
+
+  /* Mood badge — single unified class */
+  .mood-badge {
+    font-family: 'Crimson Text', Georgia, serif;
+    font-size: 12px;
+    padding: 2px 8px;
+    color: #8B949E;
+  }
+
+  /* NPC card — left accent on hover */
+  .npc-card {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    border-left: 2px solid transparent;
+  }
+  .npc-card:hover {
+    background: rgba(194, 58, 46, 0.04);
+    border-left-color: rgba(194, 58, 46, 0.4);
+  }
+  .npc-card.selected {
+    background: rgba(194, 58, 46, 0.06);
+    border-left-color: #C23A2E;
+  }
+}
+
+/* ========== AMBIENT EFFECTS ========== */
+
+/* Background subtle gradient */
+.bg-pattern {
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(194, 58, 46, 0.015) 0%, transparent 100%),
+    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(194, 58, 46, 0.01) 0%, transparent 100%);
+}
+
+/* Floating particles */
+.particles-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(230, 237, 243, 0.15);
+  animation: particleFloat 25s linear infinite;
+}
+
+@keyframes particleFloat {
+  0% { transform: translateY(100vh) scale(0); opacity: 0; }
+  5% { opacity: 0.15; transform: translateY(95vh) scale(1); }
+  95% { opacity: 0.05; }
+  100% { transform: translateY(-5vh) scale(0.3); opacity: 0; }
+}
+
+/* Typing dots */
+.typing-dots span {
+  display: inline-block;
+  animation: typingDot 1.4s ease-in-out infinite;
+}
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typingDot {
+  0%, 60%, 100% { opacity: 0.15; transform: translateY(0); }
+  30% { opacity: 0.8; transform: translateY(-5px); }
+}
+
+/* Glow pulse — gold */
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(194, 58, 46, 0.08); }
+  50% { box-shadow: 0 0 25px rgba(194, 58, 46, 0.2); }
+}
+
+/* Tooltip */
+.tooltip-trigger { position: relative; }
+.tooltip-trigger .tooltip-content {
+  visibility: hidden; opacity: 0;
+  position: absolute; bottom: calc(100% + 10px); left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  padding: 8px 14px;
+  background: rgba(13, 17, 23, 0.95);
+  border: 1px solid #30363D;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  pointer-events: none;
+  transition: all 0.2s ease;
+  z-index: 50;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+  color: #E6EDF3;
+}
+.tooltip-trigger:hover .tooltip-content {
+  visibility: visible; opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ========== DARK BLUE-BLACK THEME ========== */
+
+.bg-leather {
+  background: #0D1117;
+}
+
+.bg-stone {
+  background: #0D1117;
+}
+
+/* Ornamental border — subtle line */
+.ornament-border {
+  height: 1px;
+  background: #30363D;
+}
+
+/* Vignette corners for cards */
+.vignette-card {
+  background: #161B22;
+  border: 1px solid #30363D;
+  border-radius: 6px;
+  box-shadow:
+    inset 0 1px 0 rgba(48, 54, 61, 0.3),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+    0 4px 12px rgba(0, 0, 0, 0.4);
+  position: relative;
+}
+.vignette-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 6px;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.3) 100%);
+}
+
+/* Stone button style — SEND button */
+.btn-stone {
+  background: rgba(194, 58, 46, 0.15);
+  border: 1px solid rgba(194, 58, 46, 0.3);
+  border-radius: 6px;
+  color: #C23A2E;
+  padding: 8px 16px;
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 13px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+}
+.btn-stone:hover {
+  background: rgba(194, 58, 46, 0.25);
+  border-color: rgba(194, 58, 46, 0.5);
+}
+
+/* Parchment panel for text blocks */
+.parchment-panel {
+  background: #161B22;
+  border: 1px solid #30363D;
+  border-radius: 4px;
+  position: relative;
+}
+.parchment-panel::before,
+.parchment-panel::after {
+  content: '';
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(48, 54, 61, 0.5), transparent);
+}
+.parchment-panel::before { top: 0; }
+.parchment-panel::after { bottom: 0; }
+
+/* Atmospheric fire glow — removed for blue-black theme */
+.fire-ambience {
+  background: none;
+  pointer-events: none;
+}
+
+/* NPC card hover glow */
+.npc-card-hover {
+  transition: all 0.2s ease;
+}
+.npc-card-hover:hover {
+  background: #1C2128;
+}
+
+/* Fantasy input field */
+.input-scroll {
+  background: #161B22;
+  border: 1px solid #30363D;
+  border-radius: 8px;
+  color: #E6EDF3;
+  height: 56px;
+  padding: 0 20px;
+  font-family: 'Crimson Text', Georgia, serif;
+  font-size: 16px;
+  transition: border-color 0.2s ease;
+}
+.input-scroll:focus {
+  outline: none;
+  border-color: rgba(194, 58, 46, 0.5);
+}
+.input-scroll::placeholder {
+  color: #8B949E;
+  font-style: italic;
+}
+
+/* Fade-in animation for messages */
+@keyframes message-appear {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.message-fade-in {
+  animation: message-appear 0.4s ease-out;
+}
+
+/* DM message styling */
+.dm-message {
+  background: rgba(194, 58, 46, 0.04);
+  border-left: 2px solid rgba(194, 58, 46, 0.3);
+  border-radius: 0 4px 4px 0;
+  padding: 16px 20px;
+}
+
+/* Player message styling */
+.player-message {
+  background: rgba(230, 237, 243, 0.04);
+  border-right: 2px solid rgba(230, 237, 243, 0.12);
+  border-radius: 4px 0 0 4px;
+  padding: 16px 20px;
+  text-align: right;
+}
+
+/* System message */
+.system-message {
+  background: rgba(194, 58, 46, 0.02);
+  border-left: 2px solid rgba(194, 58, 46, 0.12);
+  border-radius: 0 4px 4px 0;
+  padding: 8px 16px;
+  font-size: 13px;
+  color: #8B949E;
+}
+
+/* Personality bars */
+.personality-bar {
+  height: 4px;
+  border-radius: 2px;
+  background: #30363D;
+}
+.personality-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: rgba(194, 58, 46, 0.5);
+  transition: width 0.5s ease-out;
+}
+
+/* Relationship bar */
+.relationship-bar {
+  height: 3px;
+  border-radius: 2px;
+  background: #30363D;
+}
+.relationship-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, rgba(194, 58, 46, 0.3), rgba(194, 58, 46, 0.6));
+  transition: width 0.5s ease-out;
+}
+
+/* Drop cap for backstory */
+.drop-cap::first-letter {
+  float: left;
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 48px;
+  line-height: 0.8;
+  padding-right: 8px;
+  color: #C23A2E;
+}
+
+/* ========== MICRO-ANIMATIONS ========== */
+
+/* Pulse glow for active/selected elements — gold */
+@keyframes pulse-gold {
+  0%, 100% { box-shadow: 0 0 5px rgba(194, 58, 46, 0.2); }
+  50% { box-shadow: 0 0 15px rgba(194, 58, 46, 0.4); }
+}
+.pulse-active {
+  animation: pulse-gold 2s ease-in-out infinite;
+}
+
+/* Relationship bar fill animation */
+@keyframes bar-fill {
+  from { width: 0; }
+  to { width: var(--fill-width); }
+}
+.bar-animate {
+  animation: bar-fill 0.8s ease-out forwards;
+}
+
+/* Hover lift for interactive cards */
+.hover-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Fade in up — general purpose entrance */
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in-up {
+  animation: fade-in-up 0.5s ease-out;
+}
+
+/* Scroll-like panels */
+.scroll-panel {
+  background: rgba(22, 27, 34, 0.6);
+  border: 1px solid #30363D;
+  border-radius: 8px;
+}
+
+/* Fantasy card style */
+.fantasy-card {
+  background: #161B22;
+  border: 1px solid #30363D;
+  border-radius: 8px;
+  box-shadow:
+    0 0 15px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(48, 54, 61, 0.3);
+}
+
+/* Nav tab hover */
+.nav-tab-btn:hover {
+  color: rgba(230, 237, 243, 0.7) !important;
+}
+
+/* Sidebar NPC button hover */
+.npc-sidebar-btn:hover {
+  background: rgba(194, 58, 46, 0.04) !important;
+}
+
+/* Sidebar exit button hover */
+.exit-btn:hover {
+  background: rgba(194, 58, 46, 0.08) !important;
+}

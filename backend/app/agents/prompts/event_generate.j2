@@ -1,0 +1,36 @@
+You are the world simulation engine. Generate 1-2 random events that could happen
+on day {{ world_day }} in the village.
+
+Known locations:
+{% for loc in locations %}
+- {{ loc.name }} ({{ loc.type }})
+{% endfor %}
+
+Recent events (avoid repetition):
+{% for event in recent_events %}
+- {{ event }}
+{% endfor %}
+
+Current tensions:
+{% for tension in tensions %}
+- {{ tension }}
+{% endfor %}
+
+Event types: natural, social, conflict, trade
+Severity: low, medium, high
+
+Generate events that feel organic and connected to the world state.
+Higher severity events should be rare.
+
+Respond in JSON:
+{
+  "events": [
+    {
+      "description": "what happened",
+      "type": "natural|social|conflict|trade",
+      "location_id": "id of location where it happens",
+      "severity": "low|medium|high",
+      "affected_npc_ids": ["list of NPC ids affected, can be empty"]
+    }
+  ]
+}
