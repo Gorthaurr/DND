@@ -31,3 +31,9 @@ data/
 # OS
 .DS_Store
 Thumbs.db
+C*tick_result*
+worlds/saves/
+worlds/chat_log.json
+worlds/world_log.json
+backend/celerybeat-schedule
+frontend/node_modules/
