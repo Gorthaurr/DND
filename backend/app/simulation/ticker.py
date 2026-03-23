@@ -62,11 +62,42 @@ async def run_world_tick() -> dict:
     recent_events_raw = await gq.get_recent_events(max(1, world_day - 3))
     recent_event_descs = [e["description"] for e in recent_events_raw]
 
-    # ── 2. SCENARIO LIFECYCLE ──────────────────────────────────────────
+    # ── 1.5. ENVIRONMENT ────────────────────────────────────────────
+    from app.simulation.environment import environment_engine
+    env_result = await environment_engine.tick(gq, world_day)
+    env_events, current_season, current_weather = env_result
+    # Refresh locations after env updates
+    locations = await gq.get_all_locations()
+
+    # ── 1.6. ECONOMY ────────────────────────────────────────────────
+    from app.simulation.economy import economy_engine
+    economy_events = await economy_engine.tick(gq, world_day, all_npcs)
+
+    # ── 2. SCENARIO LIFECYCLE (now uses Narrator for tension-based arcs) ──
     from app.simulation.scenario_manager import run_scenario_lifecycle
     scenario_directives, scenario_injected_events, scenario_infos = await run_scenario_lifecycle(
         gq, world_day, all_npcs, locations, recent_event_descs,
     )
+
+    # ── 2.5. FACTION STRATEGIES ──────────────────────────────────────
+    from app.agents.faction_agent import faction_agent
+    faction_directives: dict[str, str] = {}
+    try:
+        all_factions = await gq.get_all_factions()
+        for faction in all_factions:
+            members = await gq.get_faction_members(faction["id"])
+            if not members:
+                continue
+            other_factions = [f for f in all_factions if f["id"] != faction["id"]]
+            strategy_result = await faction_agent.strategize(
+                faction, members, other_factions,
+            )
+            # Update faction strategy in graph
+            await gq.update_faction(faction["id"], {"strategy": strategy_result["strategy"]})
+            # Merge faction directives into NPC directives
+            faction_directives.update(strategy_result.get("directives", {}))
+    except Exception as e:
+        log.error("faction_strategy_failed", error=str(e))
 
     # ── 3. WORLD EVENTS ────────────────────────────────────────────────
     event_agent.load_event_pool(settings.worlds_dir / "medieval_village")
@@ -76,15 +107,17 @@ async def run_world_tick() -> dict:
         recent_events=recent_event_descs,
         tensions=[],
     )
-    # Add scenario-injected events
+    # Add scenario-injected events + environment events + economy events
     generated_events.extend(scenario_injected_events)
+    generated_events.extend(env_events)
+    generated_events.extend(economy_events)
 
     event_results = await process_events(gq, generated_events, world_day)
 
     # Refresh event descriptions for NPC context
     all_event_descs = recent_event_descs + [e["description"] for e in generated_events]
 
-    # ── 4. NPC DECISIONS ───────────────────────────────────────────────
+    # ── 4. NPC DECISIONS (with priority-based scaling) ─────────────────
     # At night, some NPCs sleep
     if current_day_phase in ("night", "dawn"):
         active_for_decisions = [n for n in active_npcs if _rng.random() > 0.4]  # 60% sleep
@@ -92,9 +125,53 @@ async def run_world_tick() -> dict:
         active_for_decisions = active_npcs
 
     npc_actions = []
-    decision_tasks = []  # (npc, ctx) pairs
 
+    # ── Priority classification ──
+    # High: NPC in active scenario or has scene_context
+    # Low: everyone else → gets deterministic decision without LLM
+    scenario_npc_ids = set()
+    for s in scenario_infos:
+        scenario_npc_ids.update(s.get("involved_npc_ids", []))
+
+    high_priority = []
+    low_priority = []
     for npc in active_for_decisions:
+        if npc["id"] in scenario_npc_ids or npc["id"] in scenario_directives or npc["id"] in faction_directives:
+            high_priority.append(npc)
+        else:
+            low_priority.append(npc)
+
+    # Ensure we use LLM for at least priority_llm_ratio of NPCs
+    llm_budget = max(len(high_priority), int(len(active_for_decisions) * settings.priority_llm_ratio))
+    extra_llm_slots = llm_budget - len(high_priority)
+    if extra_llm_slots > 0 and low_priority:
+        _rng.shuffle(low_priority)
+        promoted = low_priority[:extra_llm_slots]
+        remaining_low = low_priority[extra_llm_slots:]
+        high_priority.extend(promoted)
+        low_priority = remaining_low
+
+    # ── Deterministic decisions for low-priority NPCs (schedule engine, no LLM) ──
+    from app.simulation.schedule import schedule_engine
+    for npc in low_priority:
+        sched = schedule_engine.get_activity(npc, current_day_phase, world_day)
+        action = sched["action"]
+        activity_desc = sched["activity_desc"]
+        npc_actions.append({
+            "npc_id": npc["id"],
+            "npc_name": npc["name"],
+            "action": action,
+            "target": None,
+            "dialogue": None,
+            "reasoning": "daily routine",
+        })
+        await gq.update_npc(npc["id"], {"current_activity": activity_desc})
+        add_memory(npc["id"], f"Day {world_day}: Spent the day {activity_desc}.", day=world_day)
+
+    # ── LLM decisions for high-priority NPCs (in batches) ──
+    decision_tasks = []
+
+    for npc in high_priority:
         try:
             location = await gq.get_npc_location(npc["id"])
             if not location:
@@ -103,7 +180,6 @@ async def run_world_tick() -> dict:
             nearby = await gq.get_npcs_at_location(location["id"])
             nearby = [n for n in nearby if n["id"] != npc["id"]]
 
-            # Get connected locations so NPC knows where they can move
             connected_locs = await gq.get_connected_locations(location["id"])
 
             relationships_raw = await gq.get_relationships(npc["id"])
@@ -114,7 +190,6 @@ async def run_world_tick() -> dict:
 
             memories = get_recent_memories(npc["id"], limit=5)
 
-            # Resolve archetype
             archetype_name = None
             archetype_decision_bias = None
             archetype_group_role = None
@@ -126,7 +201,6 @@ async def run_world_tick() -> dict:
                     archetype_decision_bias = arch.decision_bias
                     archetype_group_role = arch.group_role
 
-            # Equipment summary
             equipment_summary = None
             combat_capability = None
             npc_gold = npc.get("gold", 0)
@@ -147,12 +221,15 @@ async def run_world_tick() -> dict:
                 npc_class = npc.get("class_id", npc["occupation"])
                 combat_capability = f"Level {npc_level} {npc_class}, HP ~{npc.get('max_hp', 10)}"
 
-            current_phase = current_day_phase
-
-            # Inject scenario directive into scene context
             scene_context = scenario_directives.get(npc["id"])
+            # Merge faction directive into scene context
+            fac_directive = faction_directives.get(npc["id"])
+            if fac_directive:
+                if scene_context:
+                    scene_context = f"{scene_context} | FACTION ORDER: {fac_directive}"
+                else:
+                    scene_context = f"FACTION ORDER: {fac_directive}"
 
-            # Enrich nearby NPCs with relationship info and HP
             enriched_nearby = []
             for n in nearby:
                 nd = dict(n)
@@ -167,6 +244,7 @@ async def run_world_tick() -> dict:
                 name=npc["name"],
                 personality=npc["personality"],
                 backstory=npc.get("backstory", ""),
+                biography=npc.get("biography"),
                 goals=npc.get("goals", []),
                 mood=npc["mood"],
                 occupation=npc["occupation"],
@@ -178,7 +256,7 @@ async def run_world_tick() -> dict:
                 recent_memories=memories,
                 recent_events=all_event_descs[-5:],
                 world_day=world_day,
-                current_phase=current_phase,
+                current_phase=current_day_phase,
                 archetype_name=archetype_name,
                 archetype_decision_bias=archetype_decision_bias,
                 archetype_group_role=archetype_group_role,
@@ -187,13 +265,28 @@ async def run_world_tick() -> dict:
                 combat_capability=combat_capability,
                 gold=npc_gold,
                 nearby_locations=[loc["name"] for loc in connected_locs],
+                # Evolution baselines
+                trust_baseline=npc.get("trust_baseline", 0.0) or 0.0,
+                mood_baseline=npc.get("mood_baseline", 0.0) or 0.0,
+                aggression_baseline=npc.get("aggression_baseline", 0.0) or 0.0,
+                confidence_baseline=npc.get("confidence_baseline", 0.0) or 0.0,
+                # Environment
+                season=current_season,
+                weather=current_weather,
+                location_condition=location.get("condition"),
+                # Economy
+                local_shortages=economy_engine.get_shortages(location),
+                # Faction
+                faction_directive=faction_directives.get(npc["id"]),
             )
 
             decision_tasks.append((npc, ctx))
         except Exception as e:
             log.error("npc_context_failed", npc=npc["name"], error=str(e))
 
-    # Run all decisions in parallel
+    # Process LLM decisions in batches to avoid overwhelming Ollama
+    batch_size = settings.llm_batch_size
+
     async def _decide_and_apply(npc_data, context):
         try:
             decision = await npc_agent.decide(context)
@@ -202,33 +295,44 @@ async def run_world_tick() -> dict:
             log.error("npc_decide_failed", npc=npc_data["name"], error=str(e))
             return None
 
-    results = await asyncio.gather(
-        *[_decide_and_apply(npc, ctx) for npc, ctx in decision_tasks],
-        return_exceptions=True,
-    )
+    for batch_start in range(0, len(decision_tasks), batch_size):
+        batch = decision_tasks[batch_start : batch_start + batch_size]
+        results = await asyncio.gather(
+            *[_decide_and_apply(npc, ctx) for npc, ctx in batch],
+            return_exceptions=True,
+        )
 
-    for res in results:
-        if res is None or isinstance(res, Exception):
-            continue
-        npc, decision = res
-        npc_actions.append({
-            "npc_id": npc["id"],
-            "npc_name": npc["name"],
-            "action": decision.action,
-            "target": decision.target,
-            "dialogue": decision.dialogue,
-            "reasoning": decision.reasoning,
-        })
-        await _apply_decision(gq, npc, decision, locations, world_day)
-        add_memory(npc["id"], f"Day {world_day}: I decided to {decision.action}" +
-                   (f" targeting {decision.target}" if decision.target else ""), day=world_day)
-        mood = npc["mood"]
-        if decision.mood_change == "better":
-            mood = "content" if mood in ("angry", "fearful") else "excited"
-        elif decision.mood_change == "worse":
-            mood = "angry" if mood in ("content", "excited") else "fearful"
-        if mood != npc["mood"]:
-            await gq.update_npc(npc["id"], {"mood": mood})
+        from app.simulation.evolution import evolution_engine
+
+        for res in results:
+            if res is None or isinstance(res, Exception):
+                continue
+            npc, decision = res
+            npc_actions.append({
+                "npc_id": npc["id"],
+                "npc_name": npc["name"],
+                "action": decision.action,
+                "target": decision.target,
+                "dialogue": decision.dialogue,
+                "reasoning": decision.reasoning,
+            })
+            combat_result = await _apply_decision(gq, npc, decision, locations, world_day)
+            add_memory(npc["id"], f"Day {world_day}: I decided to {decision.action}" +
+                       (f" targeting {decision.target}" if decision.target else ""), day=world_day)
+            mood = npc["mood"]
+            if decision.mood_change == "better":
+                mood = "content" if mood in ("angry", "fearful") else "excited"
+            elif decision.mood_change == "worse":
+                mood = "angry" if mood in ("content", "excited") else "fearful"
+            if mood != npc["mood"]:
+                await gq.update_npc(npc["id"], {"mood": mood})
+
+            # ── Evolution: shift baselines based on action outcome ──
+            event_types = evolution_engine.classify_action_outcome(
+                decision.action, decision.target, combat_result,
+            )
+            if event_types:
+                await evolution_engine.apply_shifts(gq, npc["id"], npc, event_types)
 
     # ── 5. NPC INTERACTIONS (with consequences) ────────────────────────
     # Build scenario context string for interactions
@@ -242,35 +346,56 @@ async def run_world_tick() -> dict:
         gq, npc_agent, active_npcs, world_day, scenario_context_str,
     )
 
-    # ── 6. CLEANUP ─────────────────────────────────────────────────────
+    # ── 6. CLEANUP & MEMORY ──────────────────────────────────────────
     await propagate_rumors(gq, active_npcs, world_day)
 
+    from app.agents.memory_architect import memory_architect
+    from app.models.memory import purge_old_summarized
     from app.simulation.events import summarize_old_memories
     for npc in active_npcs:
         count = get_memory_count(npc["id"])
         if count > settings.memory_summarize_threshold:
-            await summarize_old_memories(npc["id"])
+            # Use Memory Architect for smart consolidation
+            await memory_architect.consolidate_npc(npc["id"], npc["name"])
+        # Decay old memories (importance fades over time)
+        memory_architect.decay_memories(npc["id"], world_day)
+        # Defragment: remove oldest summarized records if too many accumulated
+        purge_old_summarized(npc["id"], keep=50)
+
+    # Build collective location memory every 5 days
+    if world_day % 5 == 0:
+        for loc in locations:
+            try:
+                await memory_architect.build_location_memory(gq, loc["id"], loc["name"], world_day)
+            except Exception as e:
+                log.error("location_memory_failed", location=loc["name"], error=str(e))
 
     result = {
         "day": world_day,
+        "season": current_season,
+        "weather": current_weather,
         "events": [{"description": e["description"], "type": e.get("type", "event")} for e in generated_events],
         "npc_actions": npc_actions,
         "interactions": interactions,
         "active_scenarios": scenario_infos,
     }
 
-    log.info("tick_done", day=world_day, events=len(generated_events),
-             actions=len(npc_actions), scenarios=len(scenario_infos))
+    log.info("tick_done", day=world_day, season=current_season, weather=current_weather,
+             events=len(generated_events), actions=len(npc_actions), scenarios=len(scenario_infos))
     return result
 
 
-async def _apply_decision(gq: GraphQueries, npc: dict, decision, locations: list[dict], world_day: int) -> None:
-    """Apply an NPC's decision to the world graph — FULL execution of all action types."""
+async def _apply_decision(gq: GraphQueries, npc: dict, decision, locations: list[dict], world_day: int) -> dict | None:
+    """Apply an NPC's decision to the world graph — FULL execution of all action types.
+
+    Returns combat_result dict if a fight/rob occurred, else None.
+    """
     import random
     from app.models.memory import add_memory
 
     action = decision.action
     target_name = decision.target
+    combat_result = None
 
     # ── MOVE ──
     if action == "move" and target_name:
@@ -305,7 +430,7 @@ async def _apply_decision(gq: GraphQueries, npc: dict, decision, locations: list
             nearby = await gq.get_npcs_at_location(location["id"])
             target = next((n for n in nearby if target_name.lower() in n["name"].lower() and n["id"] != npc["id"]), None)
             if target and target.get("alive", True):
-                await _resolve_npc_combat(gq, npc, target, action, world_day)
+                combat_result = await _resolve_npc_combat(gq, npc, target, action, world_day)
 
     # ── REST ── (heal HP)
     elif action == "rest":
@@ -352,16 +477,22 @@ async def _apply_decision(gq: GraphQueries, npc: dict, decision, locations: list
                 if target:
                     await gq.set_relationship(target["id"], npc["id"], -0.3, "was threatened")
                     add_memory(target["id"], f"Day {world_day}: {npc['name']} threatened me!", day=world_day, importance=0.9)
+                    # Evolution: victim's trust and confidence drop
+                    from app.simulation.evolution import evolution_engine as _evo
+                    await _evo.apply_shifts(gq, target["id"], target, ["was_threatened"])
 
     # Store consequence as NPC activity
     if decision.consequence:
         await gq.update_npc(npc["id"], {"current_activity": decision.consequence[:100]})
+
+    return combat_result
 
 
 async def _resolve_npc_combat(gq: GraphQueries, attacker: dict, defender: dict, action: str, world_day: int) -> dict:
     """Resolve autonomous NPC-to-NPC combat using D&D-style rules."""
     import random
     from app.models.memory import add_memory
+    from app.simulation.evolution import evolution_engine
 
     atk_level = attacker.get("level", 1)
     def_level = defender.get("level", 1)
@@ -384,11 +515,14 @@ async def _resolve_npc_combat(gq: GraphQueries, attacker: dict, defender: dict, 
             add_memory(defender["id"], f"Day {world_day}: Was robbed! Lost {stolen} gold.", day=world_day, importance=0.9)
             await gq.set_relationship(defender["id"], attacker["id"], -0.8, "robbed me")
             await gq.update_npc(defender["id"], {"mood": "angry"})
+            # Evolution: victim's trust drops
+            await evolution_engine.apply_shifts(gq, defender["id"], defender, ["was_robbed"])
         else:
             # Caught! Turns into fight
             add_memory(defender["id"], f"Day {world_day}: Caught {attacker['name']} trying to rob me!", day=world_day, importance=0.9)
             await gq.set_relationship(defender["id"], attacker["id"], -0.9, "caught stealing")
             await gq.update_npc(defender["id"], {"mood": "angry"})
+            await evolution_engine.apply_shifts(gq, defender["id"], defender, ["caught_thief"])
         return result
 
     # ── ACTUAL COMBAT ──
@@ -430,6 +564,8 @@ async def _resolve_npc_combat(gq: GraphQueries, attacker: dict, defender: dict, 
                     await gq.set_relationship(w["id"], attacker["id"],
                                               -0.5, f"killed {defender['name']}")
                     await gq.update_npc(w["id"], {"mood": "fearful"})
+                    # Evolution: witnesses are traumatized
+                    await evolution_engine.apply_shifts(gq, w["id"], w, ["witnessed_murder"])
         log.info("npc_killed", attacker=attacker["name"], defender=defender["name"])
     elif a_hp <= 0:
         # Attacker killed

@@ -28,7 +28,7 @@ export function QuestJournal() {
 
   useEffect(() => {
     api.getQuests().then((data: any) => {
-      setQuests(data.quests || []);
+      setQuests(Array.isArray(data) ? data : data.quests || []);
       setLoading(false);
     }).catch(() => setLoading(false));
   }, []);
@@ -118,7 +118,7 @@ export function QuestJournal() {
             </div>
             <p className="text-xs font-body mb-3" style={{ color: "rgba(230,237,243,0.5)" }}>{quest.description}</p>
             {quest.giver_npc_name && (
-              <p className="text-2xs font-body mb-2" style={{ color: "rgba(230,237,243,0.3)" }}>Quest giver: {quest.giver_npc_name}</p>
+              <p className="text-xs font-body mb-2" style={{ color: "rgba(230,237,243,0.3)" }}>Quest giver: {quest.giver_npc_name}</p>
             )}
             {/* Objectives */}
             <div className="mb-3">
@@ -134,7 +134,7 @@ export function QuestJournal() {
               ))}
             </div>
             {/* Reward */}
-            <div className="flex items-center gap-2 text-2xs mb-3" style={{ color: "rgba(230,237,243,0.3)" }}>
+            <div className="flex items-center gap-2 text-xs mb-3" style={{ color: "rgba(230,237,243,0.3)" }}>
               <span>Reward:</span>
               {quest.reward_gold > 0 && <span style={{ color: "rgba(194,58,46,0.6)" }}>{quest.reward_gold} gold</span>}
               {quest.reward_description && <span>{quest.reward_description}</span>}

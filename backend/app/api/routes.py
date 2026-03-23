@@ -973,6 +973,55 @@ async def load_save(filename: str):
     return {"status": "loaded", "day": data["world_day"]}
 
 
+@router.get("/world/report")
+async def world_report(from_day: int = 1, to_day: int | None = None):
+    """Get a comprehensive world report with LLM-generated narrative."""
+    gq = _gq()
+    current_day = await gq.get_world_day()
+    if to_day is None:
+        to_day = current_day
+
+    from app.simulation.analytics import get_world_report
+    from app.agents.report_agent import report_agent
+
+    init_memory_db()
+    data = await get_world_report(gq, from_day, to_day)
+    narrative = await report_agent.analyze(data)
+
+    return {
+        "report": data,
+        "narrative": narrative,
+    }
+
+
+@router.get("/world/timeline")
+async def world_timeline(limit: int = 50):
+    """Get chronological timeline of key world events."""
+    gq = _gq()
+    from app.simulation.analytics import get_event_timeline
+    timeline = await get_event_timeline(gq, limit=limit)
+    return {"timeline": timeline}
+
+
+@router.post("/world/generate")
+async def generate_world(req: dict = Body(...)):
+    """Generate a new world from text description.
+
+    Body: {"text": "description of the world...", "world_name": "optional_name"}
+    """
+    text = req.get("text", "")
+    if not text or len(text) < 20:
+        raise HTTPException(400, "Text description must be at least 20 characters")
+
+    from app.worldgen.text_to_world import generate_world_from_text
+
+    result = await generate_world_from_text(text, req.get("world_name"))
+    if result.get("error"):
+        raise HTTPException(422, result["error"])
+
+    return result
+
+
 @router.post("/world/reset")
 async def reset_world():
     """Reset the world to initial state."""

@@ -338,7 +338,7 @@ export function WorldMapView({ data: initialData }: Props) {
       {/* Legend */}
       <div className="flex flex-wrap justify-center gap-4 mt-4">
         {Object.entries(TYPE_ICONS).map(([type, info]) => (
-          <div key={type} className="flex items-center gap-1.5 text-2xs text-parchment/40">
+          <div key={type} className="flex items-center gap-1.5 text-xs text-parchment/40">
             <span className="text-sm">{info.icon}</span>
             <span className="capitalize">{type}</span>
           </div>
@@ -353,11 +353,11 @@ export function WorldMapView({ data: initialData }: Props) {
         >
           <div className="flex items-center justify-between mb-2">
             <h3 className="font-medieval text-gold text-sm font-bold">{selectedLoc.name}</h3>
-            <span className="text-2xs" style={{ color: "rgba(194,58,46,0.4)" }}>{selectedLoc.type}</span>
+            <span className="text-xs" style={{ color: "rgba(194,58,46,0.4)" }}>{selectedLoc.type}</span>
           </div>
           <p className="text-parchment/50 text-xs font-body mb-3">{selectedLoc.description}</p>
           <div className="flex items-center justify-between">
-            <span className="text-parchment/30 text-2xs">{selectedLoc.npcCount} NPCs here</span>
+            <span className="text-parchment/30 text-xs">{selectedLoc.npcCount} NPCs here</span>
             <button
               className="btn-stone text-xs px-4 py-1.5"
               onClick={() => {

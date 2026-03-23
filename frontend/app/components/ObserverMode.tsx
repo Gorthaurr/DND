@@ -6,16 +6,30 @@ import type { NPCFull } from "@/lib/types";
 import { NPCPortrait } from "./ui/NPCPortrait";
 import { SectionDivider } from "./ui/Ornament";
 
-function PersonalityBars({ personality }: { personality: string }) {
+function PersonalityBars({ personality }: { personality: string | Record<string, number> }) {
   const labels: Record<string, string> = {
-    O: "Openness", C: "Conscientiousness", E: "Extraversion", A: "Agreeableness", N: "Neuroticism"
+    O: "Openness", C: "Conscientiousness", E: "Extraversion", A: "Agreeableness", N: "Neuroticism",
+    openness: "Openness", conscientiousness: "Conscientiousness", extraversion: "Extraversion",
+    agreeableness: "Agreeableness", neuroticism: "Neuroticism",
   };
   const values: Record<string, number> = { low: 25, mid: 50, high: 75 };
 
-  const traits = personality.split(",").map(t => t.trim()).map(t => {
-    const [key, level] = t.split(":");
-    return { key: key?.trim(), label: labels[key?.trim()] || key?.trim(), value: values[level?.trim()] || 50 };
-  });
+  let traits: { key: string; label: string; value: number }[];
+
+  if (typeof personality === "object" && personality !== null) {
+    // Handle object format: { openness: 0.6, conscientiousness: 0.8, ... }
+    traits = Object.entries(personality).map(([key, val]) => ({
+      key,
+      label: labels[key] || key.charAt(0).toUpperCase() + key.slice(1),
+      value: Math.round((val as number) * 100),
+    }));
+  } else {
+    // Handle string format: "O:high, C:mid, E:low"
+    traits = String(personality || "").split(",").map(t => t.trim()).filter(Boolean).map(t => {
+      const [key, level] = t.split(":");
+      return { key: key?.trim(), label: labels[key?.trim()] || key?.trim(), value: values[level?.trim()] || 50 };
+    });
+  }
 
   return (
     <div className="space-y-3">
@@ -41,9 +55,14 @@ export function ObserverMode() {
 
   useEffect(() => {
     api.worldMap().then((map) => {
-      setNpcs(Object.keys(map.npc_locations));
-    });
-  }, []);
+      const ids = Object.keys(map.npc_locations || {});
+      setNpcs(ids);
+      // Auto-select first NPC if none selected
+      if (ids.length > 0 && !selected) {
+        api.npcObserve(ids[0]).then(setSelected).catch(console.error);
+      }
+    }).catch(console.error);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!autoRefresh || !selected) return;
@@ -117,7 +136,7 @@ export function ObserverMode() {
 
           {npcs.length > 0 && (
             <div className="w-full max-w-md">
-              <p className="section-title mb-3 text-center" style={{ fontSize: "10px" }}>Notable Villagers</p>
+              <p className="section-title mb-3 text-center" style={{ fontSize: "12px" }}>Notable Villagers</p>
               <div className="grid grid-cols-4 gap-2">
                 {npcs.slice(0, 8).map((id) => {
                   const displayName = id.replace("npc-", "").replace(/-/g, " ");
@@ -134,7 +153,7 @@ export function ObserverMode() {
                       >
                         <span className="text-xs font-medieval uppercase" style={{ color: "rgba(194,58,46,0.5)" }}>{displayName.charAt(0)}</span>
                       </div>
-                      <div className="text-2xs font-medieval truncate capitalize" style={{ color: "rgba(230,237,243,0.4)" }}>{displayName}</div>
+                      <div className="text-xs font-medieval truncate capitalize" style={{ color: "rgba(230,237,243,0.4)" }}>{displayName}</div>
                     </button>
                   );
                 })}

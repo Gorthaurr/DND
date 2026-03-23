@@ -51,7 +51,7 @@ function ScenarioBanner({ scenarios }: { scenarios: any[] }) {
             <p className="text-xs font-body" style={{ color: "rgba(230,237,243,0.5)" }}>
               {sc.narrative_update || sc.description}
             </p>
-            <p className="text-2xs font-body mt-1" style={{ color: "rgba(230,237,243,0.3)" }}>
+            <p className="text-xs font-body mt-1" style={{ color: "rgba(230,237,243,0.3)" }}>
               Phase: {sc.phase_name}
             </p>
           </div>
@@ -158,7 +158,7 @@ export function WorldLog({ entries: initialEntries }: Props) {
                     <h3 className="font-medieval text-sm font-bold tracking-wide" style={{ color: "rgba(194,58,46,0.7)" }}>
                       {t("log.day" as any)} {entry.day || "?"}
                     </h3>
-                    <span className="text-2xs" style={{ color: "rgba(230,237,243,0.2)" }}>
+                    <span className="text-xs" style={{ color: "rgba(230,237,243,0.2)" }}>
                       {entry.events?.length || 0} {t("log.eventsCount" as any)}
                     </span>
                   </div>
@@ -204,7 +204,7 @@ export function WorldLog({ entries: initialEntries }: Props) {
                           </div>
                         ))}
                         {entry.npc_actions.length > 5 && (
-                          <p className="text-2xs" style={{ color: "rgba(230,237,243,0.2)" }}>
+                          <p className="text-xs" style={{ color: "rgba(230,237,243,0.2)" }}>
                             ...{entry.npc_actions.length - 5} {t("log.moreActions" as any)}
                           </p>
                         )}

@@ -28,6 +28,17 @@ docker-compose.override.yml
 data/
 *.sqlite3
 
+# Test artifacts
+backend/.coverage
+backend/celerybeat-schedule
+backend/worlds/
+frontend/e2e/test-results/
+frontend/e2e/screenshots/
+
+# Claude local
+.claude/settings.local.json
+.claude/plans/
+
 # OS
 .DS_Store
 Thumbs.db

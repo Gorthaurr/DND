@@ -18,6 +18,7 @@ import {
   ArrowLeft,
   X,
   Loader2,
+  ChevronRight,
 } from "lucide-react";
 
 /* ────────────────────── types ────────────────────── */
@@ -49,7 +50,7 @@ function worldFactions(w: World): number {
   return w.factions_count ?? 0;
 }
 
-/* ────────────────────── fade variants ────────────────────── */
+/* ────────────────────── motion variants ────────────────────── */
 
 const fade = {
   hidden: { opacity: 0, y: 12 },
@@ -57,8 +58,14 @@ const fade = {
   exit: { opacity: 0, y: -8, transition: { duration: 0.2 } },
 };
 
-const stagger = {
-  visible: { transition: { staggerChildren: 0.07 } },
+const cardVariants = {
+  hidden: { opacity: 0, y: 20, scale: 0.97 },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.35, ease: "easeOut" } },
+};
+
+const staggerContainer = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08 } },
 };
 
 /* ══════════════════════ PAGE ══════════════════════ */
@@ -192,21 +199,24 @@ export default function WorldBuilderPage() {
   return (
     <div
       className="min-h-screen overflow-auto"
-      style={{
-        background: "#0D1117",
-      }}
+      style={{ background: "#0D1117" }}
     >
-      {/* Ambient gold glow */}
+      {/* Ambient glow */}
       <div
         className="fixed inset-0 pointer-events-none"
         style={{
-          background: "radial-gradient(ellipse at 50% 120%, rgba(194,58,46,0.06) 0%, transparent 60%)",
+          background:
+            "radial-gradient(ellipse at 50% 120%, rgba(194,58,46,0.06) 0%, transparent 60%)",
         }}
       />
 
       {/* ── back link ── */}
       <div className="px-6 pt-5 relative z-10">
-        <Link href="/" className="ghost-btn inline-flex items-center gap-2 text-xs">
+        <Link
+          href="/"
+          className="ghost-btn inline-flex items-center gap-2"
+          style={{ fontSize: "13px", padding: "8px 16px" }}
+        >
           <ArrowLeft size={14} />
           {t("nav.backToGame")}
         </Link>
@@ -214,387 +224,721 @@ export default function WorldBuilderPage() {
 
       {/* ── header ── */}
       <header className="text-center pt-8 pb-6 relative z-10">
-        <h1 className="text-4xl md:text-5xl tracking-wider mb-3" style={{ color: "rgba(194,58,46,0.8)" }}>{t("worlds.title")}</h1>
+        <h1
+          className="text-4xl md:text-5xl tracking-wider mb-3"
+          style={{ color: "rgba(194,58,46,0.8)" }}
+        >
+          {t("worlds.title")}
+        </h1>
         <div className="accent-line mx-auto mb-3" />
-        <p className="text-sm" style={{ color: "rgba(230,237,243,0.5)" }}>
+        <p style={{ color: "rgba(230,237,243,0.5)", fontSize: "14px" }}>
           {t("worlds.subtitle")}
         </p>
       </header>
 
       <div className="max-w-7xl mx-auto px-6 pb-16 relative z-10">
+        {/* ── Breadcrumb when a world is selected ── */}
+        {selected && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex items-center gap-2 mb-6"
+            style={{ color: "rgba(230,237,243,0.35)", fontSize: "13px" }}
+          >
+            <button
+              onClick={() => setSelected(null)}
+              className="hover-lift"
+              style={{
+                color: "rgba(194,58,46,0.6)",
+                fontFamily: "Cinzel, serif",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                fontSize: "13px",
+              }}
+            >
+              {t("worlds.title")}
+            </button>
+            <ChevronRight size={14} style={{ color: "rgba(230,237,243,0.2)" }} />
+            <span
+              style={{
+                color: "#E6EDF3",
+                fontFamily: "Cinzel, serif",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                fontSize: "13px",
+              }}
+            >
+              {selected.name}
+            </span>
+          </motion.div>
+        )}
+
         {/* ── Create button row ── */}
-        <div className="flex items-center justify-center mb-8">
-          <button onClick={() => setShowCreate(true)} className="btn-stone flex items-center gap-2 text-sm py-2.5 px-6">
-            <Plus size={15} />
-            {t("worlds.createNew")}
-          </button>
-        </div>
+        {!selected && (
+          <div className="flex items-center justify-center mb-8">
+            <button
+              onClick={() => setShowCreate(true)}
+              className="btn-stone flex items-center gap-2 py-2.5 px-6"
+              style={{ fontSize: "14px" }}
+            >
+              <Plus size={16} />
+              {t("worlds.createNew")}
+            </button>
+          </div>
+        )}
 
         {loading ? (
-          <div className="flex items-center justify-center py-32" style={{ color: "rgba(194,58,46,0.4)" }}>
+          <div
+            className="flex items-center justify-center py-32"
+            style={{ color: "rgba(194,58,46,0.4)" }}
+          >
             <Loader2 size={20} className="animate-spin mr-2" />
-            {t("common.loading")}
+            <span style={{ fontSize: "14px" }}>{t("common.loading")}</span>
           </div>
-        ) : worlds.length === 0 ? (
-          /* ══════════ EMPTY STATE — centered ══════════ */
-          <div className="flex flex-col items-center justify-center py-32 text-center" style={{ color: "rgba(194,58,46,0.4)" }}>
-            <Globe size={48} className="mb-4 opacity-20" />
-            <p className="text-xl mb-2">{t("worlds.noWorlds")}</p>
-            <p className="text-sm opacity-70 mb-6">{t("worlds.noWorldsDesc")}</p>
-            <button onClick={() => setShowCreate(true)} className="btn-stone flex items-center gap-2">
+        ) : worlds.length === 0 && !selected ? (
+          /* ══════════ EMPTY STATE ══════════ */
+          <div
+            className="flex flex-col items-center justify-center py-32 text-center"
+            style={{ color: "rgba(194,58,46,0.4)" }}
+          >
+            <Globe size={48} className="mb-4" style={{ opacity: 0.35 }} />
+            <p className="mb-2" style={{ fontSize: "20px" }}>
+              {t("worlds.noWorlds")}
+            </p>
+            <p className="mb-6" style={{ fontSize: "14px", opacity: 0.7 }}>
+              {t("worlds.noWorldsDesc")}
+            </p>
+            <button
+              onClick={() => setShowCreate(true)}
+              className="btn-stone flex items-center gap-2"
+            >
               <Plus size={14} />
               {t("worlds.createNew")}
             </button>
           </div>
-        ) : (
-          /* ══════════ WORLDS + EDITOR — sidebar + content ══════════ */
-          <div className="flex gap-0">
-          {/* ══════════ LEFT: WORLD SIDEBAR ══════════ */}
-          <aside
-            className="w-[260px] shrink-0 border-r overflow-y-auto"
-            style={{ borderColor: "rgba(194,58,46,0.06)", background: "rgba(22,27,34,0.5)", maxHeight: "calc(100vh - 250px)" }}
+        ) : !selected ? (
+          /* ══════════ WORLD CARD GRID ══════════ */
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
+            variants={staggerContainer}
+            initial="hidden"
+            animate="visible"
           >
-            {/* Sidebar header */}
-            <div
-              className="flex items-center justify-between px-4 py-3 sticky top-0 z-10"
-              style={{ borderBottom: "1px solid rgba(194,58,46,0.06)", background: "rgba(22,27,34,0.95)" }}
-            >
-              <span className="text-xs uppercase tracking-widest" style={{ color: "rgba(194,58,46,0.4)", fontFamily: "Cinzel, serif" }}>
-                {t("worlds.title")}
-              </span>
-              <button
-                onClick={() => setShowCreate(true)}
-                className="p-1.5 rounded transition-colors"
-                style={{ color: "rgba(194,58,46,0.4)" }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(194,58,46,0.8)"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(194,58,46,0.4)"; }}
-                title={t("worlds.createNew")}
+            {worlds.map((w) => (
+              <motion.div
+                key={w.id}
+                variants={cardVariants}
+                className="game-card p-5 cursor-pointer flex flex-col"
+                onClick={() => handleSelect(w)}
               >
-                <Plus size={16} />
-              </button>
-            </div>
-
-            {/* World items */}
-            <div className="py-1">
-              {worlds.map((w) => (
-                <div
-                  key={w.id}
-                  className="group cursor-pointer px-4 py-3 transition-all duration-150"
-                  style={{
-                    borderLeft: selected?.id === w.id ? "2px solid rgba(194,58,46,0.6)" : "2px solid transparent",
-                    background: selected?.id === w.id ? "rgba(194,58,46,0.04)" : "transparent",
-                  }}
-                  onClick={() => handleSelect(w)}
-                  onMouseEnter={(e) => {
-                    if (selected?.id !== w.id) (e.currentTarget as HTMLElement).style.background = "rgba(194,58,46,0.02)";
-                  }}
-                  onMouseLeave={(e) => {
-                    if (selected?.id !== w.id) (e.currentTarget as HTMLElement).style.background = "transparent";
-                  }}
-                >
-                  <div className="flex items-center justify-between">
+                {/* Card header */}
+                <div className="flex items-start gap-3 mb-3">
+                  <div
+                    className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
+                    style={{ background: "rgba(194,58,46,0.08)" }}
+                  >
+                    <Globe size={20} style={{ color: "rgba(194,58,46,0.6)" }} />
+                  </div>
+                  <div className="flex-1 min-w-0">
                     <h3
-                      className="text-sm font-semibold break-words"
-                      style={{ color: selected?.id === w.id ? "rgba(194,58,46,0.8)" : "rgba(230,237,243,0.6)" }}
-                      title={w.name}
+                      className="font-bold truncate"
+                      style={{
+                        color: "#E6EDF3",
+                        fontFamily: "Cinzel, serif",
+                        fontSize: "16px",
+                        lineHeight: "1.3",
+                      }}
                     >
                       {w.name}
                     </h3>
-                    <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0 ml-2">
-                      <button
-                        className="p-1 rounded transition-colors"
-                        style={{ color: "rgba(194,58,46,0.3)" }}
-                        onClick={(e) => { e.stopPropagation(); handleLoad(w.id); }}
-                        title={t("worlds.load")}
-                        onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(194,58,46,0.7)"; }}
-                        onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(194,58,46,0.3)"; }}
+                    {w.description ? (
+                      <p
+                        className="mt-1 line-clamp-2"
+                        style={{
+                          color: "rgba(230,237,243,0.6)",
+                          fontSize: "13px",
+                          lineHeight: "1.5",
+                        }}
                       >
-                        <Play size={12} />
-                      </button>
-                      <button
-                        className="p-1 rounded transition-colors"
-                        style={{ color: "rgba(194,58,46,0.3)" }}
-                        onClick={(e) => { e.stopPropagation(); handleDelete(w.id); }}
-                        title={t("common.delete")}
-                        onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(194,58,46,0.7)"; }}
-                        onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(194,58,46,0.3)"; }}
+                        {w.description}
+                      </p>
+                    ) : (
+                      <p
+                        className="mt-1 italic"
+                        style={{
+                          color: "rgba(230,237,243,0.35)",
+                          fontSize: "13px",
+                        }}
                       >
-                        <Trash2 size={12} />
-                      </button>
-                    </div>
-                  </div>
-                  <div className="flex gap-3 mt-1" style={{ color: "rgba(194,58,46,0.3)", fontSize: "11px" }}>
-                    <span className="flex items-center gap-1"><MapPin size={9} />{worldLocations(w)}</span>
-                    <span className="flex items-center gap-1"><Users size={9} />{worldNpcs(w)}</span>
-                    <span className="flex items-center gap-1"><Flag size={9} />{worldFactions(w)}</span>
+                        No description
+                      </p>
+                    )}
                   </div>
                 </div>
-              ))}
-            </div>
-          </aside>
 
-        {/* ══════════ RIGHT: EDITOR ══════════ */}
-        <section className="flex-1 min-w-0 px-8 py-6">
-          {!selected ? (
-            <div className="flex flex-col items-center justify-center h-full py-32" style={{ color: "rgba(194,58,46,0.2)" }}>
-              <Globe size={32} className="mb-3 opacity-20" />
-              <span className="text-sm" style={{ color: "rgba(194,58,46,0.2)" }}>
-                {t("worlds.selectWorld" as any)}
-              </span>
-            </div>
-          ) : (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
-              {/* editor header */}
-              <div className="mb-6">
-                <h2 className="text-2xl tracking-wide mb-1" style={{ color: "rgba(194,58,46,0.8)" }}>{selected.name}</h2>
-                {selected.description && (
-                  <p className="text-sm" style={{ color: "rgba(230,237,243,0.4)" }}>
-                    {selected.description}
-                  </p>
-                )}
-              </div>
+                {/* Stats row */}
+                <div className="divider-ornament" style={{ margin: "8px 0" }} />
+                <div
+                  className="flex items-center gap-5 mb-4"
+                  style={{ color: "rgba(230,237,243,0.35)" }}
+                >
+                  <span
+                    className="flex items-center gap-1.5"
+                    style={{ fontSize: "12px" }}
+                  >
+                    <MapPin size={14} style={{ color: "rgba(194,58,46,0.5)" }} />
+                    {worldLocations(w)}
+                  </span>
+                  <span
+                    className="flex items-center gap-1.5"
+                    style={{ fontSize: "12px" }}
+                  >
+                    <Users size={14} style={{ color: "rgba(194,58,46,0.5)" }} />
+                    {worldNpcs(w)}
+                  </span>
+                  <span
+                    className="flex items-center gap-1.5"
+                    style={{ fontSize: "12px" }}
+                  >
+                    <Flag size={14} style={{ color: "rgba(194,58,46,0.5)" }} />
+                    {worldFactions(w)}
+                  </span>
+                </div>
 
-              {/* tabs — gold underline */}
-              <div className="flex gap-6 mb-6" style={{ borderBottom: "1px solid rgba(194,58,46,0.06)" }}>
-                {tabs.map((t_item) => (
+                {/* Action buttons */}
+                <div className="flex items-center gap-2 mt-auto">
                   <button
-                    key={t_item.key}
-                    onClick={() => setTab(t_item.key)}
-                    className="relative pb-3 text-sm uppercase tracking-widest transition-colors"
-                    style={{
-                      fontFamily: "Cinzel, serif",
-                      color: tab === t_item.key ? "rgba(194,58,46,0.8)" : "rgba(194,58,46,0.35)",
+                    className="btn-stone flex items-center gap-1.5 flex-1 justify-center"
+                    style={{ fontSize: "12px", padding: "6px 12px" }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleLoad(w.id);
                     }}
                   >
-                    {t_item.label}
-                    {tab === t_item.key && (
-                      <motion.div
-                        layoutId="tab-underline"
-                        className="absolute bottom-0 left-0 right-0 h-[2px]"
-                        style={{ background: "rgba(194,58,46,0.6)" }}
-                      />
-                    )}
+                    <Play size={14} />
+                    {t("worlds.load")}
                   </button>
-                ))}
+                  <button
+                    className="ghost-btn flex items-center gap-1.5 flex-1 justify-center"
+                    style={{ fontSize: "12px", padding: "6px 12px" }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleSelect(w);
+                    }}
+                  >
+                    <Pencil size={14} />
+                    {t("common.edit" as any)}
+                  </button>
+                  <button
+                    className="ghost-btn flex items-center justify-center"
+                    style={{
+                      fontSize: "12px",
+                      padding: "6px 10px",
+                      borderColor: "rgba(180,60,60,0.25)",
+                      color: "rgba(180,60,60,0.6)",
+                    }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDelete(w.id);
+                    }}
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        ) : (
+          /* ══════════ EDITOR VIEW (world selected) ══════════ */
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            {/* Selected world card (compact) */}
+            <div className="game-card selected p-5 mb-6">
+              <div className="flex items-start gap-4">
+                <div
+                  className="w-12 h-12 rounded-lg flex items-center justify-center shrink-0"
+                  style={{ background: "rgba(194,58,46,0.1)" }}
+                >
+                  <Globe size={24} style={{ color: "rgba(194,58,46,0.7)" }} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h2
+                    className="text-2xl tracking-wide mb-1"
+                    style={{
+                      color: "rgba(194,58,46,0.8)",
+                      fontFamily: "Cinzel, serif",
+                    }}
+                  >
+                    {selected.name}
+                  </h2>
+                  {selected.description && (
+                    <p style={{ color: "rgba(230,237,243,0.5)", fontSize: "14px" }}>
+                      {selected.description}
+                    </p>
+                  )}
+                  <div
+                    className="flex items-center gap-5 mt-3"
+                    style={{ color: "rgba(230,237,243,0.35)" }}
+                  >
+                    <span
+                      className="flex items-center gap-1.5"
+                      style={{ fontSize: "13px" }}
+                    >
+                      <MapPin size={14} style={{ color: "rgba(194,58,46,0.5)" }} />
+                      {worldLocations(selected)} locations
+                    </span>
+                    <span
+                      className="flex items-center gap-1.5"
+                      style={{ fontSize: "13px" }}
+                    >
+                      <Users size={14} style={{ color: "rgba(194,58,46,0.5)" }} />
+                      {worldNpcs(selected)} NPCs
+                    </span>
+                    <span
+                      className="flex items-center gap-1.5"
+                      style={{ fontSize: "13px" }}
+                    >
+                      <Flag size={14} style={{ color: "rgba(194,58,46,0.5)" }} />
+                      {worldFactions(selected)} factions
+                    </span>
+                  </div>
+                </div>
+                <div className="flex gap-2 shrink-0">
+                  <button
+                    className="btn-stone flex items-center gap-1.5"
+                    style={{ fontSize: "12px", padding: "6px 14px" }}
+                    onClick={() => handleLoad(selected.id)}
+                  >
+                    <Play size={14} />
+                    {t("worlds.load")}
+                  </button>
+                  <button
+                    className="ghost-btn"
+                    style={{ padding: "6px 10px", fontSize: "12px" }}
+                    onClick={() => setSelected(null)}
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
               </div>
+            </div>
 
-              {/* tab content */}
-              <AnimatePresence mode="wait">
-                {tab === "locations" && (
-                  <motion.div key="locations" variants={fade} initial="hidden" animate="visible" exit="exit">
-                    {/* existing locations */}
-                    <div className="mb-6">
-                      {(selected.locations ?? []).length > 0 ? (
-                        <div className="flex flex-col gap-2">
-                          {(selected.locations ?? []).map((loc: any, i: number) => (
-                            <div key={loc.id ?? i} className="game-card p-3 flex items-center gap-3">
-                              <MapPin size={14} style={{ color: "rgba(194,58,46,0.5)" }} />
-                              <div className="flex-1 min-w-0">
-                                <span className="text-sm font-semibold" style={{ color: "rgba(230,237,243,0.7)" }}>{loc.name}</span>
-                                {loc.type && (
-                                  <span className="ml-2 text-xs" style={{ color: "rgba(194,58,46,0.35)" }}>
-                                    {loc.type}
-                                  </span>
-                                )}
-                                {loc.description && (
-                                  <p className="text-xs mt-0.5 line-clamp-1" style={{ color: "rgba(230,237,243,0.35)" }}>
-                                    {loc.description}
-                                  </p>
-                                )}
-                              </div>
+            {/* Tabs */}
+            <div
+              className="flex gap-6 mb-6"
+              style={{ borderBottom: "1px solid rgba(48,54,61,0.5)" }}
+            >
+              {tabs.map((t_item) => (
+                <button
+                  key={t_item.key}
+                  onClick={() => setTab(t_item.key)}
+                  className="relative pb-3 uppercase tracking-widest transition-colors"
+                  style={{
+                    fontFamily: "Cinzel, serif",
+                    fontSize: "13px",
+                    color:
+                      tab === t_item.key
+                        ? "rgba(194,58,46,0.8)"
+                        : "rgba(194,58,46,0.35)",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    letterSpacing: "3px",
+                  }}
+                >
+                  {t_item.label}
+                  {tab === t_item.key && (
+                    <motion.div
+                      layoutId="tab-underline"
+                      className="absolute bottom-0 left-0 right-0 h-[2px]"
+                      style={{ background: "rgba(194,58,46,0.6)" }}
+                    />
+                  )}
+                </button>
+              ))}
+            </div>
+
+            {/* Tab content */}
+            <AnimatePresence mode="wait">
+              {tab === "locations" && (
+                <motion.div
+                  key="locations"
+                  variants={fade}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                >
+                  {/* Existing locations */}
+                  <div className="mb-6">
+                    {(selected.locations ?? []).length > 0 ? (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        {(selected.locations ?? []).map((loc: any, i: number) => (
+                          <div
+                            key={loc.id ?? i}
+                            className="game-card p-4 flex items-start gap-3"
+                          >
+                            <div
+                              className="w-9 h-9 rounded flex items-center justify-center shrink-0 mt-0.5"
+                              style={{ background: "rgba(194,58,46,0.06)" }}
+                            >
+                              <MapPin
+                                size={16}
+                                style={{ color: "rgba(194,58,46,0.5)" }}
+                              />
                             </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <p className="text-sm py-4" style={{ color: "rgba(194,58,46,0.3)" }}>
+                            <div className="flex-1 min-w-0">
+                              <span
+                                className="font-semibold"
+                                style={{
+                                  color: "rgba(230,237,243,0.8)",
+                                  fontSize: "14px",
+                                }}
+                              >
+                                {loc.name}
+                              </span>
+                              {loc.type && (
+                                <span
+                                  className="ml-2"
+                                  style={{
+                                    color: "rgba(194,58,46,0.4)",
+                                    fontSize: "12px",
+                                  }}
+                                >
+                                  {loc.type}
+                                </span>
+                              )}
+                              {loc.description && (
+                                <p
+                                  className="mt-1 line-clamp-2"
+                                  style={{
+                                    color: "rgba(230,237,243,0.35)",
+                                    fontSize: "13px",
+                                  }}
+                                >
+                                  {loc.description}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div
+                        className="text-center py-8"
+                        style={{ color: "rgba(194,58,46,0.35)" }}
+                      >
+                        <MapPin
+                          size={32}
+                          className="mx-auto mb-3"
+                          style={{ opacity: 0.35 }}
+                        />
+                        <p style={{ fontSize: "14px" }}>
                           {t("worlds.noLocations" as any)}
                         </p>
-                      )}
-                    </div>
-
-                    {/* add location form */}
-                    <div className="glass-panel p-4">
-                      <span className="section-title mb-3 block">{t("worlds.addLocation")}</span>
-                      <div className="flex flex-col gap-3">
-                        <input
-                          className="input-fantasy input-scroll"
-                          placeholder={t("common.name")}
-                          value={locName}
-                          onChange={(e) => setLocName(e.target.value)}
-                        />
-                        <input
-                          className="input-fantasy input-scroll"
-                          placeholder={t("common.type")}
-                          value={locType}
-                          onChange={(e) => setLocType(e.target.value)}
-                        />
-                        <input
-                          className="input-fantasy input-scroll"
-                          placeholder={t("common.description")}
-                          value={locDesc}
-                          onChange={(e) => setLocDesc(e.target.value)}
-                        />
-                        <button className="btn-stone self-start" onClick={handleAddLocation}>
-                          {t("common.create")}
-                        </button>
                       </div>
-                    </div>
+                    )}
+                  </div>
 
-                    {/* ai generate location */}
-                    <div className="glass-panel p-4 mt-4">
-                      <span className="section-title mb-3 flex items-center gap-2">
-                        <Sparkles size={13} style={{ color: "rgba(194,58,46,0.6)" }} />
-                        {t("worlds.aiGenerate")}
-                      </span>
-                      <textarea
-                        className="input-fantasy input-scroll min-h-[80px] resize-none"
-                        placeholder={t("worlds.aiPrompt")}
-                        value={aiPrompt}
-                        onChange={(e) => setAiPrompt(e.target.value)}
+                  {/* Add location form */}
+                  <div className="glass-panel p-5">
+                    <span className="section-title mb-4 block">
+                      {t("worlds.addLocation")}
+                    </span>
+                    <div className="flex flex-col gap-3">
+                      <input
+                        className="input-fantasy input-scroll"
+                        placeholder={t("common.name")}
+                        value={locName}
+                        onChange={(e) => setLocName(e.target.value)}
+                      />
+                      <input
+                        className="input-fantasy input-scroll"
+                        placeholder={t("common.type")}
+                        value={locType}
+                        onChange={(e) => setLocType(e.target.value)}
+                      />
+                      <input
+                        className="input-fantasy input-scroll"
+                        placeholder={t("common.description")}
+                        value={locDesc}
+                        onChange={(e) => setLocDesc(e.target.value)}
                       />
                       <button
-                        className="btn-stone mt-3 flex items-center gap-2"
-                        disabled={aiLoading}
-                        onClick={() => handleAiGenerate("location")}
+                        className="btn-stone self-start"
+                        onClick={handleAddLocation}
                       >
-                        {aiLoading && <Loader2 size={13} className="animate-spin" />}
-                        {t("worlds.aiGenerate")}
+                        {t("common.create")}
                       </button>
                     </div>
-                  </motion.div>
-                )}
+                  </div>
 
-                {tab === "npcs" && (
-                  <motion.div key="npcs" variants={fade} initial="hidden" animate="visible" exit="exit">
-                    {/* existing npcs */}
-                    <div className="mb-6">
-                      {(selected.npcs ?? []).length > 0 ? (
-                        <div className="flex flex-col gap-2">
-                          {(selected.npcs ?? []).map((npc: any, i: number) => (
-                            <div key={npc.id ?? i} className="game-card p-3 flex items-center gap-3">
-                              <Users size={14} style={{ color: "rgba(194,58,46,0.5)" }} />
-                              <div className="flex-1 min-w-0">
-                                <span className="text-sm font-semibold" style={{ color: "rgba(230,237,243,0.7)" }}>{npc.name}</span>
-                                {npc.type && (
-                                  <span className="ml-2 text-xs" style={{ color: "rgba(194,58,46,0.35)" }}>
-                                    {npc.type}
-                                  </span>
-                                )}
-                                {npc.description && (
-                                  <p className="text-xs mt-0.5 line-clamp-1" style={{ color: "rgba(230,237,243,0.35)" }}>
-                                    {npc.description}
-                                  </p>
-                                )}
-                              </div>
+                  {/* AI generate location */}
+                  <div className="glass-panel p-5 mt-4">
+                    <span className="section-title mb-4 flex items-center gap-2">
+                      <Sparkles
+                        size={14}
+                        style={{ color: "rgba(194,58,46,0.6)" }}
+                      />
+                      {t("worlds.aiGenerate")}
+                    </span>
+                    <textarea
+                      className="input-fantasy input-scroll min-h-[80px] resize-none"
+                      placeholder={t("worlds.aiPrompt")}
+                      value={aiPrompt}
+                      onChange={(e) => setAiPrompt(e.target.value)}
+                    />
+                    <button
+                      className="btn-stone mt-3 flex items-center gap-2"
+                      disabled={aiLoading}
+                      onClick={() => handleAiGenerate("location")}
+                    >
+                      {aiLoading && (
+                        <Loader2 size={14} className="animate-spin" />
+                      )}
+                      {t("worlds.aiGenerate")}
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+
+              {tab === "npcs" && (
+                <motion.div
+                  key="npcs"
+                  variants={fade}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                >
+                  {/* Existing NPCs */}
+                  <div className="mb-6">
+                    {(selected.npcs ?? []).length > 0 ? (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        {(selected.npcs ?? []).map((npc: any, i: number) => (
+                          <div
+                            key={npc.id ?? i}
+                            className="game-card p-4 flex items-start gap-3"
+                          >
+                            <div
+                              className="w-9 h-9 rounded flex items-center justify-center shrink-0 mt-0.5"
+                              style={{ background: "rgba(194,58,46,0.06)" }}
+                            >
+                              <Users
+                                size={16}
+                                style={{ color: "rgba(194,58,46,0.5)" }}
+                              />
                             </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <p className="text-sm py-4" style={{ color: "rgba(194,58,46,0.3)" }}>
+                            <div className="flex-1 min-w-0">
+                              <span
+                                className="font-semibold"
+                                style={{
+                                  color: "rgba(230,237,243,0.8)",
+                                  fontSize: "14px",
+                                }}
+                              >
+                                {npc.name}
+                              </span>
+                              {npc.type && (
+                                <span
+                                  className="ml-2"
+                                  style={{
+                                    color: "rgba(194,58,46,0.4)",
+                                    fontSize: "12px",
+                                  }}
+                                >
+                                  {npc.type}
+                                </span>
+                              )}
+                              {npc.description && (
+                                <p
+                                  className="mt-1 line-clamp-2"
+                                  style={{
+                                    color: "rgba(230,237,243,0.35)",
+                                    fontSize: "13px",
+                                  }}
+                                >
+                                  {npc.description}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div
+                        className="text-center py-8"
+                        style={{ color: "rgba(194,58,46,0.35)" }}
+                      >
+                        <Users
+                          size={32}
+                          className="mx-auto mb-3"
+                          style={{ opacity: 0.35 }}
+                        />
+                        <p style={{ fontSize: "14px" }}>
                           {t("worlds.noNpcs" as any)}
                         </p>
-                      )}
-                    </div>
-
-                    {/* add npc form */}
-                    <div className="glass-panel p-4">
-                      <span className="section-title mb-3 block">{t("worlds.addNpc")}</span>
-                      <div className="flex flex-col gap-3">
-                        <input
-                          className="input-fantasy input-scroll"
-                          placeholder={t("common.name")}
-                          value={npcName}
-                          onChange={(e) => setNpcName(e.target.value)}
-                        />
-                        <input
-                          className="input-fantasy input-scroll"
-                          placeholder={t("common.type")}
-                          value={npcType}
-                          onChange={(e) => setNpcType(e.target.value)}
-                        />
-                        <input
-                          className="input-fantasy input-scroll"
-                          placeholder={t("common.description")}
-                          value={npcDesc}
-                          onChange={(e) => setNpcDesc(e.target.value)}
-                        />
-                        <button className="btn-stone self-start" onClick={handleAddNpc}>
-                          {t("common.create")}
-                        </button>
                       </div>
-                    </div>
+                    )}
+                  </div>
 
-                    {/* ai generate npc */}
-                    <div className="glass-panel p-4 mt-4">
-                      <span className="section-title mb-3 flex items-center gap-2">
-                        <Sparkles size={13} style={{ color: "rgba(194,58,46,0.6)" }} />
-                        {t("worlds.aiGenerate")}
-                      </span>
-                      <textarea
-                        className="input-fantasy input-scroll min-h-[80px] resize-none"
-                        placeholder={t("worlds.aiPrompt")}
-                        value={aiPrompt}
-                        onChange={(e) => setAiPrompt(e.target.value)}
+                  {/* Add NPC form */}
+                  <div className="glass-panel p-5">
+                    <span className="section-title mb-4 block">
+                      {t("worlds.addNpc")}
+                    </span>
+                    <div className="flex flex-col gap-3">
+                      <input
+                        className="input-fantasy input-scroll"
+                        placeholder={t("common.name")}
+                        value={npcName}
+                        onChange={(e) => setNpcName(e.target.value)}
+                      />
+                      <input
+                        className="input-fantasy input-scroll"
+                        placeholder={t("common.type")}
+                        value={npcType}
+                        onChange={(e) => setNpcType(e.target.value)}
+                      />
+                      <input
+                        className="input-fantasy input-scroll"
+                        placeholder={t("common.description")}
+                        value={npcDesc}
+                        onChange={(e) => setNpcDesc(e.target.value)}
                       />
                       <button
-                        className="btn-stone mt-3 flex items-center gap-2"
-                        disabled={aiLoading}
-                        onClick={() => handleAiGenerate("npc")}
+                        className="btn-stone self-start"
+                        onClick={handleAddNpc}
                       >
-                        {aiLoading && <Loader2 size={13} className="animate-spin" />}
-                        {t("worlds.aiGenerate")}
+                        {t("common.create")}
                       </button>
                     </div>
-                  </motion.div>
-                )}
+                  </div>
 
-                {tab === "overview" && (
-                  <motion.div key="overview" variants={fade} initial="hidden" animate="visible" exit="exit">
-                    <div className="glass-panel p-5">
-                      <div className="mb-4">
-                        <span className="section-title block mb-1">{t("worlds.worldName")}</span>
-                        <p className="text-lg" style={{ color: "rgba(194,58,46,0.8)" }}>{selected.name}</p>
-                      </div>
-                      {selected.description && (
-                        <div className="mb-4">
-                          <span className="section-title block mb-1">{t("common.description")}</span>
-                          <p className="text-sm" style={{ color: "rgba(230,237,243,0.5)" }}>
-                            {selected.description}
-                          </p>
-                        </div>
+                  {/* AI generate NPC */}
+                  <div className="glass-panel p-5 mt-4">
+                    <span className="section-title mb-4 flex items-center gap-2">
+                      <Sparkles
+                        size={14}
+                        style={{ color: "rgba(194,58,46,0.6)" }}
+                      />
+                      {t("worlds.aiGenerate")}
+                    </span>
+                    <textarea
+                      className="input-fantasy input-scroll min-h-[80px] resize-none"
+                      placeholder={t("worlds.aiPrompt")}
+                      value={aiPrompt}
+                      onChange={(e) => setAiPrompt(e.target.value)}
+                    />
+                    <button
+                      className="btn-stone mt-3 flex items-center gap-2"
+                      disabled={aiLoading}
+                      onClick={() => handleAiGenerate("npc")}
+                    >
+                      {aiLoading && (
+                        <Loader2 size={14} className="animate-spin" />
                       )}
-                      <div className="divider-ornament" />
-                      <div className="grid grid-cols-3 gap-4 mt-4">
-                        <div className="text-center">
-                          <MapPin size={18} className="mx-auto mb-1" style={{ color: "rgba(194,58,46,0.5)" }} />
-                          <p className="text-2xl font-bold" style={{ color: "rgba(194,58,46,0.8)" }}>{worldLocations(selected)}</p>
-                          <p className="text-xs" style={{ color: "rgba(194,58,46,0.35)" }}>
-                            {t("worlds.locations")}
-                          </p>
-                        </div>
-                        <div className="text-center">
-                          <Users size={18} className="mx-auto mb-1" style={{ color: "rgba(194,58,46,0.5)" }} />
-                          <p className="text-2xl font-bold" style={{ color: "rgba(194,58,46,0.8)" }}>{worldNpcs(selected)}</p>
-                          <p className="text-xs" style={{ color: "rgba(194,58,46,0.35)" }}>
-                            {t("worlds.npcs")}
-                          </p>
-                        </div>
-                        <div className="text-center">
-                          <Flag size={18} className="mx-auto mb-1" style={{ color: "rgba(194,58,46,0.5)" }} />
-                          <p className="text-2xl font-bold" style={{ color: "rgba(194,58,46,0.8)" }}>{worldFactions(selected)}</p>
-                          <p className="text-xs" style={{ color: "rgba(194,58,46,0.35)" }}>
-                            {t("worlds.factions")}
-                          </p>
-                        </div>
+                      {t("worlds.aiGenerate")}
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+
+              {tab === "overview" && (
+                <motion.div
+                  key="overview"
+                  variants={fade}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                >
+                  <div className="glass-panel p-6">
+                    <div className="mb-5">
+                      <span className="section-title block mb-2">
+                        {t("worlds.worldName")}
+                      </span>
+                      <p
+                        className="text-lg"
+                        style={{ color: "rgba(194,58,46,0.8)" }}
+                      >
+                        {selected.name}
+                      </p>
+                    </div>
+                    {selected.description && (
+                      <div className="mb-5">
+                        <span className="section-title block mb-2">
+                          {t("common.description")}
+                        </span>
+                        <p
+                          style={{
+                            color: "rgba(230,237,243,0.5)",
+                            fontSize: "14px",
+                          }}
+                        >
+                          {selected.description}
+                        </p>
+                      </div>
+                    )}
+                    <div className="divider-ornament" />
+                    <div className="grid grid-cols-3 gap-4 mt-5">
+                      <div className="text-center">
+                        <MapPin
+                          size={20}
+                          className="mx-auto mb-2"
+                          style={{ color: "rgba(194,58,46,0.5)" }}
+                        />
+                        <p
+                          className="text-2xl font-bold"
+                          style={{ color: "rgba(194,58,46,0.8)" }}
+                        >
+                          {worldLocations(selected)}
+                        </p>
+                        <p style={{ color: "rgba(194,58,46,0.35)", fontSize: "12px" }}>
+                          {t("worlds.locations")}
+                        </p>
+                      </div>
+                      <div className="text-center">
+                        <Users
+                          size={20}
+                          className="mx-auto mb-2"
+                          style={{ color: "rgba(194,58,46,0.5)" }}
+                        />
+                        <p
+                          className="text-2xl font-bold"
+                          style={{ color: "rgba(194,58,46,0.8)" }}
+                        >
+                          {worldNpcs(selected)}
+                        </p>
+                        <p style={{ color: "rgba(194,58,46,0.35)", fontSize: "12px" }}>
+                          {t("worlds.npcs")}
+                        </p>
+                      </div>
+                      <div className="text-center">
+                        <Flag
+                          size={20}
+                          className="mx-auto mb-2"
+                          style={{ color: "rgba(194,58,46,0.5)" }}
+                        />
+                        <p
+                          className="text-2xl font-bold"
+                          style={{ color: "rgba(194,58,46,0.8)" }}
+                        >
+                          {worldFactions(selected)}
+                        </p>
+                        <p style={{ color: "rgba(194,58,46,0.35)", fontSize: "12px" }}>
+                          {t("worlds.factions")}
+                        </p>
                       </div>
                     </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          )}
-        </section>
-        </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
         )}
       </div>
 
@@ -623,10 +967,19 @@ export default function WorldBuilderPage() {
               transition={{ duration: 0.2 }}
             >
               <div className="flex items-center justify-between mb-5">
-                <h3 className="text-lg tracking-wide" style={{ color: "rgba(194,58,46,0.8)" }}>{t("worlds.createNew")}</h3>
+                <h3
+                  className="text-lg tracking-wide"
+                  style={{ color: "rgba(194,58,46,0.8)" }}
+                >
+                  {t("worlds.createNew")}
+                </h3>
                 <button
-                  className="p-1"
-                  style={{ color: "rgba(194,58,46,0.4)" }}
+                  className="ghost-btn"
+                  style={{
+                    padding: "4px 8px",
+                    border: "none",
+                    color: "rgba(194,58,46,0.4)",
+                  }}
                   onClick={() => setShowCreate(false)}
                 >
                   <X size={18} />
@@ -635,7 +988,9 @@ export default function WorldBuilderPage() {
 
               <div className="flex flex-col gap-4">
                 <div>
-                  <label className="section-title block mb-1.5">{t("worlds.worldName")}</label>
+                  <label className="section-title block mb-1.5">
+                    {t("worlds.worldName")}
+                  </label>
                   <input
                     className="input-fantasy input-scroll"
                     placeholder={t("common.name")}
@@ -645,7 +1000,9 @@ export default function WorldBuilderPage() {
                   />
                 </div>
                 <div>
-                  <label className="section-title block mb-1.5">{t("common.description")}</label>
+                  <label className="section-title block mb-1.5">
+                    {t("common.description")}
+                  </label>
                   <textarea
                     className="input-fantasy input-scroll min-h-[80px] resize-none"
                     placeholder={t("common.description")}
@@ -654,11 +1011,24 @@ export default function WorldBuilderPage() {
                   />
                 </div>
                 <div className="flex gap-3 justify-end mt-2">
-                  <button className="ghost-btn text-xs" onClick={() => setShowCreate(false)}>
+                  <button
+                    className="ghost-btn"
+                    style={{ fontSize: "13px" }}
+                    onClick={() => setShowCreate(false)}
+                  >
                     {t("common.cancel")}
                   </button>
-                  <button className="btn-stone" disabled={creating || !createName.trim()} onClick={handleCreate}>
-                    {creating && <Loader2 size={13} className="animate-spin mr-2 inline" />}
+                  <button
+                    className="btn-stone"
+                    disabled={creating || !createName.trim()}
+                    onClick={handleCreate}
+                  >
+                    {creating && (
+                      <Loader2
+                        size={14}
+                        className="animate-spin mr-2 inline"
+                      />
+                    )}
                     {t("common.create")}
                   </button>
                 </div>

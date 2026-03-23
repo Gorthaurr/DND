@@ -3,8 +3,19 @@ Personality (Big Five): {{ personality }}
 {% if archetype_dialogue_style %}
 Dialogue style: {{ archetype_dialogue_style }}
 {% endif %}
+{% if biography %}
+LIFE STORY: {{ biography }}
+{% endif %}
 Current mood: {{ mood }}
 Backstory: {{ backstory }}
+{% if trust_baseline is defined and (trust_baseline > 0.2 or trust_baseline < -0.2) %}
+LONG-TERM SHIFTS:{% if trust_baseline < -0.3 %} Distrustful.{% endif %}{% if mood_baseline < -0.3 %} Melancholic.{% endif %}{% if aggression_baseline > 0.3 %} Aggressive.{% endif %}{% if confidence_baseline < -0.3 %} Insecure.{% endif %}{% if trust_baseline > 0.3 %} Trusting.{% endif %}{% if mood_baseline > 0.3 %} Optimistic.{% endif %}{% if confidence_baseline > 0.3 %} Bold.{% endif %}
+{% endif %}
+{% if speech_instructions %}
+
+SPEECH STYLE (follow these rules strictly):
+{{ speech_instructions }}
+{% endif %}
 
 You are talking to {{ other_name }}.
 {% if relationship %}

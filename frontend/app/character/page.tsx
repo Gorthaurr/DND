@@ -23,7 +23,7 @@ const classes = [
 
 const raceSVGs: Record<string, JSX.Element> = {
   human: (
-    <svg viewBox="0 0 40 60" width="40" height="60">
+    <svg viewBox="0 0 40 60" width="50" height="75">
       <circle cx="20" cy="10" r="6" fill="currentColor"/>
       <rect x="15" y="17" width="10" height="20" rx="2" fill="currentColor"/>
       <rect x="8" y="20" width="7" height="3" rx="1" fill="currentColor"/>
@@ -34,7 +34,7 @@ const raceSVGs: Record<string, JSX.Element> = {
     </svg>
   ),
   elf: (
-    <svg viewBox="0 0 40 60" width="40" height="60">
+    <svg viewBox="0 0 40 60" width="50" height="75">
       <circle cx="20" cy="10" r="5" fill="currentColor"/>
       <path d="M14,8 L8,4" stroke="currentColor" strokeWidth="1.5" fill="none"/>
       <path d="M26,8 L32,4" stroke="currentColor" strokeWidth="1.5" fill="none"/>
@@ -46,7 +46,7 @@ const raceSVGs: Record<string, JSX.Element> = {
     </svg>
   ),
   dwarf: (
-    <svg viewBox="0 0 40 60" width="40" height="60">
+    <svg viewBox="0 0 40 60" width="50" height="75">
       <circle cx="20" cy="12" r="7" fill="currentColor"/>
       <path d="M13,16 Q20,24 27,16" fill="currentColor" opacity="0.7"/>
       <rect x="12" y="20" width="16" height="18" rx="3" fill="currentColor"/>
@@ -56,7 +56,7 @@ const raceSVGs: Record<string, JSX.Element> = {
     </svg>
   ),
   halfling: (
-    <svg viewBox="0 0 40 60" width="40" height="60">
+    <svg viewBox="0 0 40 60" width="50" height="75">
       <circle cx="20" cy="18" r="6" fill="currentColor"/>
       <rect x="15" y="25" width="10" height="14" rx="2" fill="currentColor"/>
       <rect x="15" y="40" width="4" height="10" rx="1" fill="currentColor"/>
@@ -66,7 +66,7 @@ const raceSVGs: Record<string, JSX.Element> = {
     </svg>
   ),
   "half-orc": (
-    <svg viewBox="0 0 40 60" width="40" height="60">
+    <svg viewBox="0 0 40 60" width="50" height="75">
       <circle cx="20" cy="10" r="7" fill="currentColor"/>
       <rect x="11" y="18" width="18" height="22" rx="3" fill="currentColor"/>
       <rect x="6" y="20" width="7" height="5" rx="2" fill="currentColor"/>
@@ -110,7 +110,7 @@ export default function CharacterCreation() {
       {/* Hero background image */}
       <div className="fixed inset-0 z-0">
         <div
-          className="absolute inset-0 bg-cover bg-center opacity-[0.1]"
+          className="absolute inset-0 bg-cover bg-center opacity-[0.15]"
           style={{ backgroundImage: "url(/images/hero-bg.jpg)" }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0D1117] via-[#0D1117]/70 to-[#0D1117]/90" />
@@ -165,7 +165,7 @@ export default function CharacterCreation() {
         </div>
 
         {/* Name */}
-        <div className="mb-8">
+        <div className="mb-8 max-w-md mx-auto">
           <label className="font-medieval text-gold/70 text-sm tracking-wider block mb-2">Character Name</label>
           <input
             type="text"
@@ -185,10 +185,11 @@ export default function CharacterCreation() {
               <button
                 key={r.id}
                 onClick={() => setRace(r.id)}
-                className="vignette-card hover-lift p-4 text-center transition-all duration-200"
+                className="game-card hover-lift p-4 text-center transition-all duration-200"
                 style={{
-                  border: race === r.id ? "1px solid rgba(194,58,46,0.5)" : "1px solid rgba(194,58,46,0.1)",
-                  background: race === r.id ? "rgba(194,58,46,0.06)" : "transparent",
+                  minWidth: "150px",
+                  border: race === r.id ? "1px solid rgba(194,58,46,0.5)" : "1px solid #30363D",
+                  background: race === r.id ? "rgba(194,58,46,0.06)" : "#161B22",
                 }}
               >
                 {/* Race SVG silhouette */}
@@ -196,8 +197,8 @@ export default function CharacterCreation() {
                   {raceSVGs[r.id]}
                 </div>
                 <div className="font-medieval text-sm text-gold/80 mb-1">{r.name}</div>
-                <div className="text-2xs text-parchment/40 font-body font-semibold">{r.bonus}</div>
-                <div className="text-2xs text-parchment/25 font-body mt-1.5 leading-relaxed">{r.desc}</div>
+                <div className="text-xs text-[rgba(230,237,243,0.6)] font-body font-semibold">{r.bonus}</div>
+                <div className="text-xs text-[rgba(230,237,243,0.4)] font-body mt-1.5 leading-relaxed">{r.desc}</div>
               </button>
             ))}
           </div>
@@ -211,16 +212,17 @@ export default function CharacterCreation() {
               <button
                 key={c.id}
                 onClick={() => setClassId(c.id)}
-                className="vignette-card hover-lift p-4 text-center transition-all duration-200"
+                className="game-card hover-lift p-4 text-center transition-all duration-200"
                 style={{
-                  border: classId === c.id ? "1px solid rgba(194,58,46,0.5)" : "1px solid rgba(194,58,46,0.1)",
-                  background: classId === c.id ? "rgba(194,58,46,0.06)" : "transparent",
+                  minWidth: "140px",
+                  border: classId === c.id ? "1px solid rgba(194,58,46,0.5)" : "1px solid #30363D",
+                  background: classId === c.id ? "rgba(194,58,46,0.06)" : "#161B22",
                 }}
               >
                 <div className="text-2xl mb-1.5" style={{ filter: "brightness(0.8) saturate(0.5)" }}>{c.icon}</div>
                 <div className="font-medieval text-sm text-gold/80">{c.name}</div>
-                <div className="text-2xs text-parchment/40 font-body font-semibold">HP: {c.hp}</div>
-                <div className="text-2xs text-parchment/25 font-body mt-1.5 leading-relaxed">{c.desc}</div>
+                <div className="text-xs text-[rgba(230,237,243,0.6)] font-body font-semibold">Hit Die: d{c.hp}</div>
+                <div className="text-xs text-[rgba(230,237,243,0.4)] font-body mt-1.5 leading-relaxed">{c.desc}</div>
               </button>
             ))}
           </div>
@@ -231,13 +233,8 @@ export default function CharacterCreation() {
           <button
             onClick={handleCreate}
             disabled={!canCreate || creating}
-            style={{
-              background: canCreate && !creating ? "rgba(194,58,46,0.2)" : undefined,
-              border: canCreate && !creating ? "2px solid rgba(194,58,46,0.6)" : undefined,
-              opacity: canCreate && !creating ? 1 : 0.4,
-            }}
-            className={`px-12 py-3 text-lg font-medieval tracking-wider transition-all duration-200 rounded ${
-              canCreate && !creating ? "hover:scale-105 text-gold cursor-pointer" : "cursor-not-allowed text-parchment/40 border border-parchment/10"
+            className={`btn-stone px-12 py-3 text-lg font-medieval tracking-wider transition-all duration-200 ${
+              canCreate && !creating ? "hover:scale-105 cursor-pointer" : "cursor-not-allowed opacity-40"
             }`}
           >
             {creating ? "Creating..." : "Begin Adventure"}

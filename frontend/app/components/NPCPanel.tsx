@@ -91,7 +91,7 @@ export function NPCPanel({ npcs }: Props) {
               {t("observer.title")}
             </h3>
           </div>
-          <p className="text-parchment/25 text-2xs font-body mb-4">
+          <p className="text-parchment/25 text-xs font-body mb-4">
             {t("observer.desc")}
           </p>
 
@@ -130,10 +130,10 @@ export function NPCPanel({ npcs }: Props) {
                       </span>
                     </div>
                     <div className="flex items-center justify-between mt-0.5">
-                      <span className="text-2xs" style={{ color: "rgba(230,237,243,0.3)", fontSize: "12px" }}>
+                      <span className="text-xs" style={{ color: "rgba(230,237,243,0.3)", fontSize: "12px" }}>
                         {npc.occupation}
                       </span>
-                      <span className="text-2xs" style={{ color: "rgba(230,237,243,0.4)" }}>
+                      <span className="text-xs" style={{ color: "rgba(230,237,243,0.4)" }}>
                         {npc.mood}
                       </span>
                     </div>
@@ -195,7 +195,9 @@ export function NPCPanel({ npcs }: Props) {
 
             <DetailSection title={t("observer.personality")}>
               <p className="text-parchment/70 text-sm font-body leading-relaxed">
-                {selected.personality}
+                {typeof selected.personality === "object"
+                  ? Object.entries(selected.personality).map(([k, v]) => `${k}: ${v}`).join(", ")
+                  : selected.personality}
               </p>
             </DetailSection>
 

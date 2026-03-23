@@ -547,18 +547,18 @@ export default function Home() {
 
         {/* ── Main Panel ── */}
         <div className="flex-1 flex flex-col overflow-y-auto overflow-x-hidden min-h-0 min-w-0 relative">
-          {/* Location background image */}
-          {lookData?.location && (
-            <div className="absolute inset-0 z-0 pointer-events-none">
-              <div
-                className="absolute inset-0 bg-cover bg-center opacity-[0.07]"
-                style={{
-                  backgroundImage: `url(/images/${getLocationImage(lookData.location.id)})`,
-                }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-b from-[#0D1117] via-transparent to-[#0D1117]" />
-            </div>
-          )}
+          {/* Location background image (fallback to hero-bg when no data) */}
+          <div className="absolute inset-0 z-0 pointer-events-none">
+            <div
+              className="absolute inset-0 bg-cover bg-center opacity-[0.12]"
+              style={{
+                backgroundImage: lookData?.location
+                  ? `url(/images/${getLocationImage(lookData.location.id)})`
+                  : `url(/images/hero-bg.jpg)`,
+              }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#0D1117] via-transparent to-[#0D1117]" />
+          </div>
           <AnimatePresence mode="wait">
             {activeTab === "chat" && (
               <motion.div key="chat" className="flex-1 flex flex-col overflow-hidden min-h-0 w-full relative z-10" {...tabVariants}>

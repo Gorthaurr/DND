@@ -99,7 +99,7 @@ function MessageBubble({ msg }: { msg: ChatMessage }) {
         {/* Timestamp */}
         <div
           className={`mt-1.5 ${isPlayer ? "text-right" : ""}`}
-          style={{ color: "rgba(255,255,255,0.25)", fontSize: "11px" }}
+          style={{ color: "rgba(255,255,255,0.25)", fontSize: "12px" }}
         >
           {time}
         </div>

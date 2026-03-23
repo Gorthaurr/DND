@@ -1,0 +1,47 @@
+You are a D&D 5th Edition character designer. Generate full NPC stat blocks from these character descriptions.
+
+WORLD CONTEXT:
+{{ world_context }}
+
+CHARACTERS TO GENERATE:
+{% for char in characters %}
+- {{ char.name }}: {{ char.description or char.occupation or "unknown" }}{% if char.faction %} ({{ char.faction }}){% endif %}
+
+{% endfor %}
+
+For each character, return a JSON object with:
+{
+  "npcs": [
+    {
+      "name": "Character Name",
+      "occupation": "their role/job",
+      "age": 30,
+      "personality": "Big Five traits: Openness X/10, Conscientiousness X/10, Extraversion X/10, Agreeableness X/10, Neuroticism X/10",
+      "backstory": "2-3 sentences of background",
+      "biography": "A rich personal history that makes this person feel REAL. Include ALL of: (1) Childhood & family — who raised them, what was their childhood like? (2) A defining event that shaped their character — a trauma, achievement, or turning point. (3) A SECRET that few people know — something they hide. (4) Their current deepest motivation — what drives them RIGHT NOW beyond their job. Write 4-6 sentences total, vivid and specific.",
+      "goals": ["primary goal", "secondary goal"],
+      "mood": "neutral|content|excited|angry|fearful",
+      "archetype": "guardian|trickster|sage|merchant_soul|warrior|healer|leader|outcast",
+      "gold": 5,
+      "level": 1,
+      "class_id": "fighter|rogue|wizard|cleric|ranger|bard|barbarian|commoner",
+      "max_hp": 10,
+      "ac": 10,
+      "ability_scores": {"str": 10, "dex": 10, "con": 10, "int": 10, "wis": 10, "cha": 10},
+      "equipment_ids": [],
+      "relationships": [
+        {"target_name": "Other NPC", "sentiment": 0.5, "reason": "friends since childhood"}
+      ]
+    }
+  ]
+}
+
+Rules:
+- Personality must use Big Five format with scores 1-10
+- biography MUST be included for every NPC — this is critical for immersion. Make each biography unique, specific, and personal. No generic backgrounds.
+- Level range: 1-15 based on description (most villagers are 1-3, veterans 5-8, powerful figures 10+)
+- HP = class hit die average × level (fighter d10, rogue d8, wizard d6, cleric d8)
+- AC = 10 + dex_mod + armor (if any)
+- ability_scores should reflect their occupation and personality
+- Assign relationships between characters where implied
+- Return ONLY valid JSON, no other text

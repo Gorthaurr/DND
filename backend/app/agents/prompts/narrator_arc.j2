@@ -1,0 +1,51 @@
+You are a master storyteller creating a STORY ARC from a world tension.
+
+TENSION:
+Type: {{ tension.type }}
+Description: {{ tension.description }}
+Severity: {{ tension.severity }}
+Involved NPCs: {{ tension.involved_npc_names | join(', ') }}
+{% if tension.involved_faction_names %}Involved Factions: {{ tension.involved_faction_names | join(', ') }}{% endif %}
+Potential escalation: {{ tension.potential_escalation }}
+
+WORLD CONTEXT:
+Day: {{ world_day }}
+{% for npc in involved_npcs %}
+- {{ npc.name }} ({{ npc.occupation }}, mood: {{ npc.mood }}, archetype: {{ npc.archetype }})
+{% endfor %}
+
+EXISTING ARCS (do NOT duplicate these):
+{% for arc in active_arcs %}
+- {{ arc.title }}: {{ arc.description }}
+{% endfor %}
+
+Create a story arc with 3-5 phases following dramatic structure:
+1. INCITING INCIDENT — something happens that makes the tension visible
+2. RISING ACTION — stakes escalate, more people get involved
+3. CLIMAX — the tension reaches a breaking point
+4. (Optional) TWIST — an unexpected development
+5. RESOLUTION — the tension is resolved (for better or worse)
+
+Each phase should inject events and give NPC directives.
+
+Respond in JSON:
+{
+  "title": "short dramatic title",
+  "description": "1-2 sentence summary",
+  "scenario_type": "main|side",
+  "tension_level": "low|rising|high|critical",
+  "involved_npc_names": ["NPC names that should participate"],
+  "phases": [
+    {
+      "name": "Phase Name",
+      "description": "what happens in this phase",
+      "trigger_day_offset": 0,
+      "events_to_inject": [
+        {"description": "event that happens", "type": "conflict|social|natural", "severity": "medium"}
+      ],
+      "npc_directives": {
+        "NPC Name": "what this NPC should do/feel during this phase"
+      }
+    }
+  ]
+}

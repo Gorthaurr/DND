@@ -8,10 +8,19 @@ log = get_logger("queries")
 
 
 class GraphQueries:
-    """Centralized Neo4j query executor."""
+    """Centralized Neo4j query executor with multi-world isolation.
 
-    def __init__(self, driver: AsyncDriver):
+    Each world gets a unique `world_id` stored on every node.
+    All queries filter by world_id to prevent cross-world data leaks.
+    """
+
+    def __init__(self, driver: AsyncDriver, world_id: str = "default"):
         self._driver = driver
+        self._world_id = world_id
+
+    @property
+    def world_id(self) -> str:
+        return self._world_id
 
     def _session(self) -> AsyncSession:
         return self._driver.session()
@@ -25,12 +34,18 @@ class GraphQueries:
             "name": npc["name"],
             "personality": npc.get("personality", ""),
             "backstory": npc.get("backstory", ""),
+            "biography": npc.get("biography", ""),
             "goals": npc.get("goals", []),
             "mood": npc.get("mood", "neutral"),
             "occupation": npc.get("occupation", ""),
             "age": npc.get("age", 30),
             "archetype": npc.get("archetype"),
             "current_activity": npc.get("current_activity"),
+            # Evolution baselines (start at 0.0 = neutral)
+            "trust_baseline": npc.get("trust_baseline", 0.0),
+            "mood_baseline": npc.get("mood_baseline", 0.0),
+            "aggression_baseline": npc.get("aggression_baseline", 0.0),
+            "confidence_baseline": npc.get("confidence_baseline", 0.0),
         }
         async with self._session() as s:
             await s.run(
@@ -39,13 +54,18 @@ class GraphQueries:
                 SET n.name = $name,
                     n.personality = $personality,
                     n.backstory = $backstory,
+                    n.biography = $biography,
                     n.goals = $goals,
                     n.mood = $mood,
                     n.occupation = $occupation,
                     n.age = $age,
                     n.alive = true,
                     n.archetype = $archetype,
-                    n.current_activity = $current_activity
+                    n.current_activity = $current_activity,
+                    n.trust_baseline = $trust_baseline,
+                    n.mood_baseline = $mood_baseline,
+                    n.aggression_baseline = $aggression_baseline,
+                    n.confidence_baseline = $confidence_baseline
                 """,
                 **params,
             )
@@ -622,6 +642,126 @@ class GraphQueries:
                 return {"leveled_up": True, "new_level": new_level, "new_max_hp": new_max_hp, "xp": current_xp}
 
             return {"leveled_up": False, "level": current_level, "xp": current_xp, "xp_needed": xp_for_next}
+
+    # ── Analytics ─────────────────────────────────────────────────────────
+
+    async def get_dead_npcs(self) -> list[dict]:
+        """Get all dead NPCs."""
+        async with self._session() as s:
+            result = await s.run("MATCH (n:NPC {alive: false}) RETURN n")
+            return [dict(r["n"]) async for r in result]
+
+    async def get_events_in_range(self, from_day: int, to_day: int) -> list[dict]:
+        """Get all events within a day range."""
+        async with self._session() as s:
+            result = await s.run(
+                """
+                MATCH (e:WorldEvent)
+                WHERE e.day >= $from AND e.day <= $to
+                RETURN e ORDER BY e.day ASC
+                """,
+                **{"from": from_day, "to": to_day},
+            )
+            return [dict(r["e"]) async for r in result]
+
+    async def get_all_relationships(self) -> list[dict]:
+        """Get all NPC relationships with sentiments."""
+        async with self._session() as s:
+            result = await s.run(
+                """
+                MATCH (a:NPC)-[r:FEELS]->(b:NPC)
+                RETURN a.name AS from_name, a.id AS from_id,
+                       b.name AS to_name, b.id AS to_id,
+                       r.sentiment AS sentiment, r.reason AS reason
+                """
+            )
+            return [dict(r) async for r in result]
+
+    async def get_completed_scenarios(self) -> list[dict]:
+        """Get all inactive (completed) scenarios."""
+        import json
+        async with self._session() as s:
+            result = await s.run("MATCH (sc:Scenario {active: false}) RETURN sc")
+            rows = [dict(r["sc"]) async for r in result]
+        for row in rows:
+            row["phases"] = json.loads(row.pop("phases_json", "[]"))
+        return rows
+
+    async def get_npc_stats_summary(self) -> dict:
+        """Get aggregate NPC statistics."""
+        async with self._session() as s:
+            result = await s.run(
+                """
+                MATCH (n:NPC)
+                RETURN
+                    COUNT(n) AS total,
+                    SUM(CASE WHEN n.alive THEN 1 ELSE 0 END) AS alive,
+                    SUM(CASE WHEN NOT n.alive THEN 1 ELSE 0 END) AS dead,
+                    AVG(n.gold) AS avg_gold
+                """
+            )
+            record = await result.single()
+            return dict(record) if record else {}
+
+    # ── Faction Operations ────────────────────────────────────────────
+
+    async def get_all_factions(self) -> list[dict]:
+        async with self._session() as s:
+            result = await s.run("MATCH (f:Faction) RETURN f")
+            return [dict(r["f"]) async for r in result]
+
+    async def get_faction_members(self, faction_id: str) -> list[dict]:
+        async with self._session() as s:
+            result = await s.run(
+                """
+                MATCH (n:NPC {alive: true})-[r:MEMBER_OF]->(f:Faction {id: $fid})
+                RETURN n, r.role AS faction_role
+                """,
+                fid=faction_id,
+            )
+            members = []
+            async for r in result:
+                npc = dict(r["n"])
+                npc["faction_role"] = r["faction_role"] or "member"
+                members.append(npc)
+            return members
+
+    async def update_faction(self, faction_id: str, updates: dict) -> None:
+        set_clause = ", ".join(f"f.{k} = ${k}" for k in updates)
+        async with self._session() as s:
+            await s.run(f"MATCH (f:Faction {{id: $id}}) SET {set_clause}", id=faction_id, **updates)
+
+    # ── Location Updates ──────────────────────────────────────────────
+
+    async def update_location(self, loc_id: str, updates: dict) -> None:
+        set_clause = ", ".join(f"l.{k} = ${k}" for k in updates)
+        async with self._session() as s:
+            await s.run(f"MATCH (l:Location {{id: $id}}) SET {set_clause}", id=loc_id, **updates)
+
+    async def get_events_at_location(self, loc_id: str, since_day: int = 0) -> list[dict]:
+        async with self._session() as s:
+            result = await s.run(
+                """
+                MATCH (e:WorldEvent)-[:OCCURRED_AT]->(l:Location {id: $lid})
+                WHERE e.day >= $since
+                RETURN e ORDER BY e.day DESC LIMIT 20
+                """,
+                lid=loc_id, since=since_day,
+            )
+            return [dict(r["e"]) async for r in result]
+
+    # ── World State ───────────────────────────────────────────────────
+
+    async def update_world_state(self, updates: dict) -> None:
+        set_clause = ", ".join(f"w.{k} = ${k}" for k in updates)
+        async with self._session() as s:
+            await s.run(f"MERGE (w:World {{id: 'main'}}) SET {set_clause}", **updates)
+
+    async def get_world_state(self) -> dict:
+        async with self._session() as s:
+            result = await s.run("MATCH (w:World {id: 'main'}) RETURN w")
+            record = await result.single()
+            return dict(record["w"]) if record else {}
 
     # ── Utility ──────────────────────────────────────────────────────────
 

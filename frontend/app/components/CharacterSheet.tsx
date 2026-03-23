@@ -70,7 +70,7 @@ export function CharacterSheet() {
           <Link
             href="/character"
             className="btn-fantasy inline-block text-center w-full"
-            style={{ fontSize: "11px", letterSpacing: "0.1em", padding: "10px 12px" }}
+            style={{ fontSize: "12px", letterSpacing: "0.1em", padding: "10px 12px" }}
           >
             {t("char.openCreator")}
           </Link>
@@ -94,7 +94,8 @@ export function CharacterSheet() {
             {char.name}
           </h3>
           <p style={{ color: "rgba(255,255,255,0.35)", fontSize: "13px" }} className="font-body">
-            {char.race} {char.class}
+            {typeof char.race === "object" ? (char.race as any)?.name : char.race}{" "}
+            {typeof char.class === "object" ? (char.class as any)?.name : char.class}
           </p>
         </div>
       </div>
@@ -132,7 +133,7 @@ export function CharacterSheet() {
           const score = char.abilities?.[ab] ?? 10;
           return (
             <div key={ab} className="text-center p-1.5 rounded" style={{ background: "rgba(255,255,255,0.015)", border: "1px solid rgba(255,255,255,0.04)" }}>
-              <div style={{ color: "rgba(255,255,255,0.25)", fontSize: "11px" }} className="font-medieval">{ab}</div>
+              <div style={{ color: "rgba(255,255,255,0.25)", fontSize: "12px" }} className="font-medieval">{ab}</div>
               <div className="text-sm font-medieval font-bold leading-tight" style={{ color: "#E6EDF3" }}>{score}</div>
               <div style={{ color: "rgba(194,58,46,0.7)", fontSize: "12px" }}>{mod(score)}</div>
             </div>

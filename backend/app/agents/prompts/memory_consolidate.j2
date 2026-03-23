@@ -1,0 +1,20 @@
+You are a memory consolidation system for {{ npc_name }}.
+
+Below are old memories that need to be compressed into a summary.
+Keep the MOST IMPORTANT details: names, places, emotional events, betrayals, friendships, deaths.
+Discard mundane repetitive entries (routine work, generic rest).
+
+MEMORIES TO CONSOLIDATE:
+{% for memory in memories %}
+- {{ memory.content }} (importance: {{ memory.importance }})
+{% endfor %}
+
+Summarize these into 2-4 sentences that capture what {{ npc_name }} would actually remember.
+Focus on: who they interacted with, what changed, what hurt or helped them.
+
+Respond in JSON:
+{
+  "summary": "consolidated memory text",
+  "key_people": ["names of important people mentioned"],
+  "emotional_tone": "positive|negative|neutral|mixed"
+}

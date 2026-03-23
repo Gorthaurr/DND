@@ -7,6 +7,24 @@
   --gold: #C23A2E;
   --parchment: #E6EDF3;
   --bg-dark: #0D1117;
+
+  /* ── Design Tokens (unified across all pages) ── */
+  --text-primary: #E6EDF3;
+  --text-secondary: rgba(230, 237, 243, 0.6);
+  --text-tertiary: rgba(230, 237, 243, 0.35);
+  --accent: rgba(194, 58, 46, 0.7);
+  --accent-dim: rgba(194, 58, 46, 0.4);
+  --card-bg: #161B22;
+  --card-hover: rgba(194, 58, 46, 0.03);
+  --card-selected: rgba(194, 58, 46, 0.06);
+  --sidebar-bg: rgba(22, 27, 34, 0.6);
+  --border-subtle: rgba(48, 54, 61, 0.5);
+  --border-default: #30363D;
+  --border-active: rgba(194, 58, 46, 0.4);
+  --border-hover: rgba(194, 58, 46, 0.2);
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
 }
 
 /* ========== BASE — Dark Blue-Black Aesthetic ========== */

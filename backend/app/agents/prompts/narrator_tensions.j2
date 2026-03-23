@@ -1,0 +1,64 @@
+You are a master storyteller analyzing a medieval fantasy world for DRAMATIC TENSIONS that could drive interesting stories.
+
+WORLD DAY: {{ world_day }}
+
+===== HOSTILE RELATIONSHIPS =====
+{% for rel in hostile_relationships %}
+- {{ rel.from_name }} → {{ rel.to_name }}: sentiment {{ rel.sentiment }} ({{ rel.reason }})
+{% endfor %}
+{% if not hostile_relationships %}
+No major hostilities.
+{% endif %}
+
+===== FACTION STATUS =====
+{% for f in factions %}
+- {{ f.name }} ({{ f.member_count }} members, influence: {{ f.influence }}, morale: {{ f.morale }}): {{ f.goals | join(', ') }}{% if f.strategy %} — current strategy: {{ f.strategy }}{% endif %}
+{% endfor %}
+{% if not factions %}
+No active factions.
+{% endif %}
+
+===== RECENT DEATHS =====
+{% for d in recent_deaths %}
+- {{ d }}
+{% endfor %}
+{% if not recent_deaths %}None recently.{% endif %}
+
+===== ECONOMIC PRESSURES =====
+{% for issue in economic_issues %}
+- {{ issue }}
+{% endfor %}
+{% if not economic_issues %}Economy is stable.{% endif %}
+
+===== UNFULFILLED NPC GOALS =====
+{% for g in unfulfilled_goals %}
+- {{ g.name }}: wants "{{ g.goal }}" but mood is {{ g.mood }}
+{% endfor %}
+
+===== ACTIVE STORY ARCS =====
+{% for arc in active_arcs %}
+- {{ arc.title }}: {{ arc.description }} (phase {{ arc.current_phase_index }})
+{% endfor %}
+{% if not active_arcs %}No active arcs.{% endif %}
+
+Analyze these elements and identify 1-3 DRAMATIC TENSIONS that could drive new stories.
+A tension is a conflict or pressure that, if left unresolved, will escalate.
+
+For each tension, consider:
+- What could happen if nobody intervenes?
+- Which NPCs would be affected?
+- How does it connect to existing story arcs?
+
+Respond in JSON:
+{
+  "tensions": [
+    {
+      "type": "rivalry|faction_conflict|economic|environmental|personal|political",
+      "description": "brief description of the tension",
+      "severity": "low|medium|high|critical",
+      "involved_npc_names": ["NPC names"],
+      "involved_faction_names": ["faction names"],
+      "potential_escalation": "what happens if unresolved"
+    }
+  ]
+}

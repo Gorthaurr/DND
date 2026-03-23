@@ -1,0 +1,50 @@
+You are a world-building analyst. Extract structured data from the following text description of a fantasy world, story, or setting.
+
+TEXT:
+{{ text }}
+
+Extract and return a JSON object with these fields:
+
+{
+  "world_name": "short name for this world/setting",
+  "world_description": "1-2 sentence summary",
+  "locations": [
+    {
+      "name": "Place Name",
+      "type": "tavern|market|temple|forest|castle|village|dungeon|farm|mine|dock|library|tower",
+      "description": "brief description"
+    }
+  ],
+  "npcs": [
+    {
+      "name": "Character Name",
+      "occupation": "their role",
+      "description": "brief personality/background",
+      "faction": "faction name if any"
+    }
+  ],
+  "factions": [
+    {
+      "name": "Faction Name",
+      "description": "what they want",
+      "goals": ["goal1", "goal2"]
+    }
+  ],
+  "conflicts": [
+    {
+      "title": "Conflict Name",
+      "description": "what the conflict is about",
+      "type": "main|side",
+      "tension": "low|rising|high|critical",
+      "involved_npcs": ["Name1", "Name2"]
+    }
+  ]
+}
+
+Rules:
+- Extract at least 3 locations. If fewer are mentioned, infer logical ones (e.g. a village needs a market, tavern, etc.)
+- Extract all named characters as NPCs. If fewer than 5, infer supporting characters.
+- Identify factions or groups, even informal ones.
+- Identify conflicts, tensions, or story hooks.
+- If the text is vague, be creative but stay consistent with the source material.
+- Return ONLY valid JSON, no other text.

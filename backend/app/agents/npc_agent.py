@@ -1,6 +1,7 @@
 """NPC decision-making and dialogue agent."""
 
 from app.agents.base import BaseAgent
+from app.agents.speech_patterns import build_speech_instructions
 from app.models.npc import NPCContext, NPCDecision
 from app.utils.logger import get_logger
 
@@ -28,6 +29,9 @@ class NPCAgent:
                     break
             nearby.append(entry)
 
+        # Build speech instructions from Big Five scores
+        speech = ctx.speech_instructions or build_speech_instructions(ctx.personality, ctx.mood)
+
         result = await self._decision_agent.generate_json(
             name=ctx.name,
             age=ctx.age,
@@ -52,6 +56,22 @@ class NPCAgent:
             equipment_summary=ctx.equipment_summary,
             combat_capability=ctx.combat_capability,
             gold=ctx.gold,
+            # Speech & biography
+            speech_instructions=speech,
+            biography=ctx.biography,
+            # Evolution baselines
+            trust_baseline=ctx.trust_baseline,
+            mood_baseline=ctx.mood_baseline,
+            aggression_baseline=ctx.aggression_baseline,
+            confidence_baseline=ctx.confidence_baseline,
+            # Environment
+            season=ctx.season,
+            weather=ctx.weather,
+            location_condition=ctx.location_condition,
+            # Economy
+            local_shortages=ctx.local_shortages,
+            # Faction
+            faction_directive=ctx.faction_directive,
         )
 
         if not result:
@@ -85,6 +105,9 @@ class NPCAgent:
             if arch:
                 archetype_dialogue_style = arch.dialogue_style
 
+        # Build speech instructions from Big Five
+        speech = build_speech_instructions(npc["personality"], npc["mood"])
+
         result = await self._dialogue_agent.generate_json(
             name=npc["name"],
             age=npc["age"],
@@ -92,6 +115,7 @@ class NPCAgent:
             personality=npc["personality"],
             mood=npc["mood"],
             backstory=npc["backstory"],
+            biography=npc.get("biography"),
             other_name=other_name,
             relationship=relationship,
             relevant_memories=relevant_memories or [],
@@ -99,6 +123,11 @@ class NPCAgent:
             is_player=is_player,
             reputation=reputation,
             archetype_dialogue_style=archetype_dialogue_style,
+            speech_instructions=speech,
+            trust_baseline=npc.get("trust_baseline", 0.0),
+            mood_baseline=npc.get("mood_baseline", 0.0),
+            aggression_baseline=npc.get("aggression_baseline", 0.0),
+            confidence_baseline=npc.get("confidence_baseline", 0.0),
         )
 
         if not result:
