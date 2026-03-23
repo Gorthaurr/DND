@@ -28,16 +28,16 @@ export const api = {
 
   look: () => fetchJson<LookResponse>("/look"),
 
-  action: (action: string) =>
+  action: (action: string, lang?: string) =>
     fetchJson<ActionResponse>("/action", {
       method: "POST",
-      body: JSON.stringify({ action }),
+      body: JSON.stringify({ action, lang }),
     }),
 
-  dialogue: (npc_id: string, message: string) =>
+  dialogue: (npc_id: string, message: string, lang?: string) =>
     fetchJson<DialogueResponse>("/dialogue", {
       method: "POST",
-      body: JSON.stringify({ npc_id, message }),
+      body: JSON.stringify({ npc_id, message, lang }),
     }),
 
   worldState: () => fetchJson<WorldState>("/world/state"),

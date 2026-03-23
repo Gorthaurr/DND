@@ -12,6 +12,7 @@ from app.agents.npc_agent import npc_agent
 from app.api.schemas import (
     ActionRequest,
     ActionResponse,
+    DialogueInterjection,
     DialogueRequest,
     DialogueResponse,
     LookResponse,
@@ -157,11 +158,133 @@ async def player_action(req: ActionRequest):
             # Location not found — still call DM
             pass
 
-    # Quick attack command
-    if action_lower.startswith("attack ") or action_lower.startswith("fight "):
-        target_name = req.action.split(" ", 1)[1] if " " in req.action else ""
-        # Rewrite action for DM to process as combat
-        req = ActionRequest(action=f"I attack {target_name} with my weapon!")
+    # ── COMBAT PATH: detect combat intent and resolve with D&D mechanics ──
+    from app.agents.combat_agent import combat_agent as _combat_agent
+    combat_keywords = ["attack", "fight", "strike", "stab", "slash", "shoot", "kill", "punch", "hit",
+                       "атакую", "бью", "убиваю", "дерусь", "ударяю", "стреляю", "режу"]
+    might_be_combat = any(kw in action_lower for kw in combat_keywords)
+
+    if might_be_combat and present_npcs:
+        intent = await _combat_agent.parse_combat_intent(
+            player_action=req.action,
+            present_npcs=present_npcs,
+            player=player,
+        )
+
+        if intent.get("is_combat") and intent.get("targets"):
+            # Gather target NPC full data
+            target_npcs = []
+            for t in intent["targets"]:
+                npc_data = await gq.get_npc(t["npc_id"])
+                if npc_data and npc_data.get("alive", True):
+                    target_npcs.append(npc_data)
+
+            # Gather hostile allies who join the fight
+            hostile_npcs = []
+            for npc_id in intent.get("npcs_join_fight", []):
+                npc_data = await gq.get_npc(npc_id)
+                if npc_data and npc_data.get("alive", True):
+                    hostile_npcs.append(npc_data)
+
+            if target_npcs:
+                # DETERMINISTIC COMBAT via D&D dice
+                encounter = _combat_agent.resolve_combat(
+                    player_data=player,
+                    target_npcs=target_npcs,
+                    hostile_npcs=hostile_npcs if hostile_npcs else None,
+                )
+
+                # DM narrates the structured results
+                narration = await dm_agent.narrate_combat(
+                    combat_log=encounter.combat_log,
+                    initiative_order=encounter.initiative_order,
+                    player_hp_change=encounter.player_hp_change,
+                    player_killed=encounter.player_killed,
+                    npcs_killed=encounter.npcs_killed,
+                    location_name=location["name"],
+                    present_npcs=present_npcs,
+                    lang=req.lang,
+                )
+
+                # Apply NPC damage via deterministic results
+                from app.models.memory import init_memory_db, add_memory
+                init_memory_db()
+                actual_killed = []
+                for npc_id, total_dmg in encounter.npcs_damaged.items():
+                    updated = await gq.damage_npc(npc_id, total_dmg)
+                    if updated and not updated.get("alive", True):
+                        actual_killed.append(npc_id)
+
+                # Apply player HP change
+                player_hp_change = encounter.player_hp_change
+                if player_hp_change != 0:
+                    current_hp = player.get("current_hp", player.get("max_hp", 10))
+                    max_hp = player.get("max_hp", 10)
+                    new_hp = max(0, min(max_hp, current_hp + player_hp_change))
+                    async with gq._session() as s:
+                        await s.run("MATCH (p:Player {id: $id}) SET p.current_hp = $hp",
+                                    id=PLAYER_ID, hp=new_hp)
+
+                if encounter.player_killed:
+                    async with gq._session() as s:
+                        await s.run("MATCH (p:Player {id: $id}) SET p.current_hp = 0", id=PLAYER_ID)
+
+                # Apply kill cascades
+                for npc_id in actual_killed:
+                    try:
+                        killed_npc = await gq.get_npc(npc_id)
+                        killed_name = killed_npc["name"] if killed_npc else npc_id
+
+                        try:
+                            from app.models.world_store import WorldStore
+                            ws = WorldStore()
+                            ws.update_npc("medieval_village", npc_id, {"alive": False, "mood": "dead", "current_hp": 0})
+                        except Exception:
+                            pass
+
+                        # Cascade: inform related NPCs
+                        victim_relations = await gq.get_relationships(npc_id)
+                        witnesses = await gq.get_npcs_at_location(location["id"])
+                        world_day = player.get("day", 1)
+                        for rel in victim_relations:
+                            other_id = rel["id"]
+                            other_npc = await gq.get_npc(other_id)
+                            if not other_npc or not other_npc.get("alive", True):
+                                continue
+                            sentiment = rel.get("sentiment", 0)
+                            was_witness = any(w["id"] == other_id for w in witnesses)
+                            if sentiment > 0.3:
+                                add_memory(other_id, f"Day {world_day}: The adventurer KILLED {killed_name}!", day=world_day, importance=0.9)
+                                await gq.update_npc(other_id, {"mood": "angry"})
+                            elif sentiment < -0.3:
+                                add_memory(other_id, f"Day {world_day}: The adventurer killed {killed_name}. Good riddance.", day=world_day, importance=0.7)
+                                await gq.update_npc(other_id, {"mood": "content"})
+                            else:
+                                add_memory(other_id, f"Day {world_day}: The adventurer killed {killed_name}. Terrifying.", day=world_day, importance=0.8)
+                                await gq.update_npc(other_id, {"mood": "fearful" if was_witness else "worried"})
+                    except Exception as e:
+                        log.warning("combat_kill_cascade_failed", npc_id=npc_id, error=str(e))
+
+                # Save chat entries
+                _save_chat_entry({"type": "player", "content": req.action, "timestamp": int(time.time() * 1000)})
+                _save_chat_entry({"type": "dm", "content": narration, "timestamp": int(time.time() * 1000)})
+
+                resp = ActionResponse(
+                    narration=narration,
+                    npcs_involved=[t["npc_id"] for t in intent["targets"]],
+                    npcs_killed=actual_killed,
+                    location=dict(location),
+                    items_changed=[],
+                    player_hp_change=player_hp_change,
+                    player_killed=encounter.player_killed,
+                    combat_rolls=[r for r in encounter.all_rolls],
+                )
+                xp_result = await gq.add_player_xp(PLAYER_ID, 25 if actual_killed else 10)
+                if xp_result.get("leveled_up"):
+                    resp.level_up = {"level": xp_result["new_level"], "max_hp": xp_result["new_max_hp"]}
+                return resp
+
+    # ── NON-COMBAT PATH: DM narrates the action ──
 
     # Enrich NPC data with combat stats and equipment summary
     enriched_npcs = []
@@ -182,6 +305,16 @@ async def player_action(req: ActionRequest):
             npc_data["equipment_summary"] = ", ".join(parts) if parts else None
         enriched_npcs.append(npc_data)
 
+    # Get dead NPCs at location for context
+    dead_npcs = await gq.get_dead_npcs_at_location(location["id"])
+
+    # Build recent chat context from chat log
+    chat_log = _load_chat_log()
+    recent_chat = [
+        f"{'Player' if e.get('type') == 'player' else e.get('npc_name', 'DM')}: {e.get('content', '')}"
+        for e in chat_log[-10:]
+    ]
+
     result = await dm_agent.narrate(
         player_action=req.action,
         location_name=location["name"],
@@ -198,6 +331,9 @@ async def player_action(req: ActionRequest):
         player_max_hp=player.get("max_hp", 10),
         player_ac=player.get("ac", 10),
         time_of_day=player.get("time_of_day", "day"),
+        dead_npcs=[{"id": n["id"], "name": n["name"], "occupation": n.get("occupation", "")} for n in dead_npcs],
+        recent_chat=recent_chat,
+        lang=req.lang,
     )
 
     # Apply location change if DM suggests one
@@ -233,6 +369,16 @@ async def player_action(req: ActionRequest):
             killed_name = killed_npc["name"] if killed_npc else npc_id
             await gq.kill_npc(npc_id)
             log.info("npc_killed", npc_id=npc_id, by="player")
+
+            # Persist kill to world JSON files
+            try:
+                from app.models.world_store import world_store
+                # Find active world and update NPC alive status
+                worlds = world_store.list_worlds()
+                for w in worlds:
+                    world_store.update_npc(w["id"], npc_id, {"alive": False, "mood": "dead"})
+            except Exception:
+                pass
 
             # ── CASCADE: Inform all NPCs who knew the victim ──
             victim_relations = await gq.get_relationships(npc_id)
@@ -332,6 +478,8 @@ async def player_action(req: ActionRequest):
         npcs_killed=result.get("npcs_killed", []),
         location=dict(location),
         items_changed=result.get("items_changed", []),
+        player_hp_change=result.get("player_hp_change", 0),
+        player_killed=result.get("player_killed", False),
     )
     xp_result = await gq.add_player_xp(PLAYER_ID, 10)
     if xp_result.get("leveled_up"):
@@ -352,6 +500,9 @@ async def player_dialogue(req: DialogueRequest):
     if not npc:
         raise HTTPException(404, f"NPC {req.npc_id} not found")
     if not npc.get("alive", True):
+        # Dead NPC -- save to chat log but return dead response
+        _save_chat_entry({"type": "player", "content": f"[to {npc.get('name', '???')}] {req.message}", "timestamp": int(time.time() * 1000)})
+        _save_chat_entry({"type": "npc", "content": "*lies motionless on the ground*", "npc_name": npc.get("name", "???"), "timestamp": int(time.time() * 1000)})
         return DialogueResponse(
             npc_name=npc.get("name", "???"),
             dialogue="*lies motionless on the ground*",
@@ -370,6 +521,13 @@ async def player_dialogue(req: DialogueRequest):
 
     relevant = search_memories(req.npc_id, req.message, top_k=3)
 
+    # Build recent chat context
+    chat_log = _load_chat_log()
+    recent_chat = [
+        f"{'Player' if e.get('type') == 'player' else e.get('npc_name', 'DM')}: {e.get('content', '')}"
+        for e in chat_log[-10:]
+    ]
+
     result = await npc_agent.dialogue(
         npc=npc,
         message=req.message,
@@ -378,6 +536,8 @@ async def player_dialogue(req: DialogueRequest):
         relevant_memories=relevant,
         is_player=True,
         reputation=reputation,
+        recent_chat=recent_chat,
+        lang=req.lang,
     )
 
     # Store memories for both NPC and player interaction
@@ -405,10 +565,64 @@ async def player_dialogue(req: DialogueRequest):
     # Grant XP for dialogue
     await gq.add_player_xp(PLAYER_ID, 5)
 
+    # Evaluate bystander interjections (up to 3 concurrent)
+    interjections = []
+    try:
+        location = await gq.get_player_location(PLAYER_ID)
+        if location:
+            import asyncio
+            bystanders = await gq.get_npcs_at_location(location["id"])
+            bystanders = [b for b in bystanders if b["id"] != req.npc_id and b.get("alive", True)][:3]
+
+            async def _eval_interjection(bystander):
+                try:
+                    bystander_rep = await gq.get_player_reputation(PLAYER_ID, bystander["id"])
+                    bystander_rels = await gq.get_relationships(bystander["id"])
+                    rel_to_target = "neutral"
+                    for br in bystander_rels:
+                        if br.get("id") == req.npc_id:
+                            rel_to_target = f"sentiment {br['sentiment']}: {br.get('reason', '')}"
+                            break
+                    bystander_memories = search_memories(bystander["id"], req.message, top_k=2)
+
+                    ij_result = await npc_agent.evaluate_interjection(
+                        npc=bystander,
+                        player_message=req.message,
+                        target_npc_name=npc["name"],
+                        target_npc_occupation=npc.get("occupation", ""),
+                        target_reply=result["dialogue"],
+                        player_reputation=bystander_rep,
+                        relationship_to_target=rel_to_target,
+                        relevant_memories=bystander_memories,
+                        location_name=location.get("name", ""),
+                        recent_chat=recent_chat,
+                        lang=req.lang,
+                    )
+                    if ij_result.get("should_interject"):
+                        return DialogueInterjection(
+                            npc_name=bystander["name"],
+                            npc_id=bystander["id"],
+                            dialogue=ij_result["dialogue"],
+                            mood=bystander.get("mood", "neutral"),
+                        )
+                except Exception:
+                    pass
+                return None
+
+            ij_results = await asyncio.gather(*[_eval_interjection(b) for b in bystanders])
+            interjections = [ij for ij in ij_results if ij is not None]
+
+            # Save interjection chat entries
+            for ij in interjections:
+                _save_chat_entry({"type": "npc", "content": f"[interjects] {ij.dialogue}", "npc_name": ij.npc_name, "timestamp": int(time.time() * 1000)})
+    except Exception:
+        pass
+
     return DialogueResponse(
         npc_name=npc["name"],
         dialogue=result["dialogue"],
         mood=mood,
+        interjections=interjections,
     )
 
 
@@ -427,6 +641,7 @@ async def look():
     npcs = await gq.get_npcs_at_location(location["id"])
     # Filter to alive only (safety net — query already filters, but double-check)
     npcs = [n for n in npcs if n.get("alive", True)]
+    dead_npcs = await gq.get_dead_npcs_at_location(location["id"])
     exits = await gq.get_connected_locations(location["id"])
 
     return LookResponse(
@@ -434,6 +649,7 @@ async def look():
         npcs=[{"id": n["id"], "name": n["name"], "occupation": n["occupation"], "mood": n["mood"]} for n in npcs],
         items=[],  # TODO: items at location
         exits=[{"id": e["id"], "name": e["name"], "type": e["type"]} for e in exits],
+        dead_npcs=[{"id": n["id"], "name": n["name"], "occupation": n.get("occupation", "")} for n in dead_npcs],
     )
 
 

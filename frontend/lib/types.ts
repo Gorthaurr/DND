@@ -46,6 +46,7 @@ export interface Item {
 export interface LookResponse {
   location: Location;
   npcs: NPC[];
+  dead_npcs: NPC[];
   items: Item[];
   exits: Location[];
 }
@@ -56,12 +57,22 @@ export interface ActionResponse {
   npcs_killed: string[];
   location: Location | null;
   items_changed: string[];
+  player_hp_change: number;
+  player_killed: boolean;
+}
+
+export interface DialogueInterjection {
+  npc_name: string;
+  npc_id: string;
+  dialogue: string;
+  mood: string;
 }
 
 export interface DialogueResponse {
   npc_name: string;
   dialogue: string;
   mood: string;
+  interjections: DialogueInterjection[];
 }
 
 export interface WorldState {

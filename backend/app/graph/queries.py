@@ -31,6 +31,7 @@ class GraphQueries:
             "age": npc.get("age", 30),
             "archetype": npc.get("archetype"),
             "current_activity": npc.get("current_activity"),
+            "alive": npc.get("alive", True),
         }
         async with self._session() as s:
             await s.run(
@@ -43,7 +44,7 @@ class GraphQueries:
                     n.mood = $mood,
                     n.occupation = $occupation,
                     n.age = $age,
-                    n.alive = true,
+                    n.alive = $alive,
                     n.archetype = $archetype,
                     n.current_activity = $current_activity
                 """,
@@ -191,6 +192,17 @@ class GraphQueries:
             result = await s.run(
                 """
                 MATCH (n:NPC {alive: true})-[:LOCATED_IN]->(l:Location {id: $id})
+                RETURN n
+                """,
+                id=loc_id,
+            )
+            return [dict(r["n"]) async for r in result]
+
+    async def get_dead_npcs_at_location(self, loc_id: str) -> list[dict]:
+        async with self._session() as s:
+            result = await s.run(
+                """
+                MATCH (n:NPC {alive: false})-[:LOCATED_IN]->(l:Location {id: $id})
                 RETURN n
                 """,
                 id=loc_id,

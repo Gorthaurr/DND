@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState, useMemo } from "react";
 import Link from "next/link";
 import { api } from "@/lib/api";
 import type { ChatMessage, LookResponse, NPC, WorldMap } from "@/lib/types";
-import { useT } from "@/lib/i18n";
+import { useT, useI18n } from "@/lib/i18n";
 import { LanguageSwitcher } from "./components/LanguageSwitcher";
 import { CharacterSheet } from "./components/CharacterSheet";
 import { InventoryPanel } from "./components/InventoryPanel";
@@ -127,6 +127,7 @@ const tabVariants = {
 
 export default function Home() {
   const t = useT();
+  const { locale } = useI18n();
 
   /* ── state ── */
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -295,8 +296,13 @@ export default function Home() {
           addMessage("system", `${t("sys.dontSee" as any)} "${arg}"`);
         }
       } else if (cmd === "say" && selectedNpc) {
-        const resp = await api.dialogue(selectedNpc.id, arg);
+        const resp = await api.dialogue(selectedNpc.id, arg, locale);
         addMessage("npc", resp.dialogue, resp.npc_name);
+        if (resp.interjections && resp.interjections.length > 0) {
+          for (const inter of resp.interjections) {
+            addMessage("npc", inter.dialogue, inter.npc_name);
+          }
+        }
         setConnected(true);
       } else if (cmd === "look") {
         const look = await api.look();
@@ -342,9 +348,24 @@ export default function Home() {
         setConnected(true);
         setActiveTab("map");
       } else {
-        const resp = await api.action(text);
+        const resp = await api.action(text, locale);
         addMessage("dm", resp.narration);
         setConnected(true);
+
+        // Show HP change
+        if (resp.player_hp_change && resp.player_hp_change !== 0) {
+          if (resp.player_hp_change < 0) {
+            addMessage("system", `\u2764 You lost ${Math.abs(resp.player_hp_change)} HP!`);
+          } else {
+            addMessage("system", `\u2764 You gained ${resp.player_hp_change} HP!`);
+          }
+        }
+
+        // Show player death
+        if (resp.player_killed) {
+          addMessage("system", `\uD83D\uDC80 You have been killed!`);
+          setIsDead(true);
+        }
 
         // Show kills in chat (Problem 6)
         if (resp.npcs_killed && resp.npcs_killed.length > 0) {
@@ -688,6 +709,31 @@ export default function Home() {
                     </button>
                   ))}
                 </div>
+                {/* Dead NPCs */}
+                {lookData.dead_npcs && lookData.dead_npcs.length > 0 && (
+                  <div className="mt-3 space-y-1">
+                    <h4 className="text-xs font-medieval uppercase tracking-wider" style={{ color: "rgba(194,58,46,0.5)" }}>
+                      {"\uD83D\uDC80"} Dead
+                    </h4>
+                    {lookData.dead_npcs.map((npc) => (
+                      <div
+                        key={npc.id}
+                        className="block w-full text-left px-3.5 py-2 rounded"
+                        style={{ opacity: 0.4 }}
+                      >
+                        <span
+                          className="font-medieval font-semibold block"
+                          style={{ color: "#C23A2E", fontSize: "15px", textDecoration: "line-through" }}
+                        >
+                          {npc.name}
+                        </span>
+                        <span style={{ color: "rgba(230,237,243,0.25)", fontSize: "12px", textDecoration: "line-through" }}>
+                          {npc.occupation}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
 

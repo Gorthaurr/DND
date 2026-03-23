@@ -3,11 +3,13 @@ from pydantic import BaseModel
 
 class ActionRequest(BaseModel):
     action: str  # free text: "go north", "talk to Goran", "pick up sword"
+    lang: str = "en"
 
 
 class DialogueRequest(BaseModel):
     npc_id: str
     message: str
+    lang: str = "en"
 
 
 class ActionResponse(BaseModel):
@@ -17,12 +19,23 @@ class ActionResponse(BaseModel):
     location: dict | None = None
     items_changed: list[str] = []
     level_up: dict | None = None
+    player_hp_change: int = 0
+    player_killed: bool = False
+    combat_rolls: list[dict] | None = None
+
+
+class DialogueInterjection(BaseModel):
+    npc_name: str
+    npc_id: str
+    dialogue: str
+    mood: str
 
 
 class DialogueResponse(BaseModel):
     npc_name: str
     dialogue: str
     mood: str
+    interjections: list[DialogueInterjection] = []
 
 
 class WorldStateResponse(BaseModel):
@@ -53,6 +66,7 @@ class LookResponse(BaseModel):
     npcs: list[dict]
     items: list[dict]
     exits: list[dict]
+    dead_npcs: list[dict] = []
 
 
 class NPCInfoResponse(BaseModel):

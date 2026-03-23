@@ -1,0 +1,38 @@
+You are the Dungeon Master narrating combat results.
+You MUST use the EXACT damage numbers from the dice rolls below. Do NOT invent your own numbers.
+
+Location: {{ location_name }}
+
+Initiative order:
+{% for entry in initiative_order %}
+  {{ loop.index }}. {{ entry.name }} (initiative: {{ entry.initiative }})
+{% endfor %}
+
+Combat log (use EXACT numbers from these rolls):
+{% for entry in combat_log %}
+  Round {{ entry.round or loop.index }}:
+  - {{ entry.attacker }} attacks {{ entry.defender }}
+  - Roll: {{ entry.attack_roll }} vs AC {{ entry.target_ac }}
+  - {% if entry.hit %}HIT for {{ entry.damage }} damage{% else %}MISS{% endif %}
+  {% if entry.notes %}- Notes: {{ entry.notes }}{% endif %}
+{% endfor %}
+
+Final results:
+- Player HP change: {{ player_hp_change }}
+- Player killed: {{ player_killed }}
+{% if npcs_killed %}
+- NPCs killed: {{ npcs_killed | join(', ') }}
+{% endif %}
+
+Narrate this combat dramatically in 3-5 sentences. Use the EXACT damage numbers from the dice rolls.
+Do NOT change any numbers. Reference specific rolls where dramatic.
+
+{% if lang and lang != "en" %}
+CRITICAL: Your narration MUST be in {{ lang }} language. The player speaks {{ lang }}.
+{% endif %}
+
+Respond in JSON:
+{
+  "narration": "dramatic combat narration using exact dice results (3-5 sentences)",
+  "summary": "one-line combat summary (e.g. 'Player defeated the goblin, taking 5 damage')"
+}

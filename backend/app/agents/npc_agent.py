@@ -14,6 +14,7 @@ class NPCAgent:
         self._decision_agent = BaseAgent("npc_decision.j2")
         self._dialogue_agent = BaseAgent("npc_dialogue.j2")
         self._interact_agent = BaseAgent("npc_interact.j2")
+        self._interjection_agent = BaseAgent("npc_interjection.j2")
 
     async def decide(self, ctx: NPCContext) -> NPCDecision:
         """Have an NPC decide their next action based on context."""
@@ -75,6 +76,8 @@ class NPCAgent:
         relevant_memories: list[str] | None = None,
         is_player: bool = True,
         reputation: int = 0,
+        recent_chat: list[str] | None = None,
+        lang: str = "en",
     ) -> dict:
         """Generate NPC dialogue response."""
         # Resolve archetype dialogue style
@@ -84,6 +87,12 @@ class NPCAgent:
             arch = get_archetype(npc["archetype"])
             if arch:
                 archetype_dialogue_style = arch.dialogue_style
+
+        # Generate biography and speech instructions from backstory/personality
+        biography = npc.get("backstory", "")
+        speech_instructions = ""
+        if archetype_dialogue_style:
+            speech_instructions = archetype_dialogue_style
 
         result = await self._dialogue_agent.generate_json(
             name=npc["name"],
@@ -99,6 +108,14 @@ class NPCAgent:
             is_player=is_player,
             reputation=reputation,
             archetype_dialogue_style=archetype_dialogue_style,
+            biography=biography,
+            speech_instructions=speech_instructions,
+            trust_baseline=npc.get("trust_baseline", 50),
+            mood_baseline=npc.get("mood_baseline", 50),
+            aggression_baseline=npc.get("aggression_baseline", 20),
+            confidence_baseline=npc.get("confidence_baseline", 50),
+            recent_chat=recent_chat or [],
+            lang=lang,
         )
 
         if not result:
@@ -114,6 +131,63 @@ class NPCAgent:
             "mood_change": result.get("mood_change", "same"),
             "sentiment_change": result.get("sentiment_change", 0.0),
             "internal_thought": result.get("internal_thought", ""),
+        }
+
+    async def evaluate_interjection(
+        self,
+        npc: dict,
+        player_message: str,
+        target_npc_name: str,
+        target_npc_occupation: str,
+        target_reply: str,
+        player_reputation: int = 0,
+        relationship_to_target: str = "neutral",
+        relevant_memories: list[str] | None = None,
+        location_name: str = "",
+        recent_chat: list[str] | None = None,
+        lang: str = "en",
+    ) -> dict:
+        """Evaluate whether a bystander NPC should interject into a conversation."""
+        archetype_dialogue_style = None
+        biography = npc.get("backstory", "")
+        speech_instructions = ""
+
+        if npc.get("archetype"):
+            from app.models.archetypes import get_archetype
+            arch = get_archetype(npc["archetype"])
+            if arch:
+                archetype_dialogue_style = arch.dialogue_style
+                speech_instructions = arch.dialogue_style
+
+        result = await self._interjection_agent.generate_json(
+            name=npc["name"],
+            age=npc.get("age", 30),
+            occupation=npc.get("occupation", ""),
+            personality=npc.get("personality", ""),
+            mood=npc.get("mood", "neutral"),
+            archetype_dialogue_style=archetype_dialogue_style,
+            biography=biography,
+            speech_instructions=speech_instructions,
+            location_name=location_name,
+            target_npc_name=target_npc_name,
+            target_npc_occupation=target_npc_occupation,
+            player_message=player_message,
+            target_reply=target_reply,
+            player_reputation=player_reputation,
+            relationship_to_target=relationship_to_target,
+            relevant_memories=relevant_memories or [],
+            recent_chat=recent_chat or [],
+            lang=lang,
+        )
+
+        if not result:
+            return {"should_interject": False, "reason": "no response", "dialogue": "", "mood_change": "same"}
+
+        return {
+            "should_interject": result.get("should_interject", False),
+            "reason": result.get("reason", ""),
+            "dialogue": result.get("dialogue", ""),
+            "mood_change": result.get("mood_change", "same"),
         }
 
     async def interact(self, npc_a: dict, npc_b: dict, context: dict) -> dict:

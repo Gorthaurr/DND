@@ -1,0 +1,57 @@
+You are evaluating whether {{ name }} ({{ occupation }}, mood: {{ mood }}) would interject into a nearby conversation.
+
+{{ name }}'s personality (Big Five): {{ personality }}
+{% if archetype_dialogue_style %}Dialogue style: {{ archetype_dialogue_style }}{% endif %}
+{% if biography %}LIFE STORY: {{ biography }}{% endif %}
+{% if speech_instructions %}
+SPEECH STYLE: {{ speech_instructions }}
+{% endif %}
+
+SITUATION:
+- Location: {{ location_name }}
+- The adventurer is talking to {{ target_npc_name }} ({{ target_npc_occupation }})
+- The adventurer said: "{{ player_message }}"
+- {{ target_npc_name }} replied: "{{ target_reply }}"
+
+{{ name }}'s relationship with the adventurer: {{ player_reputation }} reputation
+{{ name }}'s relationship with {{ target_npc_name }}: {{ relationship_to_target }}
+
+{% if relevant_memories %}
+{{ name }}'s relevant memories:
+{% for m in relevant_memories %}
+- {{ m }}
+{% endfor %}
+{% endif %}
+
+{% if recent_chat %}
+Recent conversation context:
+{% for entry in recent_chat %}
+- {{ entry }}
+{% endfor %}
+{% endif %}
+
+DECISION RULES — would {{ name }} interject?
+A character ONLY interjects if ONE of these applies:
+1. The topic DIRECTLY concerns them (their name mentioned, their job, their family, their faction)
+2. They have STRONG feelings about the topic (someone they love/hate was mentioned, a threat to their safety)
+3. Their archetype compels it (gossip overhears juicy info, guardian hears a threat, zealot hears blasphemy)
+4. They witnessed something relevant that others don't know about
+
+Characters do NOT interject if:
+- The conversation is mundane small talk that doesn't concern them
+- They are shy/introverted and the topic isn't critical to them
+- They are busy with their own activity
+- The topic is private between the two speakers
+- They have no strong opinion or stake
+
+{% if lang and lang != "en" %}
+CRITICAL: If interjecting, the dialogue MUST be in {{ lang }} language. The player speaks {{ lang }}.
+{% endif %}
+
+Respond in JSON:
+{
+  "should_interject": true or false,
+  "reason": "brief reason why they would/wouldn't interject",
+  "dialogue": "what they say (1-2 sentences, in character, in {{ lang or 'en' }} language) — only if should_interject is true",
+  "mood_change": "same|better|worse"
+}
