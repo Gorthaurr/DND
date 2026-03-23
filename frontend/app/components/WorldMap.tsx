@@ -5,7 +5,8 @@ import { api } from "@/lib/api";
 import { useT } from "@/lib/i18n";
 import type { WorldMap } from "@/lib/types";
 
-const LAYOUT: Record<string, { x: number; y: number }> = {
+/* Preset positions for known location IDs; unknown IDs get auto-positioned */
+const PRESET_LAYOUT: Record<string, { x: number; y: number }> = {
   "loc-square": { x: 300, y: 250 },
   "loc-tavern": { x: 150, y: 140 },
   "loc-market": { x: 460, y: 140 },
@@ -15,14 +16,61 @@ const LAYOUT: Record<string, { x: number; y: number }> = {
   "loc-farm": { x: 100, y: 460 },
 };
 
+/* Also match by type when id is dynamic (e.g. "loc-c07ae4") */
+const TYPE_POSITIONS: Record<string, { x: number; y: number }> = {
+  tavern:     { x: 150, y: 140 },
+  market:     { x: 460, y: 140 },
+  shop:       { x: 510, y: 310 },
+  temple:     { x: 140, y: 360 },
+  wilderness: { x: 450, y: 430 },
+  farm:       { x: 100, y: 460 },
+  ruins:      { x: 300, y: 430 },
+  square:     { x: 300, y: 250 },
+};
+
+/* Auto-layout: circle arrangement for locations without preset positions */
+function buildLayout(locations: { id: string; type: string }[]): Record<string, { x: number; y: number }> {
+  const layout: Record<string, { x: number; y: number }> = {};
+  const usedPositions = new Set<string>();
+
+  // First pass: assign preset / type-based positions
+  for (const loc of locations) {
+    const preset = PRESET_LAYOUT[loc.id] || TYPE_POSITIONS[loc.type];
+    if (preset) {
+      const key = `${preset.x},${preset.y}`;
+      if (!usedPositions.has(key)) {
+        layout[loc.id] = preset;
+        usedPositions.add(key);
+      }
+    }
+  }
+
+  // Second pass: auto-position remaining in a circle
+  const remaining = locations.filter((l) => !layout[l.id]);
+  const cx = 310, cy = 270, radius = 180;
+  remaining.forEach((loc, i) => {
+    const angle = (2 * Math.PI * i) / Math.max(remaining.length, 1) - Math.PI / 2;
+    layout[loc.id] = {
+      x: Math.round(cx + radius * Math.cos(angle)),
+      y: Math.round(cy + radius * Math.sin(angle)),
+    };
+  });
+
+  return layout;
+}
+
 const TYPE_ICONS: Record<string, { opacity: number; icon: string }> = {
-  tavern: { opacity: 0.7, icon: "🍺" },
-  market: { opacity: 0.6, icon: "🏪" },
-  smithy: { opacity: 0.8, icon: "⚒" },
-  square: { opacity: 0.9, icon: "🏛" },
-  forest: { opacity: 0.5, icon: "🌲" },
-  chapel: { opacity: 0.65, icon: "⛪" },
-  farm: { opacity: 0.55, icon: "🌾" },
+  tavern:     { opacity: 0.7,  icon: "🍺" },
+  market:     { opacity: 0.6,  icon: "🏪" },
+  smithy:     { opacity: 0.8,  icon: "⚒" },
+  shop:       { opacity: 0.8,  icon: "⚒" },
+  square:     { opacity: 0.9,  icon: "🏛" },
+  forest:     { opacity: 0.5,  icon: "🌲" },
+  wilderness: { opacity: 0.5,  icon: "🌲" },
+  chapel:     { opacity: 0.65, icon: "⛪" },
+  temple:     { opacity: 0.65, icon: "⛪" },
+  farm:       { opacity: 0.55, icon: "🌾" },
+  ruins:      { opacity: 0.45, icon: "🏚" },
 };
 
 interface Props {
@@ -34,6 +82,9 @@ export function WorldMapView({ data: initialData }: Props) {
   const [data, setData] = useState<WorldMap | null>(initialData);
   const [hoveredLoc, setHoveredLoc] = useState<string | null>(null);
   const [selectedLoc, setSelectedLoc] = useState<any>(null);
+
+  /* Dynamic layout computed from actual location data */
+  const LAYOUT = data ? buildLayout(data.locations) : {};
 
   useEffect(() => {
     if (!data) {
