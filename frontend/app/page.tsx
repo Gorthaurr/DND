@@ -502,6 +502,15 @@ export default function Home() {
                 <Link href="/worldbuilder" className="block px-4 py-2 text-sm font-body hover:bg-[rgba(194,58,46,0.08)] transition-colors" style={{ color: "rgba(230,237,243,0.6)" }} onClick={() => setMenuOpen(false)}>
                   World Builder
                 </Link>
+                <Link href="/editor" className="block px-4 py-2 text-sm font-body hover:bg-[rgba(194,58,46,0.08)] transition-colors" style={{ color: "rgb(217, 160, 60)" }} onClick={() => setMenuOpen(false)}>
+                  World Editor
+                </Link>
+                <Link href="/npcs" className="block px-4 py-2 text-sm font-body hover:bg-[rgba(194,58,46,0.08)] transition-colors" style={{ color: "rgb(120, 200, 255)" }} onClick={() => setMenuOpen(false)}>
+                  NPC Explorer
+                </Link>
+                <Link href="/story" className="block px-4 py-2 text-sm font-body hover:bg-[rgba(194,58,46,0.08)] transition-colors" style={{ color: "rgb(180, 120, 255)" }} onClick={() => setMenuOpen(false)}>
+                  Story Tree
+                </Link>
                 <button className="block w-full text-left px-4 py-2 text-sm font-body hover:bg-[rgba(194,58,46,0.08)] transition-colors" style={{ color: "rgba(230,237,243,0.6)" }} onClick={() => { setActiveTab("observer"); setMenuOpen(false); }}>
                   NPC Graph
                 </button>
