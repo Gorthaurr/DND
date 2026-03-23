@@ -347,6 +347,19 @@ export default function Home() {
         setWorldMap(map);
         setConnected(true);
         setActiveTab("map");
+      } else if (cmd === "leave" || cmd === "отойти" || cmd === "уйти") {
+        setSelectedNpc(null);
+        addMessage("system", t("sys.leaveConversation" as any) || "You step away.");
+      } else if (selectedNpc && !["go", "move", "look", "tick", "map", "talk", "attack", "fight", "kill", "save", "load", "reset", "respawn", "stats", "inventory", "quests", "spells", "cast"].includes(cmd) && !/\b(убиваю|атакую|бью|ударяю|нападаю|убить|дерусь|режу|стреляю|attack|kill|fight|hit|strike|stab)\b/i.test(text)) {
+        // NPC is selected and text is not a known command or combat → treat as dialogue
+        const resp = await api.dialogue(selectedNpc.id, text, locale);
+        addMessage("npc", resp.dialogue, resp.npc_name);
+        if (resp.interjections && resp.interjections.length > 0) {
+          for (const interj of resp.interjections) {
+            addMessage("npc", interj.dialogue, interj.npc_name);
+          }
+        }
+        setConnected(true);
       } else {
         const resp = await api.action(text, locale);
         addMessage("dm", resp.narration);
@@ -684,6 +697,18 @@ export default function Home() {
                 <h3 className="section-title mb-3">
                   {t("sidebar.peopleHere")}
                 </h3>
+                {selectedNpc && (
+                  <button
+                    onClick={() => {
+                      addMessage("system", t("sys.leaveConversation" as any) || "You step away.");
+                      setSelectedNpc(null);
+                    }}
+                    className="w-full mb-2 px-3 py-2 rounded text-xs font-body transition-colors"
+                    style={{ background: "rgba(194, 58, 46, 0.1)", color: "#C23A2E", border: "1px solid rgba(194, 58, 46, 0.2)" }}
+                  >
+                    {locale === "ru" ? "\u2190 \u041e\u0442\u043e\u0439\u0442\u0438 \u043e\u0442 " + selectedNpc.name : "\u2190 Leave " + selectedNpc.name}
+                  </button>
+                )}
                 <div className="space-y-1">
                   {lookData.npcs.map((npc) => (
                     <button

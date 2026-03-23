@@ -1,0 +1,66 @@
+[
+  {
+    "title": "The Bandit Threat",
+    "description": "A band of outlaws has been spotted near the village, growing bolder each day. They demand tribute or threaten to raid.",
+    "type": "main",
+    "phases": ["scouts spotted", "first robbery on the road", "ultimatum delivered", "the raid or confrontation", "aftermath"],
+    "tension": "rising to climax",
+    "tags": ["conflict", "danger", "unity"]
+  },
+  {
+    "title": "The Spreading Sickness",
+    "description": "A mysterious illness begins affecting villagers. The apothecary struggles to find a cure while fear and blame spread faster than the disease.",
+    "type": "main",
+    "phases": ["first sick villager", "more fall ill", "quarantine and panic", "cure found or tragedy", "recovery"],
+    "tension": "slow burn",
+    "tags": ["mystery", "fear", "cooperation"]
+  },
+  {
+    "title": "The Dark Ritual",
+    "description": "Strange symbols appear in the forest. Animals behave oddly. Someone — or something — is performing forbidden rituals near the village.",
+    "type": "main",
+    "phases": ["strange signs", "animals go mad", "a villager goes missing", "the ritual site discovered", "confrontation with the cultist"],
+    "tension": "mystery to horror",
+    "tags": ["supernatural", "mystery", "danger"]
+  },
+  {
+    "title": "The Merchant Prince",
+    "description": "A wealthy merchant caravan arrives, bringing prosperity but also greed, jealousy, and dangerous deals. Not everyone benefits equally.",
+    "type": "side",
+    "phases": ["caravan arrives", "trade booms", "jealousy and scheming", "a deal goes wrong", "the caravan departs"],
+    "tension": "social intrigue",
+    "tags": ["trade", "social", "greed"]
+  },
+  {
+    "title": "Blood Feud",
+    "description": "An old grudge between two village families erupts into open hostility. Others must choose sides or try to mediate before blood is spilled.",
+    "type": "main",
+    "phases": ["insults exchanged", "property damaged", "allies recruited", "violent confrontation", "justice or vendetta"],
+    "tension": "escalating",
+    "tags": ["conflict", "social", "revenge"]
+  },
+  {
+    "title": "The Lost Child",
+    "description": "A child from the village vanishes. The community rallies to search, but dark rumors swirl about what — or who — took them.",
+    "type": "main",
+    "phases": ["child goes missing", "search parties form", "a clue is found", "the truth revealed", "rescue or mourning"],
+    "tension": "urgent",
+    "tags": ["mystery", "community", "danger"]
+  },
+  {
+    "title": "Harvest Festival",
+    "description": "The annual harvest celebration brings joy, competitions, romance, and old rivalries to the surface. A time of revelry — and vulnerability.",
+    "type": "side",
+    "phases": ["preparations begin", "the festival day", "competitions and romance", "a disruption", "morning after"],
+    "tension": "festive then dramatic",
+    "tags": ["social", "celebration", "romance"]
+  },
+  {
+    "title": "The Deserter",
+    "description": "A wounded soldier arrives claiming to have deserted a losing war. Soon, military scouts come looking for him. The village must decide: shelter him or hand him over.",
+    "type": "main",
+    "phases": ["stranger arrives wounded", "his story spreads", "military scouts appear", "the village debates", "the decision and consequences"],
+    "tension": "moral dilemma",
+    "tags": ["conflict", "moral", "war"]
+  }
+]

@@ -572,7 +572,7 @@ async def player_dialogue(req: DialogueRequest):
         if location:
             import asyncio
             bystanders = await gq.get_npcs_at_location(location["id"])
-            bystanders = [b for b in bystanders if b["id"] != req.npc_id and b.get("alive", True)][:3]
+            bystanders = [b for b in bystanders if b["id"] != req.npc_id and b.get("alive", True)][:1]
 
             async def _eval_interjection(bystander):
                 try:

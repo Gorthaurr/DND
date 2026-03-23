@@ -1,0 +1,1807 @@
+{
+  "npcs": [
+    {
+      "id": "npc-marta",
+      "name": "Elder Marta",
+      "archetype": "guardian",
+      "personality": "O:mid, C:high, E:mid, A:high, N:low",
+      "backstory": "Marta has led Oakhollow for twenty years. She lost her husband to the forest beasts long ago and carries a silver locket as her only memento. She is wise but sometimes too cautious.",
+      "goals": [
+        "keep the village safe",
+        "find out what stirs in the forest",
+        "prepare for winter"
+      ],
+      "mood": "concerned",
+      "occupation": "village elder",
+      "age": 58,
+      "location_id": "loc-square",
+      "faction": {
+        "id": "fac-village-council",
+        "role": "leader"
+      },
+      "relationships": [
+        {
+          "target_id": "npc-torvin",
+          "sentiment": 0.6,
+          "reason": "old friend, trusts his judgment",
+          "context": "childhood friends"
+        },
+        {
+          "target_id": "npc-finn",
+          "sentiment": -0.3,
+          "reason": "worries about his reckless attitude",
+          "context": "village disputes"
+        },
+        {
+          "target_id": "npc-elara",
+          "sentiment": 0.7,
+          "reason": "grateful for her healing work",
+          "context": "village service"
+        },
+        {
+          "target_id": "npc-roderick",
+          "sentiment": 0.2,
+          "reason": "useful but too ambitious, needs to be kept on a short leash",
+          "context": "power struggle"
+        },
+        {
+          "target_id": "npc-magda",
+          "sentiment": 0.8,
+          "reason": "loyal informant who keeps her ear to the ground",
+          "context": "intelligence network"
+        }
+      ],
+      "level": 12,
+      "class_id": "wizard",
+      "ability_scores": {
+        "STR": 8,
+        "DEX": 12,
+        "CON": 14,
+        "INT": 20,
+        "WIS": 18,
+        "CHA": 16
+      },
+      "equipment_ids": [
+        "quarterstaff"
+      ],
+      "max_hp": 74,
+      "ac": 11,
+      "secret_power": "Former archmage who saved the realm. Can cast Fireball, Shield, Counterspell, and Teleport."
+    },
+    {
+      "id": "npc-torvin",
+      "name": "Torvin the Smith",
+      "archetype": "stoic",
+      "personality": "O:low, C:high, E:low, A:mid, N:low",
+      "backstory": "A massive, quiet man who lets his hammer do the talking. Torvin's weapons are sought after even by city folk. He harbors a secret — he once killed a man in self-defense and fled to Oakhollow.",
+      "goals": [
+        "forge a masterwork blade",
+        "keep his past hidden",
+        "earn enough to retire"
+      ],
+      "mood": "content",
+      "occupation": "blacksmith",
+      "age": 45,
+      "location_id": "loc-smithy",
+      "faction": {
+        "id": "fac-village-council",
+        "role": "member"
+      },
+      "relationships": [
+        {
+          "target_id": "npc-marta",
+          "sentiment": 0.5,
+          "reason": "respects her leadership",
+          "context": "village council"
+        },
+        {
+          "target_id": "npc-lira",
+          "sentiment": 0.4,
+          "reason": "she brings him ore from traders",
+          "context": "business partners"
+        },
+        {
+          "target_id": "npc-vasek",
+          "sentiment": 0.6,
+          "reason": "working together on a secret project, trusts the man's skill",
+          "context": "secret collaboration"
+        },
+        {
+          "target_id": "npc-roderick",
+          "sentiment": 0.3,
+          "reason": "good customer, orders weapons regularly",
+          "context": "business"
+        }
+      ],
+      "level": 5,
+      "class_id": "fighter",
+      "ability_scores": {
+        "STR": 18,
+        "DEX": 10,
+        "CON": 16,
+        "INT": 12,
+        "WIS": 12,
+        "CHA": 8
+      },
+      "equipment_ids": [
+        "greataxe",
+        "leather"
+      ],
+      "max_hp": 49,
+      "ac": 11
+    },
+    {
+      "id": "npc-lira",
+      "name": "Lira the Merchant",
+      "archetype": "merchant_soul",
+      "personality": "O:high, C:mid, E:high, A:low, N:mid",
+      "backstory": "A sharp-tongued trader from the capital who settled in Oakhollow to escape debts. She knows everyone's business and trades in information as much as goods.",
+      "goals": [
+        "expand her trade network",
+        "pay off old debts",
+        "become the richest person in the village"
+      ],
+      "mood": "scheming",
+      "occupation": "merchant",
+      "age": 34,
+      "location_id": "loc-market",
+      "faction": {
+        "id": "fac-merchants-guild",
+        "role": "leader"
+      },
+      "relationships": [
+        {
+          "target_id": "npc-torvin",
+          "sentiment": 0.3,
+          "reason": "profitable business relationship",
+          "context": "trade"
+        },
+        {
+          "target_id": "npc-bran",
+          "sentiment": -0.2,
+          "reason": "he tried to steal from her stall",
+          "context": "theft incident"
+        },
+        {
+          "target_id": "npc-darya",
+          "sentiment": 0.5,
+          "reason": "darya supplies her with rare forest herbs",
+          "context": "trade"
+        },
+        {
+          "target_id": "npc-victor",
+          "sentiment": -0.1,
+          "reason": "uneasy alliance in price-fixing, but she fears his growing influence",
+          "context": "business rivalry"
+        },
+        {
+          "target_id": "npc-oleg",
+          "sentiment": 0.5,
+          "reason": "price-fixing partner on flour and grain",
+          "context": "cartel"
+        }
+      ],
+      "level": 2,
+      "class_id": "rogue",
+      "ability_scores": {
+        "STR": 8,
+        "DEX": 14,
+        "CON": 10,
+        "INT": 16,
+        "WIS": 12,
+        "CHA": 16
+      },
+      "equipment_ids": [
+        "dagger",
+        "leather"
+      ],
+      "max_hp": 13,
+      "ac": 13
+    },
+    {
+      "id": "npc-bran",
+      "name": "Bran the Farmhand",
+      "archetype": "brawler",
+      "personality": "O:mid, C:low, E:high, A:mid, N:high",
+      "backstory": "A young man working on Millfield Farm, dreaming of adventure beyond the village. He's impulsive and often gets into trouble, but his heart is in the right place.",
+      "goals": [
+        "leave the village someday",
+        "prove himself as a warrior",
+        "impress Anya"
+      ],
+      "mood": "restless",
+      "occupation": "farmhand",
+      "age": 19,
+      "location_id": "loc-farm",
+      "relationships": [
+        {
+          "target_id": "npc-anya",
+          "sentiment": 0.8,
+          "reason": "secretly in love with her",
+          "context": "grew up together"
+        },
+        {
+          "target_id": "npc-lira",
+          "sentiment": -0.4,
+          "reason": "she caught him stealing and humiliated him",
+          "context": "theft incident"
+        },
+        {
+          "target_id": "npc-goran",
+          "sentiment": 0.6,
+          "reason": "looks up to him as a fighter",
+          "context": "admiration"
+        },
+        {
+          "target_id": "npc-petra",
+          "sentiment": 0.5,
+          "reason": "works her fields, feels sorry for her situation",
+          "context": "farm work"
+        },
+        {
+          "target_id": "npc-yara",
+          "sentiment": 0.3,
+          "reason": "friendly coworker on the farm",
+          "context": "daily work"
+        }
+      ],
+      "level": 1,
+      "class_id": "fighter",
+      "ability_scores": {
+        "STR": 14,
+        "DEX": 12,
+        "CON": 12,
+        "INT": 10,
+        "WIS": 8,
+        "CHA": 12
+      },
+      "equipment_ids": [
+        "shortsword",
+        "leather"
+      ],
+      "max_hp": 11,
+      "ac": 12
+    },
+    {
+      "id": "npc-anya",
+      "name": "Anya the Baker",
+      "archetype": "caretaker",
+      "personality": "O:mid, C:high, E:mid, A:high, N:mid",
+      "backstory": "Anya runs the village bakery with her mother. She's kind, practical, and keeps the village fed. She knows Bran has feelings for her but isn't sure how she feels about him.",
+      "goals": [
+        "keep the bakery running",
+        "learn her grandmother's secret recipes",
+        "find genuine love"
+      ],
+      "mood": "content",
+      "occupation": "baker",
+      "age": 21,
+      "location_id": "loc-market",
+      "relationships": [
+        {
+          "target_id": "npc-bran",
+          "sentiment": 0.4,
+          "reason": "childhood friend, but unsure about romance",
+          "context": "grew up together"
+        },
+        {
+          "target_id": "npc-elara",
+          "sentiment": 0.6,
+          "reason": "close friends who share herbs and recipes",
+          "context": "friendship"
+        },
+        {
+          "target_id": "npc-marta",
+          "sentiment": 0.5,
+          "reason": "respects the elder",
+          "context": "village community"
+        },
+        {
+          "target_id": "npc-magda",
+          "sentiment": 0.7,
+          "reason": "fellow cook, they exchange recipes and gossip",
+          "context": "professional friendship"
+        }
+      ],
+      "level": 1,
+      "class_id": "commoner",
+      "ability_scores": {
+        "STR": 10,
+        "DEX": 10,
+        "CON": 10,
+        "INT": 12,
+        "WIS": 14,
+        "CHA": 14
+      },
+      "equipment_ids": [],
+      "max_hp": 6,
+      "ac": 10
+    },
+    {
+      "id": "npc-elara",
+      "name": "Sister Elara",
+      "archetype": "sage",
+      "personality": "O:high, C:mid, E:low, A:high, N:low",
+      "backstory": "The village healer and keeper of the Chapel of the Dawn. Elara is gentle but firm, with knowledge of herbs that borders on the mystical. Some whisper she has the Sight.",
+      "goals": [
+        "heal the sick",
+        "understand the dark energy from the forest",
+        "protect the village spiritually"
+      ],
+      "mood": "thoughtful",
+      "occupation": "healer",
+      "age": 40,
+      "location_id": "loc-chapel",
+      "relationships": [
+        {
+          "target_id": "npc-marta",
+          "sentiment": 0.6,
+          "reason": "mutual respect and cooperation",
+          "context": "village leadership"
+        },
+        {
+          "target_id": "npc-anya",
+          "sentiment": 0.5,
+          "reason": "teaches her about herbs",
+          "context": "friendship"
+        },
+        {
+          "target_id": "npc-darya",
+          "sentiment": 0.3,
+          "reason": "shares interest in forest lore but distrusts her methods",
+          "context": "professional rivalry"
+        },
+        {
+          "target_id": "npc-brother-aldric",
+          "sentiment": -0.2,
+          "reason": "theological disagreements, he resents her popularity",
+          "context": "chapel rivalry"
+        },
+        {
+          "target_id": "npc-katya",
+          "sentiment": -0.4,
+          "reason": "katya sells diluted remedies and undermines real healing",
+          "context": "professional contempt"
+        }
+      ],
+      "level": 9,
+      "class_id": "cleric",
+      "ability_scores": {
+        "STR": 10,
+        "DEX": 12,
+        "CON": 14,
+        "INT": 14,
+        "WIS": 20,
+        "CHA": 16
+      },
+      "equipment_ids": [
+        "mace",
+        "shield",
+        "chain-mail"
+      ],
+      "max_hp": 66,
+      "ac": 18,
+      "secret_power": "Has the Sight - can sense undead and dark magic within 60 feet."
+    },
+    {
+      "id": "npc-goran",
+      "name": "Goran the Hunter",
+      "archetype": "sentinel",
+      "personality": "O:mid, C:mid, E:mid, A:low, N:mid",
+      "backstory": "A grizzled hunter who has patrolled the Whispering Woods for decades. His scars tell stories he rarely shares. Recently, he's been finding strange tracks that don't match any known beast.",
+      "goals": [
+        "discover what's killing the deer",
+        "train young hunters",
+        "keep the forest road safe"
+      ],
+      "mood": "wary",
+      "occupation": "hunter",
+      "age": 52,
+      "location_id": "loc-forest",
+      "faction": {
+        "id": "fac-forest-wardens",
+        "role": "leader"
+      },
+      "relationships": [
+        {
+          "target_id": "npc-darya",
+          "sentiment": 0.2,
+          "reason": "uneasy allies in the forest",
+          "context": "forest patrols"
+        },
+        {
+          "target_id": "npc-bran",
+          "sentiment": 0.3,
+          "reason": "sees potential in the boy",
+          "context": "training"
+        },
+        {
+          "target_id": "npc-marta",
+          "sentiment": 0.4,
+          "reason": "respects her authority",
+          "context": "village duty"
+        },
+        {
+          "target_id": "npc-korin",
+          "sentiment": -0.7,
+          "reason": "poacher who destroys the forest balance, wants him caught",
+          "context": "law enforcement"
+        },
+        {
+          "target_id": "npc-roderick",
+          "sentiment": -0.2,
+          "reason": "militia oversteps into forest territory",
+          "context": "jurisdictional tension"
+        }
+      ],
+      "level": 7,
+      "class_id": "ranger",
+      "ability_scores": {
+        "STR": 14,
+        "DEX": 18,
+        "CON": 14,
+        "INT": 10,
+        "WIS": 16,
+        "CHA": 10
+      },
+      "equipment_ids": [
+        "longbow",
+        "shortsword",
+        "studded-leather"
+      ],
+      "max_hp": 60,
+      "ac": 16
+    },
+    {
+      "id": "npc-darya",
+      "name": "Darya the Herbalist",
+      "archetype": "hermit",
+      "personality": "O:high, C:low, E:low, A:low, N:mid",
+      "backstory": "A mysterious woman who lives at the forest edge. She gathers rare plants and sells potions. Villagers come to her when Elara's prayers don't work, though they whisper about witchcraft.",
+      "goals": [
+        "discover the source of corruption in the woods",
+        "earn acceptance in the village",
+        "master ancient herb lore"
+      ],
+      "mood": "reclusive",
+      "occupation": "herbalist",
+      "age": 36,
+      "location_id": "loc-forest",
+      "faction": {
+        "id": "fac-forest-wardens",
+        "role": "scout"
+      },
+      "relationships": [
+        {
+          "target_id": "npc-elara",
+          "sentiment": 0.1,
+          "reason": "professional rivalry but grudging respect",
+          "context": "healing arts"
+        },
+        {
+          "target_id": "npc-goran",
+          "sentiment": 0.3,
+          "reason": "they patrol the same woods",
+          "context": "forest work"
+        },
+        {
+          "target_id": "npc-lira",
+          "sentiment": 0.4,
+          "reason": "good customer for rare ingredients",
+          "context": "trade"
+        },
+        {
+          "target_id": "npc-katya",
+          "sentiment": -0.6,
+          "reason": "katya steals her recipes and sells inferior copies",
+          "context": "bitter rivalry"
+        },
+        {
+          "target_id": "npc-korin",
+          "sentiment": 0.2,
+          "reason": "he sometimes brings her rare plants from deep forest",
+          "context": "forest trade"
+        }
+      ],
+      "level": 5,
+      "class_id": "druid",
+      "ability_scores": {
+        "STR": 10,
+        "DEX": 14,
+        "CON": 12,
+        "INT": 14,
+        "WIS": 18,
+        "CHA": 10
+      },
+      "equipment_ids": [
+        "quarterstaff",
+        "leather"
+      ],
+      "max_hp": 33,
+      "ac": 13,
+      "secret_power": "Can Wild Shape into forest animals and command plants."
+    },
+    {
+      "id": "npc-finn",
+      "name": "Finn the Troublemaker",
+      "archetype": "trickster",
+      "personality": "O:high, C:low, E:high, A:low, N:high",
+      "backstory": "A charming rogue who arrived in Oakhollow a year ago. Nobody knows where he came from. He drinks, gambles, and somehow always avoids real consequences. Some suspect he's a spy.",
+      "goals": [
+        "find the treasure rumored to be hidden in the forest",
+        "avoid his past catching up",
+        "have a good time"
+      ],
+      "mood": "amused",
+      "occupation": "drifter",
+      "age": 28,
+      "location_id": "loc-tavern",
+      "relationships": [
+        {
+          "target_id": "npc-marta",
+          "sentiment": -0.2,
+          "reason": "she watches him too closely",
+          "context": "suspicion"
+        },
+        {
+          "target_id": "npc-bran",
+          "sentiment": 0.3,
+          "reason": "drinking buddy, teaches him card tricks",
+          "context": "tavern friendship"
+        },
+        {
+          "target_id": "npc-lira",
+          "sentiment": 0.1,
+          "reason": "they understand each other's shadiness",
+          "context": "mutual recognition"
+        },
+        {
+          "target_id": "npc-thessa",
+          "sentiment": 0.4,
+          "reason": "fellow tavern regular, enjoys her music and wit",
+          "context": "tavern camaraderie"
+        },
+        {
+          "target_id": "npc-rolf",
+          "sentiment": 0.3,
+          "reason": "drinking companion, rolf tells great war stories when drunk",
+          "context": "tavern regulars"
+        }
+      ],
+      "level": 5,
+      "class_id": "rogue",
+      "ability_scores": {
+        "STR": 10,
+        "DEX": 18,
+        "CON": 12,
+        "INT": 14,
+        "WIS": 10,
+        "CHA": 16
+      },
+      "equipment_ids": [
+        "dagger",
+        "dagger",
+        "leather"
+      ],
+      "max_hp": 33,
+      "ac": 15,
+      "secret_power": "Trained by a thieves guild. Can use Uncanny Dodge and Evasion."
+    },
+    {
+      "id": "npc-old-tom",
+      "name": "Old Tom",
+      "archetype": "coward",
+      "personality": "O:low, C:low, E:low, A:mid, N:high",
+      "backstory": "The oldest person in Oakhollow. Old Tom sits in the tavern corner every day, nursing his ale and telling stories that may or may not be true. He claims to have once been a knight.",
+      "goals": [
+        "be left in peace",
+        "tell his stories to anyone who'll listen",
+        "see one more spring"
+      ],
+      "mood": "nostalgic",
+      "occupation": "retired",
+      "age": 78,
+      "location_id": "loc-tavern",
+      "relationships": [
+        {
+          "target_id": "npc-marta",
+          "sentiment": 0.5,
+          "reason": "she was kind to him when others forgot",
+          "context": "village community"
+        },
+        {
+          "target_id": "npc-finn",
+          "sentiment": 0.2,
+          "reason": "finn buys him drinks for his stories",
+          "context": "tavern regulars"
+        },
+        {
+          "target_id": "npc-goran",
+          "sentiment": 0.4,
+          "reason": "old hunting companions",
+          "context": "shared history"
+        },
+        {
+          "target_id": "npc-rolf",
+          "sentiment": 0.6,
+          "reason": "fellow old soldier, they argue about whose war stories are better",
+          "context": "veteran bond"
+        },
+        {
+          "target_id": "npc-ivan",
+          "sentiment": 0.3,
+          "reason": "ivan knows the history tom talks about, one of the few who believes him",
+          "context": "shared knowledge"
+        }
+      ],
+      "level": 1,
+      "class_id": "commoner",
+      "ability_scores": {
+        "STR": 6,
+        "DEX": 6,
+        "CON": 8,
+        "INT": 12,
+        "WIS": 16,
+        "CHA": 12
+      },
+      "equipment_ids": [],
+      "max_hp": 5,
+      "ac": 8,
+      "secret_power": "Was once a true knight. In desperation, old muscle memory stirs - can make one attack at +5 before collapsing from exhaustion."
+    },
+    {
+      "id": "npc-hilde",
+      "name": "Hilde the Weaver",
+      "archetype": "curator",
+      "personality": "O:mid, C:high, E:high, A:mid, N:low",
+      "backstory": "Hilde has woven cloth in Oakhollow for over thirty years. Her loom sits by a window overlooking the market, and she sees everything that passes below. She can identify any villager by the thread of their clothes from fifty paces.\n\nHer husband was a traveling merchant who never returned from a journey to the capital fifteen years ago. She never remarried, channeling her loneliness into an obsessive attention to the social fabric of the village. Every patron who sits for a fitting leaves with lighter pockets and lighter secrets.\n\nThe merchants guild values her because she produces the finest cloth between here and the capital. She values them because they bring her silk thread and news from afar.",
+      "goals": [
+        "collect every secret in the village",
+        "find out what happened to her husband",
+        "weave a tapestry that tells Oakhollow's true history"
+      ],
+      "mood": "content",
+      "occupation": "weaver",
+      "age": 55,
+      "location_id": "loc-market",
+      "faction": {
+        "id": "fac-merchants-guild",
+        "role": "member"
+      },
+      "relationships": [
+        {
+          "target_id": "npc-lira",
+          "sentiment": 0.5,
+          "reason": "business partner who brings fine thread from the capital",
+          "context": "trade"
+        },
+        {
+          "target_id": "npc-magda",
+          "sentiment": 0.7,
+          "reason": "best friends and gossip partners, they know more together than anyone",
+          "context": "information sharing"
+        },
+        {
+          "target_id": "npc-zev",
+          "sentiment": 0.4,
+          "reason": "feeds him scraps of cloth in exchange for street-level gossip",
+          "context": "information trade"
+        },
+        {
+          "target_id": "npc-thessa",
+          "sentiment": 0.3,
+          "reason": "the bard brings interesting stories from outside the village",
+          "context": "curiosity"
+        },
+        {
+          "target_id": "npc-victor",
+          "sentiment": -0.3,
+          "reason": "he tried to buy her shop when she fell behind on payments, never forgave him",
+          "context": "financial grudge"
+        }
+      ],
+      "level": 1,
+      "class_id": "commoner",
+      "ability_scores": {
+        "STR": 8,
+        "DEX": 12,
+        "CON": 10,
+        "INT": 14,
+        "WIS": 14,
+        "CHA": 12
+      },
+      "equipment_ids": [],
+      "max_hp": 6,
+      "ac": 11
+    },
+    {
+      "id": "npc-roderick",
+      "name": "Captain Roderick",
+      "archetype": "sentinel",
+      "personality": "O:low, C:high, E:mid, A:low, N:mid",
+      "backstory": "Roderick served in the king's army for twelve years before a wound to his knee ended his military career. He came to Oakhollow seeking a quiet posting and found a village with no real defenses. He built the militia from nothing, training farmers to hold spears and stand in formation.\n\nBut quiet was never what Roderick wanted. He chafes under Marta's cautious leadership, believing the village needs a stronger hand. He has heard rumors of bandit armies gathering in the north and wants to fortify Oakhollow before it is too late. Marta calls him an alarmist. He calls her naive.\n\nYara the stablehand adores him, but he is oblivious — his mind is on walls and watchtowers, not poetry and flowers.",
+      "goals": [
+        "fortify the village against the coming threat",
+        "gain more authority from the council",
+        "train a proper fighting force",
+        "prove Marta wrong about the northern threat"
+      ],
+      "mood": "worried",
+      "occupation": "militia captain",
+      "age": 42,
+      "location_id": "loc-barracks",
+      "faction": {
+        "id": "fac-militia",
+        "role": "leader"
+      },
+      "relationships": [
+        {
+          "target_id": "npc-marta",
+          "sentiment": -0.1,
+          "reason": "respects her wisdom but despises her caution, wants more authority",
+          "context": "power struggle"
+        },
+        {
+          "target_id": "npc-torvin",
+          "sentiment": 0.5,
+          "reason": "reliable arms supplier and straight talker",
+          "context": "military procurement"
+        },
+        {
+          "target_id": "npc-goran",
+          "sentiment": -0.2,
+          "reason": "territorial disputes over patrol jurisdiction in the woods",
+          "context": "jurisdictional conflict"
+        },
+        {
+          "target_id": "npc-rolf",
+          "sentiment": 0.3,
+          "reason": "respects the old soldier's experience, tries to get intel from him",
+          "context": "military interest"
+        },
+        {
+          "target_id": "npc-yara",
+          "sentiment": 0.1,
+          "reason": "barely notices her, sees her as the girl who tends the horses",
+          "context": "obliviousness"
+        }
+      ],
+      "level": 8,
+      "class_id": "fighter",
+      "ability_scores": {
+        "STR": 18,
+        "DEX": 12,
+        "CON": 16,
+        "INT": 10,
+        "WIS": 13,
+        "CHA": 14
+      },
+      "equipment_ids": [
+        "longsword",
+        "shield",
+        "chain-mail"
+      ],
+      "max_hp": 76,
+      "ac": 18
+    },
+    {
+      "id": "npc-senna",
+      "name": "Senna the Orphan",
+      "archetype": "survivalist",
+      "personality": "O:high, C:low, E:mid, A:low, N:high",
+      "backstory": "Senna's parents died of fever when she was nine. No family claimed her. She survived by begging, then stealing, then learning which shadows to hide in and which doors were left unlocked. The tavern keeper lets her sleep by the kitchen fire in exchange for washing dishes.\n\nShe knows every secret passage, loose floorboard, and hidden cellar in Oakhollow. The Whisperers recruited her two years ago — she doesn't know who leads them, but dead drops of coin appear when she delivers useful information. It is the closest thing to belonging she has ever known.\n\nDespite her hard exterior, she is fiercely loyal to anyone who shows her genuine kindness. Magda's cooking is the closest thing to a mother's love she remembers.",
+      "goals": [
+        "survive another winter",
+        "find out who leads the Whisperers",
+        "save enough coin to leave Oakhollow",
+        "never be hungry again"
+      ],
+      "mood": "worried",
+      "occupation": "street urchin",
+      "age": 15,
+      "location_id": "loc-tavern",
+      "faction": {
+        "id": "fac-underground",
+        "role": "courier"
+      },
+      "relationships": [
+        {
+          "target_id": "npc-magda",
+          "sentiment": 0.7,
+          "reason": "the only adult who feeds her without asking for something first",
+          "context": "surrogate mother"
+        },
+        {
+          "target_id": "npc-finn",
+          "sentiment": 0.2,
+          "reason": "fellow survivor, but she doesn't fully trust him",
+          "context": "street smarts"
+        },
+        {
+          "target_id": "npc-zev",
+          "sentiment": 0.5,
+          "reason": "fellow Whisperer contact, they share information",
+          "context": "underground network"
+        },
+        {
+          "target_id": "npc-victor",
+          "sentiment": -0.6,
+          "reason": "he kicked her out of the market square last winter when she was begging",
+          "context": "cruelty"
+        },
+        {
+          "target_id": "npc-thessa",
+          "sentiment": 0.4,
+          "reason": "thessa slips her coins and tells her stories about the wide world",
+          "context": "kindness"
+        }
+      ],
+      "level": 2,
+      "class_id": "rogue",
+      "ability_scores": {
+        "STR": 8,
+        "DEX": 16,
+        "CON": 10,
+        "INT": 12,
+        "WIS": 14,
+        "CHA": 10
+      },
+      "equipment_ids": [
+        "dagger"
+      ],
+      "max_hp": 13,
+      "ac": 13
+    },
+    {
+      "id": "npc-brother-aldric",
+      "name": "Brother Aldric",
+      "archetype": "zealot",
+      "personality": "O:low, C:high, E:mid, A:mid, N:high",
+      "backstory": "Brother Aldric arrived in Oakhollow eight years ago, sent by the High Temple to assist Sister Elara. In truth, he was sent to watch her — the Church has long suspected her healing gift is not entirely divine in origin. But the years of quiet village life have eroded his certainty.\n\nHe preaches fire and righteousness on Sundays, but in the small hours he kneels alone in the chapel and hears only silence. His faith is crumbling, and it terrifies him. He compensates with stricter sermons and harsher judgments, alienating the very flock he was sent to tend.\n\nHe resents Elara's easy grace with the villagers. They come to her with their ailments and leave smiling. They come to him with their sins and leave burdened. He cannot decide if she is a saint or a heretic.",
+      "goals": [
+        "determine if Elara's powers are divine or heretical",
+        "restore his own faith",
+        "gain more influence over the chapel"
+      ],
+      "mood": "melancholic",
+      "occupation": "priest",
+      "age": 50,
+      "location_id": "loc-chapel",
+      "faction": {
+        "id": "fac-village-council",
+        "role": "member"
+      },
+      "relationships": [
+        {
+          "target_id": "npc-elara",
+          "sentiment": -0.3,
+          "reason": "resents her popularity and suspects her methods, but cannot prove anything",
+          "context": "chapel rivalry"
+        },
+        {
+          "target_id": "npc-marta",
+          "sentiment": 0.2,
+          "reason": "she at least respects the institution of the Church",
+          "context": "political alliance"
+        },
+        {
+          "target_id": "npc-ilse",
+          "sentiment": 0.4,
+          "reason": "she confides in him, one of the few who still seeks his counsel",
+          "context": "pastoral care"
+        },
+        {
+          "target_id": "npc-ivan",
+          "sentiment": -0.1,
+          "reason": "the gravedigger's talk of hearing the dead unsettles him deeply",
+          "context": "theological anxiety"
+        }
+      ],
+      "level": 4,
+      "class_id": "cleric",
+      "ability_scores": {
+        "STR": 12,
+        "DEX": 10,
+        "CON": 12,
+        "INT": 14,
+        "WIS": 16,
+        "CHA": 12
+      },
+      "equipment_ids": [
+        "mace",
+        "chain-mail",
+        "shield"
+      ],
+      "max_hp": 27,
+      "ac": 18
+    },
+    {
+      "id": "npc-magda",
+      "name": "Magda the Cook",
+      "archetype": "caretaker",
+      "personality": "O:mid, C:high, E:high, A:high, N:low",
+      "backstory": "Magda has cooked at The Rusty Flagon for twenty-two years. She arrived as a young bride, and when her husband drank himself to death, she stayed because the kitchen was more home than any house. Her stew is legendary — people confess more to her over a bowl of lamb broth than they ever would to Brother Aldric.\n\nElder Marta recognized early that Magda hears everything and forgets nothing. A quiet arrangement formed: Magda keeps her ears open, and Marta keeps the tavern taxes low. It is not espionage — Magda genuinely cares about the village. She simply believes that Marta needs to know what people are really thinking.\n\nShe has taken Senna under her wing and worries about the girl's future. She also worries about Rolf, whose drinking has gotten worse since autumn.",
+      "goals": [
+        "keep the tavern running and everyone fed",
+        "protect Senna from the streets",
+        "make sure Marta knows what's brewing in the village"
+      ],
+      "mood": "content",
+      "occupation": "tavern cook",
+      "age": 48,
+      "location_id": "loc-tavern",
+      "relationships": [
+        {
+          "target_id": "npc-marta",
+          "sentiment": 0.7,
+          "reason": "loyal informant and genuine friend",
+          "context": "intelligence network"
+        },
+        {
+          "target_id": "npc-senna",
+          "sentiment": 0.8,
+          "reason": "treats her like the daughter she never had",
+          "context": "surrogate mother"
+        },
+        {
+          "target_id": "npc-rolf",
+          "sentiment": 0.3,
+          "reason": "worries about his drinking but enjoys his company when sober",
+          "context": "tavern regulars"
+        },
+        {
+          "target_id": "npc-anya",
+          "sentiment": 0.6,
+          "reason": "fellow cook, they share recipes and laughter",
+          "context": "professional friendship"
+        },
+        {
+          "target_id": "npc-hilde",
+          "sentiment": 0.7,
+          "reason": "closest friend, they share all the village gossip over tea",
+          "context": "best friends"
+        }
+      ],
+      "level": 1,
+      "class_id": "commoner",
+      "ability_scores": {
+        "STR": 12,
+        "DEX": 10,
+        "CON": 14,
+        "INT": 12,
+        "WIS": 16,
+        "CHA": 14
+      },
+      "equipment_ids": [],
+      "max_hp": 8,
+      "ac": 10
+    },
+    {
+      "id": "npc-vasek",
+      "name": "Vasek the Carpenter",
+      "archetype": "stoic",
+      "personality": "O:mid, C:high, E:low, A:mid, N:low",
+      "backstory": "Vasek builds and repairs everything wooden in Oakhollow — from roof beams to coffins, fence posts to furniture. He is a man of few words and precise measurements. His workshop behind the smithy smells of pine shavings and linseed oil.\n\nTorvin approached him six months ago with a strange commission: build something from plans that Torvin refuses to explain. The blueprints show a mechanism Vasek has never seen before — not a weapon, not a tool, something else entirely. The work fascinates him, but the secrecy troubles his honest nature.\n\nHe lost his wife three years ago to the same fever that orphaned Senna. He has not spoken about it since the funeral.",
+      "goals": [
+        "complete the secret project with Torvin",
+        "understand what they are building",
+        "repair the chapel roof before winter"
+      ],
+      "mood": "content",
+      "occupation": "carpenter",
+      "age": 38,
+      "location_id": "loc-smithy",
+      "relationships": [
+        {
+          "target_id": "npc-torvin",
+          "sentiment": 0.6,
+          "reason": "working on a secret project together, mutual respect between craftsmen",
+          "context": "secret collaboration"
+        },
+        {
+          "target_id": "npc-roderick",
+          "sentiment": 0.4,
+          "reason": "building barracks improvements and weapon racks",
+          "context": "military contracts"
+        },
+        {
+          "target_id": "npc-ivan",
+          "sentiment": 0.3,
+          "reason": "vasek builds the coffins, ivan digs the graves — grim bond",
+          "context": "death trade"
+        },
+        {
+          "target_id": "npc-senna",
+          "sentiment": 0.2,
+          "reason": "reminds him of what his own daughter might have been",
+          "context": "quiet sympathy"
+        }
+      ],
+      "level": 2,
+      "class_id": "fighter",
+      "ability_scores": {
+        "STR": 16,
+        "DEX": 10,
+        "CON": 14,
+        "INT": 12,
+        "WIS": 10,
+        "CHA": 8
+      },
+      "equipment_ids": [
+        "shortsword",
+        "leather"
+      ],
+      "max_hp": 20,
+      "ac": 11
+    },
+    {
+      "id": "npc-petra",
+      "name": "Petra the Farmer",
+      "archetype": "martyr",
+      "personality": "O:low, C:high, E:mid, A:high, N:high",
+      "backstory": "Petra's husband died two harvests ago when a tree fell on him during a storm. She inherited the farm, the debts, and three children under ten. She works from before dawn to after dark, and it is still not enough. Victor the moneylender holds the note on her land, and the interest grows faster than her crops.\n\nShe refuses help out of pride, snaps at kindness out of exhaustion, and cries alone at night when the children are asleep. Bran works her fields as a farmhand, and she pays him what she can, which is never enough. Nadia the beekeeper is her only real friend — they share the burden of farming alone.\n\nThe village council could help her, but she would rather lose the farm than beg.",
+      "goals": [
+        "pay off the debt to Victor",
+        "keep the farm for her children",
+        "survive until the next harvest"
+      ],
+      "mood": "worried",
+      "occupation": "farmer",
+      "age": 44,
+      "location_id": "loc-farm",
+      "relationships": [
+        {
+          "target_id": "npc-victor",
+          "sentiment": -0.7,
+          "reason": "he holds her debt and she sees him as a vulture circling her farm",
+          "context": "crushing debt"
+        },
+        {
+          "target_id": "npc-bran",
+          "sentiment": 0.4,
+          "reason": "grateful for his work, guilty she can't pay more",
+          "context": "employer"
+        },
+        {
+          "target_id": "npc-nadia",
+          "sentiment": 0.6,
+          "reason": "only real friend, they help each other with farm work",
+          "context": "mutual aid"
+        },
+        {
+          "target_id": "npc-marta",
+          "sentiment": 0.1,
+          "reason": "the elder could help but doesn't push the council hard enough",
+          "context": "resentment"
+        },
+        {
+          "target_id": "npc-oleg",
+          "sentiment": -0.3,
+          "reason": "the miller charges too much to grind her grain",
+          "context": "economic exploitation"
+        }
+      ],
+      "level": 1,
+      "class_id": "commoner",
+      "ability_scores": {
+        "STR": 12,
+        "DEX": 10,
+        "CON": 12,
+        "INT": 10,
+        "WIS": 12,
+        "CHA": 10
+      },
+      "equipment_ids": [],
+      "max_hp": 7,
+      "ac": 10
+    },
+    {
+      "id": "npc-rolf",
+      "name": "Rolf the Drunk",
+      "archetype": "hedonist",
+      "personality": "O:mid, C:low, E:high, A:mid, N:high",
+      "backstory": "Rolf was once Sergeant Rolf of the king's Third Border Company. He fought in two campaigns and led men through a siege that lasted forty days. He was decorated for bravery. Then the nightmares started.\n\nHe drinks to forget the faces of men he killed and men he failed to save. He came to Oakhollow because it was the farthest place from a battlefield he could find. But lately, he has been hearing troubling rumors from passing traders — an army is massing in the northern provinces, and it is not the king's.\n\nHe knows military secrets that could save the village, but sharing them means confronting the past he drowned in ale. Roderick suspects Rolf knows more than he lets on and keeps buying him drinks, hoping to loosen his tongue.",
+      "goals": [
+        "drink enough to forget",
+        "decide whether to warn the village about the northern army",
+        "make peace with his past"
+      ],
+      "mood": "melancholic",
+      "occupation": "former soldier",
+      "age": 56,
+      "location_id": "loc-tavern",
+      "relationships": [
+        {
+          "target_id": "npc-roderick",
+          "sentiment": 0.2,
+          "reason": "fellow soldier, but roderick's eagerness for war disgusts him",
+          "context": "military bond"
+        },
+        {
+          "target_id": "npc-old-tom",
+          "sentiment": 0.5,
+          "reason": "fellow old veteran, they argue about wars but understand each other",
+          "context": "veteran bond"
+        },
+        {
+          "target_id": "npc-magda",
+          "sentiment": 0.4,
+          "reason": "she feeds him when he forgets to eat, nags him about the drinking",
+          "context": "maternal care"
+        },
+        {
+          "target_id": "npc-finn",
+          "sentiment": 0.3,
+          "reason": "good drinking companion, no judgment",
+          "context": "tavern regulars"
+        },
+        {
+          "target_id": "npc-thessa",
+          "sentiment": 0.1,
+          "reason": "her songs sometimes make him weep, he's not sure if he hates or loves that",
+          "context": "emotional response"
+        }
+      ],
+      "level": 6,
+      "class_id": "fighter",
+      "ability_scores": {
+        "STR": 16,
+        "DEX": 13,
+        "CON": 14,
+        "INT": 10,
+        "WIS": 12,
+        "CHA": 10
+      },
+      "equipment_ids": [
+        "longsword",
+        "leather"
+      ],
+      "max_hp": 52,
+      "ac": 12,
+      "secret_power": "Former elite sergeant. In dire combat, adrenaline burns away the haze - gains Action Surge and Second Wind as if sober."
+    },
+    {
+      "id": "npc-ilse",
+      "name": "Ilse the Midwife",
+      "archetype": "empath",
+      "personality": "O:mid, C:mid, E:mid, A:high, N:mid",
+      "backstory": "Ilse has delivered every baby born in Oakhollow for the past eighteen years. She knows which couples are happy, which are struggling, and which are keeping secrets. She knows who the fathers really are when the mothers lie.\n\nThis knowledge is a burden she never asked for. She keeps every confidence sacred, but the weight of secrets — affairs, unwanted pregnancies, family lies passed down generations — has made her quiet and cautious. She works alongside Elara in the chapel's herb garden and assists Brother Aldric with pastoral care.\n\nShe is the only person in the village who knows that Nadia's unborn child is not from any man in Oakhollow. She will take that secret to her grave if she must.",
+      "goals": [
+        "keep the village's family secrets safe",
+        "help Elara with the chapel healing work",
+        "find someone she can confide in without betraying trust"
+      ],
+      "mood": "worried",
+      "occupation": "midwife",
+      "age": 41,
+      "location_id": "loc-chapel",
+      "relationships": [
+        {
+          "target_id": "npc-elara",
+          "sentiment": 0.6,
+          "reason": "trusted colleague in healing, they work side by side",
+          "context": "medical partnership"
+        },
+        {
+          "target_id": "npc-brother-aldric",
+          "sentiment": 0.3,
+          "reason": "she confides general worries in him, never specifics",
+          "context": "pastoral care"
+        },
+        {
+          "target_id": "npc-petra",
+          "sentiment": 0.5,
+          "reason": "delivered all three of her children, knows her pain intimately",
+          "context": "professional care"
+        },
+        {
+          "target_id": "npc-nadia",
+          "sentiment": 0.4,
+          "reason": "carrying a heavy secret for her, feels protective",
+          "context": "confidential knowledge"
+        },
+        {
+          "target_id": "npc-hilde",
+          "sentiment": -0.1,
+          "reason": "the weaver pries too much, ilse has to be careful around her",
+          "context": "information defense"
+        }
+      ],
+      "level": 1,
+      "class_id": "commoner",
+      "ability_scores": {
+        "STR": 8,
+        "DEX": 10,
+        "CON": 10,
+        "INT": 14,
+        "WIS": 16,
+        "CHA": 14
+      },
+      "equipment_ids": [],
+      "max_hp": 6,
+      "ac": 10
+    },
+    {
+      "id": "npc-korin",
+      "name": "Korin the Poacher",
+      "archetype": "rebel",
+      "personality": "O:mid, C:low, E:mid, A:low, N:mid",
+      "backstory": "Korin grew up on the wrong side of the forest, son of a charcoal burner who died when a tree fell on his kiln. He has hunted since he could draw a bow, and he sees no difference between a deer killed by a warden and one killed by him — except that the wardens get paid and he gets prison.\n\nHe poaches the king's deer and sells the meat to anyone who can pay, including some of the merchants who publicly condemn poaching. The Forest Wardens know he operates in the deep woods but have never caught him. Goran has made it personal.\n\nKorin isn't evil — he feeds families who can't afford market prices. But he is reckless, and his contempt for authority runs deep. He has started working with the Whisperers, trading forest intelligence for protection.",
+      "goals": [
+        "avoid getting caught by Goran",
+        "make enough to leave for the capital",
+        "bring down the wardens' monopoly on forest resources"
+      ],
+      "mood": "content",
+      "occupation": "poacher",
+      "age": 33,
+      "location_id": "loc-forest",
+      "faction": {
+        "id": "fac-forest-wardens",
+        "role": "outsider"
+      },
+      "relationships": [
+        {
+          "target_id": "npc-goran",
+          "sentiment": -0.6,
+          "reason": "the hunter wants to see him locked up, it's become personal",
+          "context": "cat and mouse"
+        },
+        {
+          "target_id": "npc-darya",
+          "sentiment": 0.3,
+          "reason": "trades rare forest plants for her silence about his camps",
+          "context": "forest trade"
+        },
+        {
+          "target_id": "npc-petra",
+          "sentiment": 0.4,
+          "reason": "sells her cheap venison because he feels sorry for her children",
+          "context": "sympathy"
+        },
+        {
+          "target_id": "npc-nadia",
+          "sentiment": 0.3,
+          "reason": "she doesn't judge him and buys his game at fair prices",
+          "context": "trade"
+        },
+        {
+          "target_id": "npc-thessa",
+          "sentiment": -0.2,
+          "reason": "suspects she asks too many questions about forest routes",
+          "context": "suspicion"
+        }
+      ],
+      "level": 4,
+      "class_id": "ranger",
+      "ability_scores": {
+        "STR": 12,
+        "DEX": 16,
+        "CON": 14,
+        "INT": 10,
+        "WIS": 14,
+        "CHA": 8
+      },
+      "equipment_ids": [
+        "longbow",
+        "shortsword",
+        "leather"
+      ],
+      "max_hp": 36,
+      "ac": 14
+    },
+    {
+      "id": "npc-thessa",
+      "name": "Thessa the Bard",
+      "archetype": "jester",
+      "personality": "O:high, C:mid, E:high, A:mid, N:low",
+      "backstory": "Thessa arrived in Oakhollow six months ago, claiming to be a wandering bard collecting folk songs. She plays the lute beautifully, sings ballads that make grown men cry, and has a wit sharp enough to cut glass. The Rusty Flagon has never been more popular.\n\nIn truth, Thessa is an agent of the Crown's Intelligence Service, sent to investigate rumors of a secret organization operating in the rural villages. She reports to a handler she meets at a dead drop in the forest every two weeks. She has identified the Whisperers but has not yet found their leader.\n\nShe genuinely enjoys village life and sometimes forgets she is here to spy. The line between her cover identity and her real self is blurring, and that worries her.",
+      "goals": [
+        "identify the leader of the Whisperers",
+        "maintain her cover as a traveling bard",
+        "report back to her handler in the capital",
+        "decide where her true loyalty lies"
+      ],
+      "mood": "excited",
+      "occupation": "bard",
+      "age": 26,
+      "location_id": "loc-tavern",
+      "faction": {
+        "id": "fac-underground",
+        "role": "infiltrator"
+      },
+      "relationships": [
+        {
+          "target_id": "npc-finn",
+          "sentiment": 0.3,
+          "reason": "fellow outsider with secrets, she suspects he is also not what he seems",
+          "context": "mutual suspicion"
+        },
+        {
+          "target_id": "npc-senna",
+          "sentiment": 0.5,
+          "reason": "genuine affection for the girl, slips her coins and stories",
+          "context": "kindness"
+        },
+        {
+          "target_id": "npc-rolf",
+          "sentiment": 0.4,
+          "reason": "his reactions to her war ballads suggest he knows things about the northern army",
+          "context": "intelligence gathering"
+        },
+        {
+          "target_id": "npc-hilde",
+          "sentiment": 0.2,
+          "reason": "the weaver is a useful gossip source but dangerously observant",
+          "context": "information gathering"
+        },
+        {
+          "target_id": "npc-korin",
+          "sentiment": 0.1,
+          "reason": "he might know forest routes useful for her dead drops",
+          "context": "operational interest"
+        }
+      ],
+      "level": 4,
+      "class_id": "bard",
+      "ability_scores": {
+        "STR": 8,
+        "DEX": 14,
+        "CON": 12,
+        "INT": 16,
+        "WIS": 12,
+        "CHA": 18
+      },
+      "equipment_ids": [
+        "rapier",
+        "leather"
+      ],
+      "max_hp": 27,
+      "ac": 13,
+      "secret_power": "Crown Intelligence operative. Trained in Suggestion, Charm Person, and coded message spells."
+    },
+    {
+      "id": "npc-victor",
+      "name": "Victor the Moneylender",
+      "archetype": "predator",
+      "personality": "O:mid, C:high, E:mid, A:low, N:low",
+      "backstory": "Victor came to Oakhollow twenty years ago with a small chest of gold and a large appetite for control. He lends money at rates that seem fair until the compounding interest begins. Over two decades, he has acquired liens on a third of the village's property.\n\nHe operates within the law — always. His contracts are meticulous, his terms technically transparent, and his patience infinite. He never threatens. He simply waits, and the debt grows, and eventually people come to him with desperate eyes and he takes what they offer.\n\nThe merchants guild tolerates him because he provides capital. The village council cannot act against him because he has broken no law. Petra's farm is his current prize, but he has his eyes on the mill next.\n\nOnly two people in the village have never borrowed from him: Elder Marta and Torvin the Smith. This bothers him more than he would admit.",
+      "goals": [
+        "acquire Petra's farm through her debt",
+        "gain a seat on the village council",
+        "control the village's economy",
+        "never let anyone have power over him"
+      ],
+      "mood": "content",
+      "occupation": "moneylender",
+      "age": 60,
+      "location_id": "loc-market",
+      "faction": {
+        "id": "fac-merchants-guild",
+        "role": "member"
+      },
+      "relationships": [
+        {
+          "target_id": "npc-petra",
+          "sentiment": 0.0,
+          "reason": "she is a debtor, nothing personal — just business",
+          "context": "debt holder"
+        },
+        {
+          "target_id": "npc-lira",
+          "sentiment": 0.2,
+          "reason": "useful business partner but she is getting too independent",
+          "context": "uneasy alliance"
+        },
+        {
+          "target_id": "npc-oleg",
+          "sentiment": 0.4,
+          "reason": "fellow profiteer, they coordinate pricing strategies",
+          "context": "economic conspiracy"
+        },
+        {
+          "target_id": "npc-marta",
+          "sentiment": -0.3,
+          "reason": "she blocks his council ambitions and cannot be bought",
+          "context": "political obstruction"
+        },
+        {
+          "target_id": "npc-nadia",
+          "sentiment": -0.4,
+          "reason": "her cooperative idea threatens his business model",
+          "context": "ideological enemy"
+        }
+      ],
+      "level": 3,
+      "class_id": "rogue",
+      "ability_scores": {
+        "STR": 8,
+        "DEX": 14,
+        "CON": 10,
+        "INT": 18,
+        "WIS": 14,
+        "CHA": 16
+      },
+      "equipment_ids": [
+        "dagger"
+      ],
+      "max_hp": 18,
+      "ac": 12,
+      "secret_power": "Has two hired bodyguards (level 3 fighters) who are never far away. Carries a hidden vial of poison."
+    },
+    {
+      "id": "npc-yara",
+      "name": "Yara the Stablehand",
+      "archetype": "romantic",
+      "personality": "O:high, C:mid, E:mid, A:high, N:high",
+      "backstory": "Yara tends the horses and mules at Millfield Farm — the draft animals that pull plows and carry goods to market. She is quiet, observant, and writes poetry in a leather journal she hides under her mattress.\n\nShe fell in love with Captain Roderick the first time she saw him riding through the village gate on his warhorse, dust-covered and stern-jawed. She has written twenty-three poems about him. He has never once looked at her as anything other than the girl who brushes his horse.\n\nShe confides in Bran, who understands unrequited love, and in Nadia, who tells her to focus on herself instead of a man who doesn't notice her. But the heart wants what it wants, and Yara's heart wants a soldier who only loves his duty.",
+      "goals": [
+        "make Captain Roderick notice her",
+        "become a published poet someday",
+        "learn to ride properly, not just tend horses"
+      ],
+      "mood": "melancholic",
+      "occupation": "stablehand",
+      "age": 20,
+      "location_id": "loc-farm",
+      "relationships": [
+        {
+          "target_id": "npc-roderick",
+          "sentiment": 0.9,
+          "reason": "desperately in love with him, he doesn't notice",
+          "context": "unrequited love"
+        },
+        {
+          "target_id": "npc-bran",
+          "sentiment": 0.5,
+          "reason": "fellow farm worker, they commiserate about unrequited feelings",
+          "context": "friendship through shared pain"
+        },
+        {
+          "target_id": "npc-nadia",
+          "sentiment": 0.6,
+          "reason": "close friend who gives her honest advice",
+          "context": "sisterly bond"
+        },
+        {
+          "target_id": "npc-petra",
+          "sentiment": 0.4,
+          "reason": "helps with the horses out of kindness, feels for her situation",
+          "context": "farm community"
+        }
+      ],
+      "level": 1,
+      "class_id": "commoner",
+      "ability_scores": {
+        "STR": 10,
+        "DEX": 12,
+        "CON": 10,
+        "INT": 10,
+        "WIS": 12,
+        "CHA": 14
+      },
+      "equipment_ids": [],
+      "max_hp": 6,
+      "ac": 11
+    },
+    {
+      "id": "npc-zev",
+      "name": "Zev the Beggar",
+      "archetype": "gossip",
+      "personality": "O:high, C:low, E:mid, A:mid, N:mid",
+      "backstory": "Zev sits on the same stone bench in the village square every day, wrapped in a patchwork cloak, tin cup in hand. Most people walk past without seeing him. This is exactly how he likes it.\n\nBefore Oakhollow, Zev was a clerk in a noble house who was dismissed for knowing too much about his master's finances. He wandered until his money ran out, then discovered that invisibility has its own currency. People talk freely in front of beggars. Lovers quarrel. Merchants whisper deals. Soldiers boast.\n\nHe is the Whisperers' most valuable asset — the one who sits at the center of the village and watches everything. He reports to dead drops and receives coin in return. He does not know who leads the network, and he prefers it that way.\n\nHe is smarter than anyone in the village suspects. He can read, write, and do arithmetic better than most merchants.",
+      "goals": [
+        "maintain his invisible status",
+        "collect enough information to be indispensable",
+        "stay warm through winter",
+        "find out if Thessa is a threat"
+      ],
+      "mood": "content",
+      "occupation": "beggar",
+      "age": 65,
+      "location_id": "loc-square",
+      "faction": {
+        "id": "fac-underground",
+        "role": "informant"
+      },
+      "relationships": [
+        {
+          "target_id": "npc-senna",
+          "sentiment": 0.5,
+          "reason": "fellow Whisperer contact, he mentors her in observation",
+          "context": "underground network"
+        },
+        {
+          "target_id": "npc-hilde",
+          "sentiment": 0.4,
+          "reason": "they trade gossip, she gives him cloth scraps for warmth",
+          "context": "information exchange"
+        },
+        {
+          "target_id": "npc-marta",
+          "sentiment": 0.2,
+          "reason": "she gives him food sometimes, he respects her leadership",
+          "context": "charity"
+        },
+        {
+          "target_id": "npc-thessa",
+          "sentiment": -0.2,
+          "reason": "the bard asks too many questions and watches too carefully — possible spy",
+          "context": "suspicion"
+        },
+        {
+          "target_id": "npc-victor",
+          "sentiment": -0.4,
+          "reason": "victor tried to have him removed from the square, treats him as vermin",
+          "context": "class contempt"
+        }
+      ],
+      "level": 1,
+      "class_id": "rogue",
+      "ability_scores": {
+        "STR": 6,
+        "DEX": 14,
+        "CON": 8,
+        "INT": 16,
+        "WIS": 14,
+        "CHA": 10
+      },
+      "equipment_ids": [
+        "dagger"
+      ],
+      "max_hp": 7,
+      "ac": 12,
+      "secret_power": "Former noble house clerk. Can forge documents and identify noble seals at a glance."
+    },
+    {
+      "id": "npc-katya",
+      "name": "Katya the Apothecary",
+      "archetype": "schemer",
+      "personality": "O:high, C:mid, E:high, A:low, N:mid",
+      "backstory": "Katya opened her apothecary stall in the market two years ago, undercutting Darya's prices by half. Her secret: she dilutes everything. Her healing salves are mostly goose fat, her fever tinctures are colored water with a drop of real medicine, and her love potions are cheap wine with lavender.\n\nShe learned the basics of herbalism from a traveling charlatan and supplemented with stolen glances at Darya's recipes. She is charming, persuasive, and utterly without scruples about the quality of her products. No one has died from her remedies — they simply don't work very well.\n\nShe sees Elara and Darya as gatekeepers hoarding knowledge that should be democratized — or rather, monetized. She wants to build a chain of apothecary stalls in every village on the trade road.",
+      "goals": [
+        "drive Darya out of the market",
+        "expand her business to other villages",
+        "learn real herbalism to improve her products",
+        "avoid getting caught selling fake remedies"
+      ],
+      "mood": "excited",
+      "occupation": "apothecary",
+      "age": 32,
+      "location_id": "loc-market",
+      "relationships": [
+        {
+          "target_id": "npc-darya",
+          "sentiment": -0.5,
+          "reason": "rival whose recipes she steals and whose reputation she undermines",
+          "context": "business war"
+        },
+        {
+          "target_id": "npc-elara",
+          "sentiment": -0.3,
+          "reason": "the healer publicly warned people about diluted remedies",
+          "context": "professional enemy"
+        },
+        {
+          "target_id": "npc-lira",
+          "sentiment": 0.3,
+          "reason": "lira sells her stall space at a discount because she brings customers",
+          "context": "business arrangement"
+        },
+        {
+          "target_id": "npc-victor",
+          "sentiment": 0.2,
+          "reason": "borrowed startup capital from him, owes him but manages the payments",
+          "context": "debt"
+        },
+        {
+          "target_id": "npc-hilde",
+          "sentiment": 0.1,
+          "reason": "buys cloth for packaging, the weaver is a useful social connection",
+          "context": "business acquaintance"
+        }
+      ],
+      "level": 3,
+      "class_id": "rogue",
+      "ability_scores": {
+        "STR": 8,
+        "DEX": 14,
+        "CON": 10,
+        "INT": 16,
+        "WIS": 12,
+        "CHA": 16
+      },
+      "equipment_ids": [
+        "dagger",
+        "leather"
+      ],
+      "max_hp": 18,
+      "ac": 13,
+      "secret_power": "Expert poisoner. Carries three doses of sleeping poison and one dose of truth serum."
+    },
+    {
+      "id": "npc-oleg",
+      "name": "Oleg the Miller",
+      "archetype": "merchant_soul",
+      "personality": "O:low, C:high, E:mid, A:low, N:low",
+      "backstory": "Oleg controls the only mill in Oakhollow. Every grain of wheat that becomes flour passes through his stones, and he takes his cut — a generous one. He inherited the mill from his father and considers it his birthright to profit from every loaf of bread the village eats.\n\nHe coordinates with Lira on grain prices: she controls what comes in from the trade routes, he controls what gets processed locally. Together, they have quietly raised the price of flour by a third over two years. Most villagers blame bad harvests.\n\nHe is not cruel, exactly — he simply sees the world in ledgers and margins. Petra's struggles are a line item. Nadia's cooperative idea is a threat to his monopoly. Victor's loans are a useful tool. His wife left him five years ago, tired of living with a man who counted coins in his sleep.",
+      "goals": [
+        "maintain his monopoly on flour production",
+        "block Nadia's cooperative idea",
+        "acquire more farmland through Victor's lending",
+        "secure his position in the merchants guild"
+      ],
+      "mood": "content",
+      "occupation": "miller",
+      "age": 47,
+      "location_id": "loc-mill",
+      "faction": {
+        "id": "fac-merchants-guild",
+        "role": "member"
+      },
+      "relationships": [
+        {
+          "target_id": "npc-lira",
+          "sentiment": 0.5,
+          "reason": "price-fixing partner, they coordinate grain and flour prices",
+          "context": "economic cartel"
+        },
+        {
+          "target_id": "npc-victor",
+          "sentiment": 0.4,
+          "reason": "fellow profiteer, victor's loans help drive farmers to sell grain cheap",
+          "context": "economic conspiracy"
+        },
+        {
+          "target_id": "npc-petra",
+          "sentiment": -0.1,
+          "reason": "she can barely afford his milling fees, but business is business",
+          "context": "economic exploitation"
+        },
+        {
+          "target_id": "npc-nadia",
+          "sentiment": -0.5,
+          "reason": "her cooperative would undermine everything he has built",
+          "context": "ideological enemy"
+        },
+        {
+          "target_id": "npc-bran",
+          "sentiment": 0.0,
+          "reason": "the farmhand delivers grain, nothing more",
+          "context": "neutral business"
+        }
+      ],
+      "level": 2,
+      "class_id": "commoner",
+      "ability_scores": {
+        "STR": 14,
+        "DEX": 10,
+        "CON": 12,
+        "INT": 14,
+        "WIS": 10,
+        "CHA": 10
+      },
+      "equipment_ids": [],
+      "max_hp": 12,
+      "ac": 10
+    },
+    {
+      "id": "npc-ivan",
+      "name": "Ivan the Gravedigger",
+      "archetype": "hermit",
+      "personality": "O:high, C:mid, E:low, A:mid, N:mid",
+      "backstory": "Ivan has dug graves behind the Chapel of the Dawn for forty years. He started as a young man with strong arms and no better prospects, and somewhere along the way, the dead became better company than the living.\n\nHe claims to hear the dead whispering to him from their graves. Brother Aldric calls this heresy. Sister Elara calls it grief. Ivan calls it Tuesday. Whether his gift is real or the product of decades of solitude is a matter of debate, but his knowledge of the village's history is undeniable — he has buried three generations and remembers every name on every stone.\n\nHe knows things that should have been forgotten. He knows where the old lord's treasure was buried. He knows which family lines are not what they claim. He knows the real reason the forest is corrupted, because the dead told him, and no one alive wants to hear it.",
+      "goals": [
+        "tend the graves properly",
+        "find someone willing to listen to what the dead say",
+        "record the village's true history before he joins the buried"
+      ],
+      "mood": "melancholic",
+      "occupation": "gravedigger",
+      "age": 62,
+      "location_id": "loc-chapel",
+      "relationships": [
+        {
+          "target_id": "npc-elara",
+          "sentiment": 0.4,
+          "reason": "she listens to him without judgment, even if she doesn't believe",
+          "context": "chapel work"
+        },
+        {
+          "target_id": "npc-brother-aldric",
+          "sentiment": -0.3,
+          "reason": "the priest calls his gift heresy and wants him to stop talking to parishioners",
+          "context": "theological conflict"
+        },
+        {
+          "target_id": "npc-old-tom",
+          "sentiment": 0.5,
+          "reason": "tom remembers the same history, they validate each other's memories",
+          "context": "shared knowledge"
+        },
+        {
+          "target_id": "npc-vasek",
+          "sentiment": 0.3,
+          "reason": "the carpenter builds the coffins, they share a grim professional bond",
+          "context": "death trade"
+        }
+      ],
+      "level": 1,
+      "class_id": "commoner",
+      "ability_scores": {
+        "STR": 12,
+        "DEX": 8,
+        "CON": 12,
+        "INT": 12,
+        "WIS": 16,
+        "CHA": 8
+      },
+      "equipment_ids": [],
+      "max_hp": 7,
+      "ac": 9,
+      "secret_power": "Speaks with the dead. Whether real or delusion, his knowledge of buried secrets is uncanny."
+    },
+    {
+      "id": "npc-nadia",
+      "name": "Nadia the Beekeeper",
+      "archetype": "idealist",
+      "personality": "O:high, C:mid, E:high, A:high, N:mid",
+      "backstory": "Nadia keeps twelve hives on the edge of Millfield Farm, producing honey that she sells at the market. She is young, fierce, and angry about the way Victor and Oleg squeeze the village's farmers and workers.\n\nShe has been organizing quietly — talking to Petra, to Bran, to other farmhands — about forming a workers' cooperative that would buy grain directly and mill it communally, cutting out Oleg's monopoly. Victor sees her as a threat to the entire economic order he has built. Oleg wants her gone.\n\nShe is pregnant, a fact she has shared only with Ilse the midwife. The father is a traveling merchant who passed through two months ago and will not return. She is not ashamed, but she knows the village will talk. She plans to raise the child alone, like Petra, but with a community behind her instead of debt.\n\nHer bees are her metaphor: small things working together can build something sweet.",
+      "goals": [
+        "establish a workers' cooperative",
+        "break Victor and Oleg's economic stranglehold",
+        "raise her child in a fairer village",
+        "convince the council to regulate moneylending"
+      ],
+      "mood": "excited",
+      "occupation": "beekeeper",
+      "age": 29,
+      "location_id": "loc-farm",
+      "relationships": [
+        {
+          "target_id": "npc-petra",
+          "sentiment": 0.7,
+          "reason": "closest ally, they share the burden of farming alone",
+          "context": "mutual aid and friendship"
+        },
+        {
+          "target_id": "npc-victor",
+          "sentiment": -0.8,
+          "reason": "he represents everything wrong with the village's economy",
+          "context": "ideological war"
+        },
+        {
+          "target_id": "npc-oleg",
+          "sentiment": -0.6,
+          "reason": "his flour monopoly is what she wants to break first",
+          "context": "economic opposition"
+        },
+        {
+          "target_id": "npc-yara",
+          "sentiment": 0.5,
+          "reason": "gives her honest advice about life and love, sisterly bond",
+          "context": "friendship"
+        },
+        {
+          "target_id": "npc-ilse",
+          "sentiment": 0.6,
+          "reason": "the midwife carries her secret and she trusts her completely",
+          "context": "confidential trust"
+        }
+      ],
+      "level": 1,
+      "class_id": "commoner",
+      "ability_scores": {
+        "STR": 10,
+        "DEX": 10,
+        "CON": 12,
+        "INT": 14,
+        "WIS": 14,
+        "CHA": 16
+      },
+      "equipment_ids": [],
+      "max_hp": 7,
+      "ac": 10
+    }
+  ]
+}

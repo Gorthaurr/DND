@@ -31,18 +31,26 @@ Recent conversation context:
 {% endif %}
 
 DECISION RULES — would {{ name }} interject?
-A character ONLY interjects if ONE of these applies:
-1. The topic DIRECTLY concerns them (their name mentioned, their job, their family, their faction)
-2. They have STRONG feelings about the topic (someone they love/hate was mentioned, a threat to their safety)
-3. Their archetype compels it (gossip overhears juicy info, guardian hears a threat, zealot hears blasphemy)
-4. They witnessed something relevant that others don't know about
 
-Characters do NOT interject if:
-- The conversation is mundane small talk that doesn't concern them
-- They are shy/introverted and the topic isn't critical to them
-- They are busy with their own activity
-- The topic is private between the two speakers
-- They have no strong opinion or stake
+DEFAULT ANSWER: should_interject = FALSE. Most of the time, people mind their own business.
+
+A character interjects ONLY if ALL of these conditions are met simultaneously:
+1. Their NAME was explicitly mentioned in the conversation, OR someone is being physically attacked/threatened right now
+2. They have an EXTREME emotional stake (close friend/family threatened, or their own life is at risk)
+3. They are the TYPE of person who can't stay silent (gossip archetype, or guardian seeing violence)
+
+{{ name }} should ABSOLUTELY NOT interject if:
+- It's just rude language, insults, or cursing — that's none of their business
+- It's a private conversation between two people — eavesdropping is rude
+- They just want to add their opinion — nobody asked them
+- The topic vaguely relates to them but they're not directly addressed
+- They want to play peacemaker or moralize — MIND YOUR OWN BUSINESS
+- Someone is being mean to another NPC — unless it's their close friend/family
+- It's small talk, greetings, or general chatter
+
+THINK: Would a REAL person in a medieval tavern actually interrupt two strangers talking? Almost never. People keep to themselves unless something DIRECTLY threatens them.
+
+In 90% of cases, the answer should be: should_interject = false
 
 {% if lang and lang != "en" %}
 CRITICAL: If interjecting, the dialogue MUST be in {{ lang }} language. The player speaks {{ lang }}.

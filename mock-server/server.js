@@ -124,9 +124,9 @@ app.post('/api/action', (req, res) => {
   let combat_data = null;
 
   // --- MOVEMENT ---
-  const goMatch = actionLower.match(/^go\s+(.+)/i);
+  const goMatch = actionLower.match(/^(go|move|иду|идти|пойти|перейти)\s+(.+)/i);
   if (goMatch) {
-    const target = goMatch[1].toLowerCase();
+    const target = (goMatch[2] || goMatch[1]).toLowerCase().replace(/^(to|the|в|на|к)\s+/i, '');
     const exits = world.connections.filter(c => c.from === gameState.player_location || c.to === gameState.player_location);
     for (const conn of exits) {
       const targetId = conn.from === gameState.player_location ? conn.to : conn.from;
@@ -145,8 +145,8 @@ app.post('/api/action', (req, res) => {
   }
 
   // --- ATTACK ---
-  else if (actionLower.match(/^(attack|fight|hit|strike|kill)\s+(.+)/i)) {
-    const targetName = actionLower.replace(/^(attack|fight|hit|strike|kill)\s+/i, '').trim();
+  else if (actionLower.match(/^(attack|fight|hit|strike|kill)\s+(.+)/i) || actionLower.match(/(атакую|убиваю|бью|ударяю|дерусь с|нападаю на|пытаюсь убить|режу|стреляю в)\s+(.+)/i)) {
+    const targetName = actionLower.replace(/^(attack|fight|hit|strike|kill)\s+/i, '').replace(/(атакую|убиваю|бью|ударяю|дерусь с|нападаю на|пытаюсь убить|режу|стреляю в)\s+/i, '').replace(/^(я\s+)/i, '').trim();
     const npcsHere = npcsAtLocation(gameState.player_location);
     const targetNpc = npcsHere.find(n => n.name.toLowerCase().includes(targetName));
 
@@ -350,15 +350,64 @@ app.post('/api/action', (req, res) => {
     });
   }
 
-  // --- DEFAULT ---
+  // --- DEFAULT: check if it might be combat in another language ---
   else {
-    // Try a generic skill check (perception) for unrecognized actions
-    const check = dnd.skillCheck(character.ability_scores, character.level, 'perception', character.proficient_skills);
-    narration = `You attempt to "${action}".\n[PERCEPTION CHECK] ${check.breakdown}\n`;
-    if (check.total >= 15) narration += `You notice something interesting as you do so...`;
-    else if (check.total >= 10) narration += `Nothing unusual catches your eye.`;
-    else narration += `You're not sure what to make of the situation.`;
-    combat_data = { skillCheck: check };
+    // Try to match combat intent from any language by checking if NPC names appear in the action
+    const npcsHere = npcsAtLocation(gameState.player_location);
+    const combatWords = ['убиваю', 'атакую', 'бью', 'ударяю', 'нападаю', 'убить', 'дерусь', 'режу', 'стреляю', 'attack', 'kill', 'fight', 'hit', 'strike'];
+    const isCombatIntent = combatWords.some(w => actionLower.includes(w));
+
+    if (isCombatIntent && npcsHere.length > 0) {
+      // Find target NPC by name match in any language
+      const targetNpc = npcsHere.find(n => actionLower.includes(n.name.toLowerCase()) || actionLower.includes(n.name.split(' ')[0].toLowerCase()));
+
+      if (targetNpc) {
+        // Start combat
+        if (!combat.inCombat) {
+          const combatStart = combat.startCombat(character, [targetNpc]);
+          narration = `=== COMBAT BEGINS! ===\n${combatStart.log.join('\n')}\n\n`;
+        }
+        const result = combat.playerAttack(targetNpc.id);
+        narration += result.narration;
+        combat_data = { ...result, combatState: combat.getState() };
+
+        if (result.killed) {
+          npcs_killed.push(targetNpc.id);
+          const aliveEnemies = combat.combatants.filter(c => c.type === 'npc' && c.hp > 0);
+          if (aliveEnemies.length === 0) {
+            const endResult = combat.endCombat();
+            narration += `\n\n=== COMBAT ENDS ===\nVictory! XP gained: ${endResult.xpGained}`;
+            gameState.player_xp = (gameState.player_xp || character.xp) + endResult.xpGained;
+          }
+        } else {
+          // Enemy counterattacks
+          const aliveEnemies = combat.combatants.filter(c => c.type === 'npc' && c.hp > 0);
+          for (const enemy of aliveEnemies) {
+            const npcResult = combat.npcAttack(enemy.id);
+            if (npcResult) {
+              narration += `\n${npcResult.narration}`;
+              if (npcResult.playerDown) {
+                gameState.player_hp = 0;
+                narration += `\nYou fall unconscious!`;
+              }
+            }
+          }
+          combat_data.combatState = combat.getState();
+        }
+
+        const playerCombatant = combat.combatants.find(c => c.id === 'player');
+        if (playerCombatant) {
+          gameState.player_hp = playerCombatant.hp;
+          character.hp = playerCombatant.hp;
+        }
+        npcs_involved = [targetNpc.id];
+      } else {
+        narration = `You look around for a target but can't find one matching your intent. NPCs here: ${npcsHere.map(n => n.name).join(', ')}`;
+      }
+    } else {
+      // Truly unrecognized action — narrate generically
+      narration = `You attempt to "${action}". Nothing notable happens.`;
+    }
   }
 
   const msg = { id: String(Date.now()), type: 'dm', content: narration, timestamp: new Date().toISOString() };
@@ -373,74 +422,121 @@ app.post('/api/action', (req, res) => {
   });
 });
 
-// Dialogue - with D&D skill checks
+// Dialogue - with D&D skill checks and language support
 app.post('/api/dialogue', (req, res) => {
-  const { npc_id, message } = req.body;
+  const { npc_id, message, lang } = req.body;
   const npc = findNpc(npc_id);
   if (!npc) return res.status(404).json({ error: 'NPC not found' });
 
+  const isRu = lang === 'ru';
   const msgLower = (message || '').toLowerCase();
   let dialogue = '';
   let skillCheckResult = null;
 
-  // Check for persuasion/intimidation/deception attempts
-  if (msgLower.includes('persuad') || msgLower.includes('please') || msgLower.includes('convince')) {
+  // Check for persuasion/intimidation/deception (EN + RU keywords)
+  if (msgLower.match(/persuad|please|convince|убеди|пожалуйста|прошу/)) {
     skillCheckResult = dnd.skillCheck(character.ability_scores, character.level, 'persuasion', character.proficient_skills);
     if (skillCheckResult.total >= 15) {
-      dialogue = `*${npc.name} considers your words carefully* "You make a compelling argument. Very well, I'll help you." [PERSUASION: ${skillCheckResult.breakdown}]`;
+      dialogue = isRu
+        ? `*${npc.name} задумчиво кивает* "Хм, в твоих словах есть смысл. Хорошо, я помогу тебе."`
+        : `*${npc.name} considers your words carefully* "You make a compelling argument. Very well, I'll help you."`;
     } else {
-      dialogue = `*${npc.name} shakes their head* "I appreciate your effort, but I'm not convinced." [PERSUASION: ${skillCheckResult.breakdown}]`;
+      dialogue = isRu
+        ? `*${npc.name} качает головой* "Нет, ты меня не убедил. Попробуй другой подход."`
+        : `*${npc.name} shakes their head* "I appreciate your effort, but I'm not convinced."`;
     }
-  } else if (msgLower.includes('threaten') || msgLower.includes('or else') || msgLower.includes('scare')) {
+  } else if (msgLower.match(/threaten|or else|scare|угрожа|пугаю|запугива/)) {
     skillCheckResult = dnd.skillCheck(character.ability_scores, character.level, 'intimidation', character.proficient_skills);
     if (skillCheckResult.total >= 15) {
-      dialogue = `*${npc.name} pales* "A-alright! No need for threats! I'll do what you ask!" [INTIMIDATION: ${skillCheckResult.breakdown}]`;
+      dialogue = isRu
+        ? `*${npc.name} бледнеет* "Л-ладно! Не надо угроз! Я сделаю, что ты просишь!"`
+        : `*${npc.name} pales* "A-alright! No need for threats! I'll do what you ask!"`;
     } else {
-      dialogue = `*${npc.name} stands firm* "You don't scare me, adventurer. I've seen worse than you." [INTIMIDATION: ${skillCheckResult.breakdown}]`;
+      dialogue = isRu
+        ? `*${npc.name} стоит твёрдо* "Ты меня не напугаешь, путник. Я видал и похуже."`
+        : `*${npc.name} stands firm* "You don't scare me, adventurer. I've seen worse than you."`;
     }
-  } else if (msgLower.includes('lie') || msgLower.includes('trick') || msgLower.includes('pretend')) {
+  } else if (msgLower.match(/lie|trick|pretend|обман|вру|хитр/)) {
     skillCheckResult = dnd.skillCheck(character.ability_scores, character.level, 'deception', character.proficient_skills);
     const insightCheck = dnd.skillCheck(npc.ability_scores || { STR: 10, DEX: 10, CON: 10, INT: 10, WIS: 14, CHA: 10 }, npc.level || 1, 'insight', []);
     if (skillCheckResult.total > insightCheck.total) {
-      dialogue = `*${npc.name} nods, believing your words* "Really? I had no idea! Thank you for telling me." [DECEPTION: ${skillCheckResult.breakdown} vs INSIGHT: ${insightCheck.total}]`;
+      dialogue = isRu
+        ? `*${npc.name} верит тебе* "Правда? Я и не знал! Спасибо, что рассказал."`
+        : `*${npc.name} nods, believing your words* "Really? I had no idea! Thank you for telling me."`;
     } else {
-      dialogue = `*${npc.name} narrows their eyes* "Wait... something doesn't add up. Are you trying to deceive me?" [DECEPTION: ${skillCheckResult.breakdown} vs INSIGHT: ${insightCheck.total}]`;
+      dialogue = isRu
+        ? `*${npc.name} прищуривается* "Подожди... что-то тут не сходится. Ты пытаешься меня обмануть?"`
+        : `*${npc.name} narrows their eyes* "Wait... something doesn't add up. Are you trying to deceive me?"`;
     }
   } else {
-    // Normal dialogue based on mood and backstory
-    const moodResponses = {
-      concerned: [
-        `*${npc.name} furrows their brow* "These are dark times. ${npc.goals?.[0] ? `I must ${npc.goals[0]}.` : 'I worry about what comes next.'}"`,
-        `"Have you heard the rumors? Something stirs in the woods. As ${npc.occupation}, I see things others miss."`,
-      ],
-      content: [
-        `*${npc.name} smiles* "Life in Oakhollow has its charms. ${npc.backstory?.split('.')[0] || 'I enjoy my work.'}."`,
-        `"Welcome, traveler! Care for some company? I'm ${npc.name}, the village ${npc.occupation}."`,
-      ],
-      excited: [
-        `*${npc.name}'s eyes light up* "You won't believe it! ${npc.goals?.[0] ? `I'm so close to achieving my goal — ${npc.goals[0]}!` : 'Something wonderful is happening!'}"`,
-        `"Oh! A fellow adventurer! I have so much to tell you about what's been happening!"`,
-      ],
-      angry: [
-        `*${npc.name} scowls* "What do you want? I'm not in the mood for pleasantries."`,
-        `"Don't test my patience. I've had enough trouble for one day."`,
-      ],
-      fearful: [
-        `*${npc.name} glances around nervously* "Keep your voice down... something isn't right in this village."`,
-        `"Please, you look capable. Can you help? I'm afraid for my safety."`,
-      ],
-      scheming: [
-        `*${npc.name} leans in close* "I might know something useful... but information has a price."`,
-        `"Interesting that you'd come to me. Perhaps we can help each other."`,
-      ],
-    };
-    const options = moodResponses[npc.mood] || moodResponses.content;
-    dialogue = options[Math.floor(Math.random() * options.length)];
+    // Context-aware dialogue based on mood, backstory and message content
+    const backstorySnippet = npc.backstory?.split('.')[0] || '';
+    const goalSnippet = npc.goals?.[0] || '';
+
+    // Detect question types
+    const isQuestion = msgLower.match(/\?|почему|зачем|кто ты|как дела|что |where|why|who|how|what/);
+    const isAboutDrinking = msgLower.match(/пьёшь|пьешь|бухаешь|алкаш|выпивк|drink|drunk|ale|beer/);
+    const isGreeting = msgLower.match(/привет|здравствуй|здорово|hello|hi |hey|greet/);
+    const isInsult = msgLower.match(/дурак|идиот|ебан|блядь|сука|хуй|пизд|fuck|shit|asshole|idiot|stupid/);
+    const isAboutSelf = msgLower.match(/кто ты|расскажи о себе|who are you|tell me about/);
+
+    if (isInsult) {
+      const responses = isRu ? [
+        `*${npc.name} хмурится* "Следи за языком, путник. В этой деревне за такие слова можно и по зубам получить."`,
+        `*${npc.name} сжимает кулаки* "Ещё одно слово — и пожалеешь, что зашёл сюда."`,
+        `*${npc.name} отворачивается* "Я не собираюсь разговаривать с тем, кто не умеет вести себя."`,
+      ] : [
+        `*${npc.name} frowns* "Watch your tongue, traveler. Words like that can get you hurt around here."`,
+        `*${npc.name} clenches their fists* "One more word like that and you'll regret stepping in here."`,
+        `*${npc.name} turns away* "I don't talk to people who can't show basic respect."`,
+      ];
+      dialogue = responses[Math.floor(Math.random() * responses.length)];
+    } else if (isAboutDrinking && npc.occupation?.includes('soldier')) {
+      dialogue = isRu
+        ? `*${npc.name} смотрит в кружку* "Пью? А что мне ещё делать? Война забрала у меня всё — товарищей, здоровье, смысл. Эль — единственное, что притупляет воспоминания. ${backstorySnippet ? backstorySnippet + '.' : ''}"`
+        : `*${npc.name} stares into the mug* "Why do I drink? What else is there? The war took everything — my comrades, my health, my purpose. Ale is the only thing that dulls the memories. ${backstorySnippet ? backstorySnippet + '.' : ''}"`;
+    } else if (isAboutDrinking) {
+      dialogue = isRu
+        ? `*${npc.name} пожимает плечами* "А тебе-то какое дело до моей выпивки? У каждого свои способы справляться с этим миром."`
+        : `*${npc.name} shrugs* "What's it to you how much I drink? Everyone has their own way of coping."`;
+    } else if (isAboutSelf) {
+      dialogue = isRu
+        ? `*${npc.name}* "Меня зовут ${npc.name}. Я ${npc.occupation} здесь, в Оакхоллоу. ${backstorySnippet ? backstorySnippet + '.' : ''} ${goalSnippet ? 'Сейчас я хочу ' + goalSnippet + '.' : ''}"`
+        : `*${npc.name}* "I'm ${npc.name}, the village ${npc.occupation}. ${backstorySnippet ? backstorySnippet + '.' : ''} ${goalSnippet ? 'Right now I want to ' + goalSnippet + '.' : ''}"`;
+    } else if (isGreeting) {
+      dialogue = isRu
+        ? `*${npc.name} кивает* "Привет, путник. Я ${npc.name}, ${npc.occupation}. ${npc.mood === 'concerned' ? 'Неспокойные нынче времена...' : 'Чем могу помочь?'}"`
+        : `*${npc.name} nods* "Hello, traveler. I'm ${npc.name}, ${npc.occupation}. ${npc.mood === 'concerned' ? 'Troubled times these days...' : 'How can I help?'}"`;
+    } else if (isQuestion) {
+      // Generic question — answer based on personality and backstory
+      dialogue = isRu
+        ? `*${npc.name}* "${backstorySnippet ? backstorySnippet + '. ' : ''}${goalSnippet ? 'Меня сейчас больше всего заботит — ' + goalSnippet + '.' : 'Трудно сказать... жизнь в деревне непростая.'}"`
+        : `*${npc.name}* "${backstorySnippet ? backstorySnippet + '. ' : ''}${goalSnippet ? 'What concerns me most right now is ' + goalSnippet + '.' : 'Hard to say... village life isn\'t easy.'}"`
+    } else {
+      // Mood-based fallback
+      const moodResponses = isRu ? {
+        concerned: [`*${npc.name} хмурится* "Тёмные нынче времена. ${goalSnippet ? 'Мне нужно ' + goalSnippet + '.' : 'Я беспокоюсь о том, что будет дальше.'}"`,],
+        content: [`*${npc.name} улыбается* "Жизнь в Оакхоллоу имеет свои прелести. ${backstorySnippet || 'Мне нравится моя работа.'}."`,],
+        excited: [`*${npc.name} оживляется* "${goalSnippet ? 'Я так близок к своей цели — ' + goalSnippet + '!' : 'Происходит что-то замечательное!'}"`,],
+        angry: [`*${npc.name} рычит* "Чего тебе надо? Мне не до разговоров."`,],
+        fearful: [`*${npc.name} оглядывается* "Тише... что-то неладно в деревне."`,],
+        scheming: [`*${npc.name} наклоняется ближе* "У меня есть кое-что интересное... но информация стоит денег."`,],
+      } : {
+        concerned: [`*${npc.name} furrows their brow* "Dark times. ${goalSnippet ? 'I must ' + goalSnippet + '.' : 'I worry about what comes next.'}"`,],
+        content: [`*${npc.name} smiles* "Life here has its charms. ${backstorySnippet || 'I enjoy my work.'}."`,],
+        excited: [`*${npc.name}'s eyes light up* "${goalSnippet ? 'I\'m so close to ' + goalSnippet + '!' : 'Something wonderful is happening!'}"`,],
+        angry: [`*${npc.name} scowls* "What do you want? I'm not in the mood."`,],
+        fearful: [`*${npc.name} glances around nervously* "Keep your voice down... something isn't right."`,],
+        scheming: [`*${npc.name} leans in* "I might know something useful... but information has a price."`,],
+      };
+      const options = moodResponses[npc.mood] || moodResponses.content;
+      dialogue = options[Math.floor(Math.random() * options.length)];
+    }
   }
 
   const chatMsg = { id: String(Date.now()), type: 'npc', content: dialogue, npc_name: npc.name, timestamp: new Date().toISOString() };
   chatHistory.push(chatMsg);
-  res.json({ npc_name: npc.name, dialogue, mood: npc.mood, skill_check: skillCheckResult });
+  res.json({ npc_name: npc.name, dialogue, mood: npc.mood, interjections: [], skill_check: skillCheckResult });
 });
 
 // World State
