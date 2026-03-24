@@ -45,7 +45,23 @@ class PlayerCharacter(BaseModel):
     has_shield: bool = False
 
     known_spells: list[str] = Field(default_factory=list)
+    prepared_spells: list[str] = Field(default_factory=list)
     spell_slots_used: dict[str, int] = Field(default_factory=dict)
+
+    expertise_skills: list[str] = Field(default_factory=list)
+    conditions: list[str] = Field(default_factory=list)  # active conditions
+
+    # Class resources
+    rage_uses: int = 0
+    ki_points: int = 0
+    sorcery_points: int = 0
+    channel_divinity_uses: int = 0
+    lay_on_hands_pool: int = 0
+    bardic_inspiration_uses: int = 0
+    wild_shape_uses: int = 0
+    second_wind_used: bool = False
+    action_surge_used: bool = False
+    indomitable_uses: int = 0
 
     gold: int = 50
     silver: int = 0

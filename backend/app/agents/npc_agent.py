@@ -94,6 +94,16 @@ class NPCAgent:
         if archetype_dialogue_style:
             speech_instructions = archetype_dialogue_style
 
+        # Convert 0-100 baselines to -1.0 to 1.0 range for prompt
+        def _norm(val: int | float, default: int = 50) -> float:
+            v = val if isinstance(val, (int, float)) else default
+            return round((v - 50) / 50, 2)  # 0->-1, 50->0, 100->1
+
+        trust = _norm(npc.get("trust_baseline", 50))
+        mood_bl = _norm(npc.get("mood_baseline", 50))
+        aggression = _norm(npc.get("aggression_baseline", 20))
+        confidence = _norm(npc.get("confidence_baseline", 50))
+
         result = await self._dialogue_agent.generate_json(
             name=npc["name"],
             age=npc["age"],
@@ -110,10 +120,10 @@ class NPCAgent:
             archetype_dialogue_style=archetype_dialogue_style,
             biography=biography,
             speech_instructions=speech_instructions,
-            trust_baseline=npc.get("trust_baseline", 50),
-            mood_baseline=npc.get("mood_baseline", 50),
-            aggression_baseline=npc.get("aggression_baseline", 20),
-            confidence_baseline=npc.get("confidence_baseline", 50),
+            trust_baseline=trust,
+            mood_baseline=mood_bl,
+            aggression_baseline=aggression,
+            confidence_baseline=confidence,
             recent_chat=recent_chat or [],
             lang=lang,
         )

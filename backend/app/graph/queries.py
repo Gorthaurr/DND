@@ -20,6 +20,7 @@ class GraphQueries:
 
     async def create_npc(self, npc: dict) -> None:
         # Extract optional fields with defaults so Cypher always gets them
+        max_hp = npc.get("max_hp", 10)
         params = {
             "id": npc["id"],
             "name": npc["name"],
@@ -32,6 +33,19 @@ class GraphQueries:
             "archetype": npc.get("archetype"),
             "current_activity": npc.get("current_activity"),
             "alive": npc.get("alive", True),
+            # D&D stats
+            "level": npc.get("level", 1),
+            "class_id": npc.get("class_id"),
+            "race": npc.get("race"),
+            "max_hp": max_hp,
+            "current_hp": npc.get("current_hp", max_hp),
+            "ac": npc.get("ac", 10),
+            "gold": npc.get("gold", 0),
+            "equipment_ids": npc.get("equipment_ids", []),
+            "known_spells": npc.get("known_spells", []),
+            "proficient_skills": npc.get("proficient_skills", []),
+            "expertise_skills": npc.get("expertise_skills", []),
+            "saving_throw_proficiencies": npc.get("saving_throw_proficiencies", []),
         }
         async with self._session() as s:
             await s.run(
@@ -46,7 +60,19 @@ class GraphQueries:
                     n.age = $age,
                     n.alive = $alive,
                     n.archetype = $archetype,
-                    n.current_activity = $current_activity
+                    n.current_activity = $current_activity,
+                    n.level = $level,
+                    n.class_id = $class_id,
+                    n.race = $race,
+                    n.max_hp = $max_hp,
+                    n.current_hp = $current_hp,
+                    n.ac = $ac,
+                    n.gold = $gold,
+                    n.equipment_ids = $equipment_ids,
+                    n.known_spells = $known_spells,
+                    n.proficient_skills = $proficient_skills,
+                    n.expertise_skills = $expertise_skills,
+                    n.saving_throw_proficiencies = $saving_throw_proficiencies
                 """,
                 **params,
             )
@@ -241,6 +267,30 @@ class GraphQueries:
                 id=npc_id,
             )
             return [dict(r) async for r in result]
+
+    async def set_relationship_tags(self, from_id: str, to_id: str, tags_json: str) -> None:
+        """Store relationship tags JSON on the FEELS edge."""
+        async with self._session() as s:
+            await s.run(
+                """
+                MATCH (a:NPC {id: $a})-[r:FEELS]->(b:NPC {id: $b})
+                SET r.tags_json = $tags
+                """,
+                a=from_id, b=to_id, tags=tags_json,
+            )
+
+    async def get_relationship_tags(self, from_id: str, to_id: str) -> str | None:
+        """Get relationship tags JSON from FEELS edge."""
+        async with self._session() as s:
+            result = await s.run(
+                """
+                MATCH (a:NPC {id: $a})-[r:FEELS]->(b:NPC {id: $b})
+                RETURN r.tags_json AS tags
+                """,
+                a=from_id, b=to_id,
+            )
+            record = await result.single()
+            return record["tags"] if record else None
 
     async def set_knows(self, from_id: str, to_id: str, since_day: int, context: str) -> None:
         async with self._session() as s:

@@ -24,11 +24,14 @@ def resolve_attack(
     attacker: dict,
     defender: dict,
     weapon_id: str | None = None,
+    advantage: bool = False,
+    disadvantage: bool = False,
 ) -> CombatResult:
     """Resolve a single attack between two entities (player/NPC).
 
     attacker/defender dicts should have:
       name, level, ability_scores (dict), armor_id, has_shield, weapon_ids (list)
+    Supports advantage/disadvantage from conditions.
     """
     attacker_name = attacker.get("name", "Attacker")
     defender_name = defender.get("name", "Defender")
@@ -74,8 +77,8 @@ def resolve_attack(
         defender.get("has_shield", False),
     )
 
-    # Attack roll
-    atk = attack_roll(atk_ability, level)
+    # Attack roll (with advantage/disadvantage support)
+    atk = attack_roll(atk_ability, level, advantage=advantage, disadvantage=disadvantage)
     is_hit = atk["is_crit"] or (not atk["is_fumble"] and atk["total"] >= target_ac)
 
     rolls = [{"type": "attack", **atk}]

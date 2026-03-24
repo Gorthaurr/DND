@@ -78,7 +78,7 @@ class NPCInfoResponse(BaseModel):
 
 
 class NPCObserveResponse(BaseModel):
-    """Debug/demo: full NPC state."""
+    """Full NPC state including D&D stats and evolution."""
     id: str
     name: str
     personality: str
@@ -91,6 +91,27 @@ class NPCObserveResponse(BaseModel):
     location: dict | None
     relationships: list[dict]
     recent_memories: list[str]
+    # D&D stats
+    level: int = 1
+    class_id: str | None = None
+    race: str | None = None
+    archetype: str | None = None
+    current_hp: int | None = None
+    max_hp: int | None = None
+    ac: int | None = None
+    gold: int = 0
+    equipment_ids: list[str] = []
+    known_spells: list[str] = []
+    proficient_skills: list[str] = []
+    conditions: list[str] = []
+    # Evolution state
+    fears: list[dict] = []
+    active_goals: list[dict] = []
+    nemesis: dict | None = None
+    evolution_log: list[dict] = []
+    trait_scale: dict | None = None
+    archetype_affinity: dict[str, float] = {}
+    relationship_tags: dict[str, list[dict]] = {}
 
 
 class TickResponse(BaseModel):
@@ -99,3 +120,4 @@ class TickResponse(BaseModel):
     npc_actions: list[dict]
     interactions: list[dict]
     active_scenarios: list[dict] = []
+    evolution_changes: list[dict] = []

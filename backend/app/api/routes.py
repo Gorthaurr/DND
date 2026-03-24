@@ -815,6 +815,37 @@ async def npc_observe(npc_id: str):
     init_memory_db()
     memories = get_recent_memories(npc_id, limit=10)
 
+    # Parse evolution state if present
+    evo_json = npc.get("evolution_state_json")
+    fears = []
+    active_goals = []
+    nemesis_data = None
+    evolution_log = []
+    trait_scale = None
+    archetype_affinity = {}
+    relationship_tags = {}
+
+    if evo_json:
+        try:
+            from app.models.evolution import NPCEvolutionState
+            evo = NPCEvolutionState.model_validate_json(evo_json)
+            fears = [f.model_dump() for f in evo.fears]
+            active_goals = [g.model_dump() for g in evo.goals if g.status == "active"]
+            nemesis_data = evo.nemesis.model_dump() if evo.nemesis else None
+            evolution_log = [e.model_dump() for e in evo.evolution_log[-20:]]
+            trait_scale = evo.traits.as_dict()
+            archetype_affinity = evo.archetype_affinity
+            relationship_tags = {
+                k: [t.model_dump() for t in v] for k, v in evo.relationship_tags.items()
+            }
+        except Exception:
+            pass
+
+    # Compute AC from equipment
+    ac_val = npc.get("ac")
+    if ac_val is None:
+        ac_val = 10 + (npc.get("level", 1) if not npc.get("armor_id") else 0)
+
     return NPCObserveResponse(
         id=npc["id"],
         name=npc["name"],
@@ -828,6 +859,27 @@ async def npc_observe(npc_id: str):
         location=dict(location) if location else None,
         relationships=relationships,
         recent_memories=memories,
+        # D&D stats
+        level=npc.get("level", 1),
+        class_id=npc.get("class_id"),
+        race=npc.get("race"),
+        archetype=npc.get("archetype"),
+        current_hp=npc.get("current_hp"),
+        max_hp=npc.get("max_hp"),
+        ac=ac_val,
+        gold=npc.get("gold", 0),
+        equipment_ids=npc.get("equipment_ids", []),
+        known_spells=npc.get("known_spells", []),
+        proficient_skills=npc.get("proficient_skills", []),
+        conditions=npc.get("conditions", []),
+        # Evolution
+        fears=fears,
+        active_goals=active_goals,
+        nemesis=nemesis_data,
+        evolution_log=evolution_log,
+        trait_scale=trait_scale,
+        archetype_affinity=archetype_affinity,
+        relationship_tags=relationship_tags,
     )
 
 
@@ -842,6 +894,12 @@ async def manual_tick():
     if len(_world_log) > 50:
         _world_log[:] = _world_log[-50:]
     _save_world_log()
+    # Flatten evolution_logs into evolution_changes list
+    evo_changes = []
+    for npc_id, logs in result.get("evolution_logs", {}).items():
+        for log in logs:
+            evo_changes.append({"npc_id": npc_id, **log})
+    result["evolution_changes"] = evo_changes
     return TickResponse(**result)
 
 
@@ -931,6 +989,9 @@ async def npc_graph():
             "alive": npc.get("alive", True),
         })
 
+    # Build name lookup
+    name_map = {n["id"]: n["name"] for n in all_npcs}
+
     edges = []
     for npc in all_npcs:
         if not npc.get("alive", True):
@@ -942,9 +1003,11 @@ async def npc_graph():
                 edges.append({
                     "from": npc["id"],
                     "to": rel["id"],
-                    "sentiment": round(rel["sentiment"], 2),  # Always show, rounded
+                    "from_name": name_map.get(npc["id"], npc["id"]),
+                    "to_name": name_map.get(rel["id"], rel["id"]),
+                    "sentiment": round(rel["sentiment"], 2),
                     "reason": rel.get("reason", ""),
-                    "visible": True,  # Always visible
+                    "visible": True,
                 })
 
     return {"nodes": nodes, "edges": edges}
@@ -1187,6 +1250,43 @@ async def load_save(filename: str):
     _world_log.extend(data.get("world_log", []))
 
     return {"status": "loaded", "day": data["world_day"]}
+
+
+@router.post("/world/inter-session")
+async def inter_session(days: int = 3):
+    """Simulate inter-session events (what happened while player was away)."""
+    from app.simulation.inter_session import process_inter_session
+    gq = _gq()
+    world_day = await gq.get_world_day()
+    map_data = await gq.get_world_map()
+    location_names = [loc["name"] for loc in map_data.get("locations", [])]
+
+    result = await process_inter_session(gq, days, world_day, location_names)
+
+    # Advance world day
+    new_day = world_day + days
+    async with gq._session() as s:
+        await s.run("MERGE (w:World {id: 'main'}) SET w.day = $day", day=new_day)
+
+    # Add events to world log
+    for event in result["events"]:
+        _world_log.append({
+            "day": world_day + event["day_offset"],
+            "events": [event],
+            "npc_actions": [],
+            "interactions": [],
+            "active_scenarios": [],
+        })
+    if len(_world_log) > 50:
+        _world_log[:] = _world_log[-50:]
+    _save_world_log()
+
+    return {
+        "new_day": new_day,
+        "days_simulated": result["days_simulated"],
+        "events": result["events"],
+        "npc_changes": result["npc_changes"],
+    }
 
 
 @router.post("/world/reset")

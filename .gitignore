@@ -37,3 +37,6 @@ worlds/chat_log.json
 worlds/world_log.json
 backend/celerybeat-schedule
 frontend/node_modules/
+
+# Fine-tuning data
+backend/finetune/data/

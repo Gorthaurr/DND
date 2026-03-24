@@ -47,6 +47,11 @@ class NPCContext(BaseModel):
     combat_capability: str | None = None  # "Capable fighter (level 5, AC 16, ~40 HP)"
     gold: int = 0
     nearby_locations: list[str] = Field(default_factory=list)  # connected location names
+    # Evolution context (injected from NPCEvolutionState)
+    fears: list[dict] = Field(default_factory=list)
+    active_goals: list[dict] = Field(default_factory=list)
+    completed_goals: list[str] = Field(default_factory=list)
+    relationship_tags: dict[str, list[str]] = Field(default_factory=dict)
 
 
 class NPC(BaseModel):
@@ -72,3 +77,20 @@ class NPC(BaseModel):
     gold: int = 0
     max_hp: int = 10
     current_hp: int = 10
+    # D&D 5e abilities
+    known_spells: list[str] = Field(default_factory=list)
+    proficient_skills: list[str] = Field(default_factory=list)
+    expertise_skills: list[str] = Field(default_factory=list)
+    saving_throw_proficiencies: list[str] = Field(default_factory=list)
+    conditions: list[str] = Field(default_factory=list)  # active conditions
+    spell_slots_used: dict[str, int] = Field(default_factory=dict)
+    # Resources
+    rage_uses: int = 0
+    ki_points: int = 0
+    sorcery_points: int = 0
+    channel_divinity_uses: int = 0
+    lay_on_hands_pool: int = 0
+    bardic_inspiration_uses: int = 0
+    wild_shape_uses: int = 0
+    # Evolution state (serialized NPCEvolutionState)
+    evolution_state_json: str | None = None

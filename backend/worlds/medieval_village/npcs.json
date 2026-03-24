@@ -66,7 +66,54 @@
       ],
       "max_hp": 74,
       "ac": 11,
-      "secret_power": "Former archmage who saved the realm. Can cast Fireball, Shield, Counterspell, and Teleport."
+      "secret_power": "Former archmage who saved the realm. Can cast Fireball, Shield, Counterspell, and Teleport.",
+      "known_spells": [
+        "fire-bolt",
+        "light",
+        "prestidigitation",
+        "mage-hand",
+        "message",
+        "magic-missile",
+        "shield",
+        "mage-armor",
+        "detect-magic",
+        "identify",
+        "find-familiar",
+        "alarm",
+        "feather-fall",
+        "misty-step",
+        "scorching-ray",
+        "hold-person",
+        "see-invisibility",
+        "detect-thoughts",
+        "arcane-lock",
+        "fireball",
+        "counterspell",
+        "dispel-magic",
+        "fly",
+        "sending",
+        "leomunds-tiny-hut",
+        "banishment",
+        "greater-invisibility",
+        "polymorph",
+        "wall-of-fire",
+        "arcane-eye",
+        "wall-of-force",
+        "telekinesis",
+        "scrying",
+        "cone-of-cold",
+        "teleportation-circle"
+      ],
+      "proficient_skills": [
+        "arcana",
+        "history",
+        "insight",
+        "persuasion"
+      ],
+      "saving_throw_proficiencies": [
+        "INT",
+        "WIS"
+      ]
     },
     {
       "id": "npc-torvin",
@@ -128,7 +175,17 @@
         "leather"
       ],
       "max_hp": 49,
-      "ac": 11
+      "ac": 11,
+      "known_spells": [],
+      "proficient_skills": [
+        "athletics",
+        "intimidation",
+        "perception"
+      ],
+      "saving_throw_proficiencies": [
+        "STR",
+        "CON"
+      ]
     },
     {
       "id": "npc-lira",
@@ -196,7 +253,19 @@
         "leather"
       ],
       "max_hp": 13,
-      "ac": 13
+      "ac": 13,
+      "known_spells": [],
+      "proficient_skills": [
+        "deception",
+        "insight",
+        "persuasion",
+        "sleight-of-hand",
+        "investigation"
+      ],
+      "saving_throw_proficiencies": [
+        "DEX",
+        "INT"
+      ]
     },
     {
       "id": "npc-bran",
@@ -260,7 +329,17 @@
         "leather"
       ],
       "max_hp": 11,
-      "ac": 12
+      "ac": 12,
+      "known_spells": [],
+      "proficient_skills": [
+        "athletics",
+        "perception",
+        "animal-handling"
+      ],
+      "saving_throw_proficiencies": [
+        "STR",
+        "CON"
+      ]
     },
     {
       "id": "npc-anya",
@@ -315,7 +394,13 @@
       },
       "equipment_ids": [],
       "max_hp": 6,
-      "ac": 10
+      "ac": 10,
+      "known_spells": [],
+      "proficient_skills": [
+        "insight",
+        "persuasion"
+      ],
+      "saving_throw_proficiencies": []
     },
     {
       "id": "npc-elara",
@@ -381,7 +466,48 @@
       ],
       "max_hp": 66,
       "ac": 18,
-      "secret_power": "Has the Sight - can sense undead and dark magic within 60 feet."
+      "secret_power": "Has the Sight - can sense undead and dark magic within 60 feet.",
+      "known_spells": [
+        "sacred-flame",
+        "guidance",
+        "light",
+        "spare-the-dying",
+        "thaumaturgy",
+        "cure-wounds",
+        "healing-word",
+        "bless",
+        "detect-magic",
+        "sanctuary",
+        "shield-of-faith",
+        "guiding-bolt",
+        "spiritual-weapon",
+        "lesser-restoration",
+        "prayer-of-healing",
+        "aid",
+        "warding-bond",
+        "zone-of-truth",
+        "spirit-guardians",
+        "revivify",
+        "mass-healing-word",
+        "beacon-of-hope",
+        "dispel-magic",
+        "death-ward",
+        "guardian-of-faith",
+        "freedom-of-movement",
+        "mass-cure-wounds",
+        "greater-restoration",
+        "flame-strike"
+      ],
+      "proficient_skills": [
+        "medicine",
+        "religion",
+        "insight",
+        "perception"
+      ],
+      "saving_throw_proficiencies": [
+        "WIS",
+        "CHA"
+      ]
     },
     {
       "id": "npc-goran",
@@ -450,7 +576,28 @@
         "studded-leather"
       ],
       "max_hp": 60,
-      "ac": 16
+      "ac": 16,
+      "known_spells": [
+        "hunters-mark",
+        "cure-wounds",
+        "goodberry",
+        "detect-poison-and-disease",
+        "absorb-elements",
+        "pass-without-trace",
+        "spike-growth",
+        "silence"
+      ],
+      "proficient_skills": [
+        "perception",
+        "stealth",
+        "survival",
+        "nature",
+        "athletics"
+      ],
+      "saving_throw_proficiencies": [
+        "STR",
+        "DEX"
+      ]
     },
     {
       "id": "npc-darya",
@@ -519,7 +666,36 @@
       ],
       "max_hp": 33,
       "ac": 13,
-      "secret_power": "Can Wild Shape into forest animals and command plants."
+      "secret_power": "Can Wild Shape into forest animals and command plants.",
+      "known_spells": [
+        "druidcraft",
+        "produce-flame",
+        "guidance",
+        "cure-wounds",
+        "entangle",
+        "goodberry",
+        "detect-magic",
+        "speak-with-animals",
+        "create-or-destroy-water",
+        "moonbeam",
+        "lesser-restoration",
+        "heat-metal",
+        "pass-without-trace",
+        "spike-growth",
+        "call-lightning",
+        "plant-growth",
+        "conjure-animals"
+      ],
+      "proficient_skills": [
+        "nature",
+        "medicine",
+        "perception",
+        "survival"
+      ],
+      "saving_throw_proficiencies": [
+        "INT",
+        "WIS"
+      ]
     },
     {
       "id": "npc-finn",
@@ -585,7 +761,20 @@
       ],
       "max_hp": 33,
       "ac": 15,
-      "secret_power": "Trained by a thieves guild. Can use Uncanny Dodge and Evasion."
+      "secret_power": "Trained by a thieves guild. Can use Uncanny Dodge and Evasion.",
+      "known_spells": [],
+      "proficient_skills": [
+        "stealth",
+        "deception",
+        "sleight-of-hand",
+        "acrobatics",
+        "perception",
+        "persuasion"
+      ],
+      "saving_throw_proficiencies": [
+        "DEX",
+        "INT"
+      ]
     },
     {
       "id": "npc-old-tom",
@@ -647,7 +836,13 @@
       "equipment_ids": [],
       "max_hp": 5,
       "ac": 8,
-      "secret_power": "Was once a true knight. In desperation, old muscle memory stirs - can make one attack at +5 before collapsing from exhaustion."
+      "secret_power": "Was once a true knight. In desperation, old muscle memory stirs - can make one attack at +5 before collapsing from exhaustion.",
+      "known_spells": [],
+      "proficient_skills": [
+        "history",
+        "perception"
+      ],
+      "saving_throw_proficiencies": []
     },
     {
       "id": "npc-hilde",
@@ -712,7 +907,13 @@
       },
       "equipment_ids": [],
       "max_hp": 6,
-      "ac": 11
+      "ac": 11,
+      "known_spells": [],
+      "proficient_skills": [
+        "perception",
+        "insight"
+      ],
+      "saving_throw_proficiencies": []
     },
     {
       "id": "npc-roderick",
@@ -782,7 +983,18 @@
         "chain-mail"
       ],
       "max_hp": 76,
-      "ac": 18
+      "ac": 18,
+      "known_spells": [],
+      "proficient_skills": [
+        "athletics",
+        "intimidation",
+        "perception",
+        "survival"
+      ],
+      "saving_throw_proficiencies": [
+        "STR",
+        "CON"
+      ]
     },
     {
       "id": "npc-senna",
@@ -850,7 +1062,19 @@
         "dagger"
       ],
       "max_hp": 13,
-      "ac": 13
+      "ac": 13,
+      "known_spells": [],
+      "proficient_skills": [
+        "stealth",
+        "perception",
+        "sleight-of-hand",
+        "acrobatics",
+        "survival"
+      ],
+      "saving_throw_proficiencies": [
+        "DEX",
+        "INT"
+      ]
     },
     {
       "id": "npc-brother-aldric",
@@ -913,7 +1137,33 @@
         "shield"
       ],
       "max_hp": 27,
-      "ac": 18
+      "ac": 18,
+      "known_spells": [
+        "sacred-flame",
+        "thaumaturgy",
+        "light",
+        "toll-the-dead",
+        "bless",
+        "command",
+        "cure-wounds",
+        "guiding-bolt",
+        "detect-magic",
+        "inflict-wounds",
+        "spiritual-weapon",
+        "hold-person",
+        "silence",
+        "zone-of-truth"
+      ],
+      "proficient_skills": [
+        "religion",
+        "history",
+        "insight",
+        "persuasion"
+      ],
+      "saving_throw_proficiencies": [
+        "WIS",
+        "CHA"
+      ]
     },
     {
       "id": "npc-magda",
@@ -974,7 +1224,13 @@
       },
       "equipment_ids": [],
       "max_hp": 8,
-      "ac": 10
+      "ac": 10,
+      "known_spells": [],
+      "proficient_skills": [
+        "insight",
+        "perception"
+      ],
+      "saving_throw_proficiencies": []
     },
     {
       "id": "npc-vasek",
@@ -1032,7 +1288,17 @@
         "leather"
       ],
       "max_hp": 20,
-      "ac": 11
+      "ac": 11,
+      "known_spells": [],
+      "proficient_skills": [
+        "athletics",
+        "perception",
+        "investigation"
+      ],
+      "saving_throw_proficiencies": [
+        "STR",
+        "CON"
+      ]
     },
     {
       "id": "npc-petra",
@@ -1093,7 +1359,13 @@
       },
       "equipment_ids": [],
       "max_hp": 7,
-      "ac": 10
+      "ac": 10,
+      "known_spells": [],
+      "proficient_skills": [
+        "animal-handling",
+        "survival"
+      ],
+      "saving_throw_proficiencies": []
     },
     {
       "id": "npc-rolf",
@@ -1158,7 +1430,18 @@
       ],
       "max_hp": 52,
       "ac": 12,
-      "secret_power": "Former elite sergeant. In dire combat, adrenaline burns away the haze - gains Action Surge and Second Wind as if sober."
+      "secret_power": "Former elite sergeant. In dire combat, adrenaline burns away the haze - gains Action Surge and Second Wind as if sober.",
+      "known_spells": [],
+      "proficient_skills": [
+        "athletics",
+        "insight",
+        "intimidation",
+        "perception"
+      ],
+      "saving_throw_proficiencies": [
+        "STR",
+        "CON"
+      ]
     },
     {
       "id": "npc-ilse",
@@ -1219,7 +1502,13 @@
       },
       "equipment_ids": [],
       "max_hp": 6,
-      "ac": 10
+      "ac": 10,
+      "known_spells": [],
+      "proficient_skills": [
+        "medicine",
+        "insight"
+      ],
+      "saving_throw_proficiencies": []
     },
     {
       "id": "npc-korin",
@@ -1288,7 +1577,25 @@
         "leather"
       ],
       "max_hp": 36,
-      "ac": 14
+      "ac": 14,
+      "known_spells": [
+        "hunters-mark",
+        "cure-wounds",
+        "goodberry",
+        "absorb-elements",
+        "longstrider"
+      ],
+      "proficient_skills": [
+        "stealth",
+        "survival",
+        "nature",
+        "perception",
+        "athletics"
+      ],
+      "saving_throw_proficiencies": [
+        "STR",
+        "DEX"
+      ]
     },
     {
       "id": "npc-thessa",
@@ -1358,7 +1665,31 @@
       ],
       "max_hp": 27,
       "ac": 13,
-      "secret_power": "Crown Intelligence operative. Trained in Suggestion, Charm Person, and coded message spells."
+      "secret_power": "Crown Intelligence operative. Trained in Suggestion, Charm Person, and coded message spells.",
+      "known_spells": [
+        "vicious-mockery",
+        "prestidigitation",
+        "minor-illusion",
+        "charm-person",
+        "healing-word",
+        "disguise-self",
+        "detect-magic",
+        "faerie-fire",
+        "suggestion",
+        "invisibility",
+        "detect-thoughts"
+      ],
+      "proficient_skills": [
+        "performance",
+        "deception",
+        "persuasion",
+        "insight",
+        "stealth"
+      ],
+      "saving_throw_proficiencies": [
+        "DEX",
+        "CHA"
+      ]
     },
     {
       "id": "npc-victor",
@@ -1427,7 +1758,19 @@
       ],
       "max_hp": 18,
       "ac": 12,
-      "secret_power": "Has two hired bodyguards (level 3 fighters) who are never far away. Carries a hidden vial of poison."
+      "secret_power": "Has two hired bodyguards (level 3 fighters) who are never far away. Carries a hidden vial of poison.",
+      "known_spells": [],
+      "proficient_skills": [
+        "deception",
+        "insight",
+        "investigation",
+        "persuasion",
+        "perception"
+      ],
+      "saving_throw_proficiencies": [
+        "DEX",
+        "INT"
+      ]
     },
     {
       "id": "npc-yara",
@@ -1482,7 +1825,13 @@
       },
       "equipment_ids": [],
       "max_hp": 6,
-      "ac": 11
+      "ac": 11,
+      "known_spells": [],
+      "proficient_skills": [
+        "animal-handling",
+        "performance"
+      ],
+      "saving_throw_proficiencies": []
     },
     {
       "id": "npc-zev",
@@ -1551,7 +1900,19 @@
       ],
       "max_hp": 7,
       "ac": 12,
-      "secret_power": "Former noble house clerk. Can forge documents and identify noble seals at a glance."
+      "secret_power": "Former noble house clerk. Can forge documents and identify noble seals at a glance.",
+      "known_spells": [],
+      "proficient_skills": [
+        "perception",
+        "stealth",
+        "deception",
+        "insight",
+        "investigation"
+      ],
+      "saving_throw_proficiencies": [
+        "DEX",
+        "INT"
+      ]
     },
     {
       "id": "npc-katya",
@@ -1617,7 +1978,19 @@
       ],
       "max_hp": 18,
       "ac": 13,
-      "secret_power": "Expert poisoner. Carries three doses of sleeping poison and one dose of truth serum."
+      "secret_power": "Expert poisoner. Carries three doses of sleeping poison and one dose of truth serum.",
+      "known_spells": [],
+      "proficient_skills": [
+        "deception",
+        "persuasion",
+        "sleight-of-hand",
+        "investigation",
+        "nature"
+      ],
+      "saving_throw_proficiencies": [
+        "DEX",
+        "INT"
+      ]
     },
     {
       "id": "npc-oleg",
@@ -1683,7 +2056,13 @@
       },
       "equipment_ids": [],
       "max_hp": 12,
-      "ac": 10
+      "ac": 10,
+      "known_spells": [],
+      "proficient_skills": [
+        "athletics",
+        "persuasion"
+      ],
+      "saving_throw_proficiencies": []
     },
     {
       "id": "npc-ivan",
@@ -1739,7 +2118,13 @@
       "equipment_ids": [],
       "max_hp": 7,
       "ac": 9,
-      "secret_power": "Speaks with the dead. Whether real or delusion, his knowledge of buried secrets is uncanny."
+      "secret_power": "Speaks with the dead. Whether real or delusion, his knowledge of buried secrets is uncanny.",
+      "known_spells": [],
+      "proficient_skills": [
+        "history",
+        "religion"
+      ],
+      "saving_throw_proficiencies": []
     },
     {
       "id": "npc-nadia",
@@ -1801,7 +2186,14 @@
       },
       "equipment_ids": [],
       "max_hp": 7,
-      "ac": 10
+      "ac": 10,
+      "known_spells": [],
+      "proficient_skills": [
+        "animal-handling",
+        "persuasion",
+        "nature"
+      ],
+      "saving_throw_proficiencies": []
     }
   ]
 }

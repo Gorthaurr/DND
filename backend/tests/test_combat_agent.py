@@ -14,6 +14,7 @@ from app.agents.combat_agent import (
     EncounterResult,
 )
 from app.dnd.combat_narrator import CombatResult
+from app.dnd.death_saves import DeathState
 
 
 # ── Fixtures ──
@@ -165,19 +166,19 @@ class TestResolveSingleAttack:
         assert outcome.damage_dealt >= 0
         assert outcome.defender_hp_after >= 0
 
-    def test_damage_reduces_defender_hp(self, agent):
+    def test_damage_reported_correctly(self, agent):
         attacker = agent.build_combatant(_make_player(), is_player=True)
         defender = agent.build_combatant(_make_npc(hp=100), is_player=False)
 
         outcome = agent._resolve_single_attack(attacker, defender)
 
-        if outcome.damage_dealt > 0:
-            assert defender.current_hp == 100 - outcome.damage_dealt
-        else:
-            assert defender.current_hp == 100
+        # _resolve_single_attack no longer mutates HP directly (combat loop does)
+        # but it reports damage_dealt and defender_hp_after correctly
+        assert outcome.damage_dealt >= 0
+        assert outcome.defender_hp_after == max(0, 100 - outcome.damage_dealt)
 
-    def test_kill_sets_alive_false(self, agent):
-        """Attack a 1 HP target multiple times until it dies."""
+    def test_kill_via_apply_damage(self, agent):
+        """Attack a 1 HP target — damage applied via _apply_damage_to_combatant triggers death."""
         attacker = agent.build_combatant(_make_player(), is_player=True)
         defender = agent.build_combatant(_make_npc(hp=1, ac=1), is_player=False)
 
@@ -185,14 +186,14 @@ class TestResolveSingleAttack:
         for _ in range(20):  # retry to handle rare misses
             defender.current_hp = 1
             defender.alive = True
+            defender.death_tracker.state = DeathState.ALIVE
             outcome = agent._resolve_single_attack(attacker, defender)
-            if outcome.defender_killed:
-                assert defender.alive is False
+            if outcome.damage_dealt > 0:
+                agent._apply_damage_to_combatant(defender, outcome.damage_dealt)
                 assert defender.current_hp == 0
                 return
 
-        # If we get here after 20 tries with AC 1, something is wrong
-        pytest.fail("Could not kill AC 1 target in 20 attempts")
+        pytest.fail("Could not hit AC 1 target in 20 attempts")
 
 
 # ── test_resolve_combat_player_wins ──
@@ -223,8 +224,12 @@ class TestResolveCombatPlayerWins:
 # ── test_resolve_combat_player_dies ──
 
 class TestResolveCombatPlayerDies:
-    def test_player_dies_against_overwhelming_force(self, agent):
-        """Player with 1 HP vs 3 strong ogres -- should die."""
+    def test_player_drops_to_zero_against_overwhelming_force(self, agent):
+        """Player with 1 HP vs 3 strong ogres -- should drop to 0 HP (dying).
+
+        With death saves, player won't die instantly in one round unless
+        massive damage occurs. But they should take damage and reach 0 HP.
+        """
         player = _make_player(current_hp=1, ac=1)  # 1 HP, no armor
         ogres = [
             _make_strong_npc(f"ogre-{i}", f"Ogre {i}") for i in range(3)
@@ -235,11 +240,11 @@ class TestResolveCombatPlayerDies:
             result = agent.resolve_combat(player, ogres)
 
             assert isinstance(result, EncounterResult)
-            if result.player_killed:
-                assert result.player_hp_change < 0
+            if result.player_hp_change < 0 or result.player_killed:
+                # Player either died or took damage (dropped to 0 HP / dying)
                 return
 
-        pytest.fail("Player with 1 HP did not die vs 3 ogres in 20 encounters")
+        pytest.fail("Player with 1 HP did not take damage vs 3 ogres in 20 encounters")
 
 
 # ── test_resolve_combat_multiple_npcs ──

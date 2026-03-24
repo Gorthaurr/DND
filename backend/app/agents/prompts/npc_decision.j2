@@ -45,6 +45,45 @@ YOUR LOCATION: {{ location_name }} — {{ location_description }}
 {% if gold %}Gold: {{ gold }}gp{% endif %}
 {% if current_hp is defined %}HP: {{ current_hp }}/{{ max_hp }}{% endif %}
 
+{% if fears %}
+===== YOUR FEARS =====
+These experiences haunt you and affect your decisions:
+{% for fear in fears %}
+- {{ fear.trigger }} ({{ "overwhelming" if fear.intensity > 0.7 else "strong" if fear.intensity > 0.4 else "mild" }} intensity)
+{% endfor %}
+You tend to avoid situations involving your fears. Higher intensity fears more strongly affect your choices.
+{% endif %}
+
+{% if active_goals %}
+===== YOUR CURRENT GOALS =====
+{% for goal in active_goals %}
+- {{ goal.description }} [priority: {{ "critical" if goal.priority > 0.7 else "important" if goal.priority > 0.4 else "minor" }}, progress: {{ (goal.progress * 100)|int }}%]
+{% endfor %}
+Your decisions should work toward your highest priority goals.
+{% endif %}
+
+{% if completed_goals %}
+You recently accomplished: {{ completed_goals | join(', ') }}. This gives you confidence and may open new paths.
+{% endif %}
+
+{% if relationship_tags %}
+===== SPECIAL BONDS =====
+You have deep, personal connections with certain people:
+{% for npc_id, tags in relationship_tags.items() %}
+- {{ npc_id }}: {{ tags | join(', ') }}
+{% endfor %}
+These bonds strongly influence how you interact with these people.
+{% endif %}
+
+{% if nemesis %}
+===== YOUR NEMESIS =====
+{{ nemesis_directive }}
+Nemesis: {{ nemesis.target_name }}
+Stage: {{ nemesis.stage }} | Defeats suffered: {{ nemesis.defeats_suffered }} | Victories: {{ nemesis.victories_achieved }}
+{% if nemesis.adaptation %}You have adapted: {{ nemesis.adaptation }}{% endif %}
+This relationship DOMINATES your decision-making. Your actions should reflect this obsession or fear.
+{% endif %}
+
 ===== DRAMATIC PRESSURE =====
 Consider these factors CAREFULLY before choosing your action:
 

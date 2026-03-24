@@ -73,12 +73,14 @@ function TimelineEvent({ event, index }: { event: any; index: number }) {
 
 export function NPCDeepProfile({ npcId, onClose }: { npcId: string; onClose: () => void }) {
   const [profile, setProfile] = useState<DeepProfile | null>(null);
-  const [tab, setTab] = useState<'psychology' | 'biography' | 'memory' | 'combat'>('psychology');
+  const [tab, setTab] = useState<'psychology' | 'biography' | 'memory' | 'combat' | 'evolution'>('psychology');
   const [shadow, setShadow] = useState<any>(null);
+  const [evo, setEvo] = useState<any>(null);
 
   useEffect(() => {
-    fetch(`${API}/api/npc-life/${npcId}/deep-profile`).then(r => r.json()).then(setProfile);
-    fetch(`${API}/api/shadow/${npcId}`).then(r => r.json()).then(setShadow);
+    fetch(`${API}/api/npc-life/${npcId}/deep-profile`).then(r => r.json()).then(setProfile).catch(() => {});
+    fetch(`${API}/api/shadow/${npcId}`).then(r => r.json()).then(setShadow).catch(() => {});
+    fetch(`${API}/api/npc/${npcId}/observe`).then(r => r.json()).then(setEvo).catch(() => {});
   }, [npcId]);
 
   if (!profile) return <div className="flex items-center justify-center h-64 text-gray-500">Loading...</div>;
@@ -94,6 +96,7 @@ export function NPCDeepProfile({ npcId, onClose }: { npcId: string; onClose: () 
     { id: 'biography' as const, label: 'Biography', icon: '📜' },
     { id: 'memory' as const, label: 'Memory', icon: '💭' },
     { id: 'combat' as const, label: 'Combat', icon: '⚔' },
+    { id: 'evolution' as const, label: 'Evolution', icon: '🧬' },
   ];
 
   return (
@@ -366,6 +369,185 @@ export function NPCDeepProfile({ npcId, onClose }: { npcId: string; onClose: () 
                     </div>
                   ))}
                 </div>
+              </motion.div>
+            )}
+            {tab === 'evolution' && (
+              <motion.div key="evolution" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                {!evo ? (
+                  <div className="text-gray-500 text-center py-8">Loading evolution data...</div>
+                ) : (
+                  <>
+                    {/* Nemesis Panel */}
+                    {evo.nemesis && (
+                      <div className={`mb-6 p-4 rounded-lg border ${
+                        evo.nemesis.stage === 'broken' ? 'bg-gray-900/30 border-gray-700' :
+                        evo.nemesis.stage === 'arch_nemesis' ? 'bg-red-900/30 border-red-600 shadow-lg shadow-red-900/20' :
+                        evo.nemesis.stage === 'nemesis' ? 'bg-red-900/20 border-red-800' :
+                        evo.nemesis.stage === 'rival' ? 'bg-orange-900/20 border-orange-800' :
+                        'bg-yellow-900/20 border-yellow-800'
+                      }`}>
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-lg">{
+                            evo.nemesis.stage === 'broken' ? '💔' :
+                            evo.nemesis.stage === 'arch_nemesis' ? '💀' :
+                            evo.nemesis.stage === 'nemesis' ? '🔥' :
+                            evo.nemesis.stage === 'rival' ? '⚔' : '😤'
+                          }</span>
+                          <h3 className="text-sm font-[Cinzel] text-red-400 uppercase tracking-wider">
+                            Nemesis: {evo.nemesis.target_name}
+                          </h3>
+                          <span className={`ml-auto text-xs px-2 py-0.5 rounded font-bold uppercase ${
+                            evo.nemesis.stage === 'broken' ? 'bg-gray-800 text-gray-400' :
+                            evo.nemesis.stage === 'arch_nemesis' ? 'bg-red-900 text-red-300' :
+                            evo.nemesis.stage === 'nemesis' ? 'bg-red-900/50 text-red-400' :
+                            evo.nemesis.stage === 'rival' ? 'bg-orange-900/50 text-orange-400' :
+                            'bg-yellow-900/50 text-yellow-400'
+                          }`}>{evo.nemesis.stage.replace('_', ' ')}</span>
+                        </div>
+                        <div className="grid grid-cols-3 gap-4 text-center text-xs mb-2">
+                          <div><span className="text-red-400 font-bold text-lg">{evo.nemesis.defeats_suffered}</span><br /><span className="text-gray-500">Defeats</span></div>
+                          <div><span className="text-green-400 font-bold text-lg">{evo.nemesis.victories_achieved}</span><br /><span className="text-gray-500">Victories</span></div>
+                          <div><span className="text-amber-400 font-bold text-lg">{evo.nemesis.encounters}</span><br /><span className="text-gray-500">Encounters</span></div>
+                        </div>
+                        {evo.nemesis.adaptation && (
+                          <div className="text-xs text-amber-300 bg-amber-900/20 rounded p-2 mt-2">
+                            <span className="text-amber-500 font-bold">Adaptation:</span> {evo.nemesis.adaptation}
+                          </div>
+                        )}
+                        {/* Escalation bar */}
+                        <div className="mt-3">
+                          <div className="flex justify-between text-xs text-gray-500 mb-1">
+                            <span>Grudge</span><span>Rival</span><span>Nemesis</span><span>Arch</span><span>Broken</span>
+                          </div>
+                          <div className="h-2 bg-[#1c2128] rounded-full overflow-hidden flex">
+                            {['grudge','rival','nemesis','arch_nemesis','broken'].map((s, i) => (
+                              <div key={s} className={`flex-1 h-full ${
+                                s === evo.nemesis.stage ? (s === 'broken' ? 'bg-gray-500' : 'bg-red-500') :
+                                ['grudge','rival','nemesis','arch_nemesis','broken'].indexOf(evo.nemesis.stage) > i ? 'bg-red-900' : 'bg-transparent'
+                              } ${i > 0 ? 'border-l border-[#30363d]' : ''}`} />
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Big Five Trait Scale */}
+                    {evo.trait_scale && (
+                      <>
+                        <h3 className="text-sm font-[Cinzel] text-gray-400 uppercase tracking-wider mb-3">Personality Traits (Big Five)</h3>
+                        <div className="grid grid-cols-1 gap-2 mb-6">
+                          {[
+                            { key: 'O', label: 'Openness', color: 'cyan' },
+                            { key: 'C', label: 'Conscientiousness', color: 'green' },
+                            { key: 'E', label: 'Extraversion', color: 'amber' },
+                            { key: 'A', label: 'Agreeableness', color: 'blue' },
+                            { key: 'N', label: 'Neuroticism', color: 'red' },
+                          ].map(t => (
+                            <ProgressBar key={t.key} value={evo.trait_scale[t.key] || 0.5} color={t.color} label={t.label} />
+                          ))}
+                        </div>
+                      </>
+                    )}
+
+                    {/* Fears */}
+                    {evo.fears && evo.fears.length > 0 && (
+                      <>
+                        <h3 className="text-sm font-[Cinzel] text-gray-400 uppercase tracking-wider mb-3">Fears</h3>
+                        <div className="space-y-2 mb-6">
+                          {evo.fears.map((f: any, i: number) => (
+                            <div key={i} className="flex items-center gap-3 bg-purple-900/10 border border-purple-900/20 rounded p-2">
+                              <span className="text-lg">😰</span>
+                              <div className="flex-1">
+                                <div className="text-sm text-purple-300 font-bold capitalize">{f.trigger}</div>
+                                <div className="text-xs text-gray-500">{f.origin_event}</div>
+                              </div>
+                              <div className="text-right">
+                                <div className={`text-xs font-bold ${f.intensity > 0.7 ? 'text-red-400' : f.intensity > 0.4 ? 'text-orange-400' : 'text-yellow-400'}`}>
+                                  {f.intensity > 0.7 ? 'OVERWHELMING' : f.intensity > 0.4 ? 'STRONG' : 'MILD'}
+                                </div>
+                                <ProgressBar value={f.intensity} color={f.intensity > 0.7 ? 'red' : 'purple'} />
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </>
+                    )}
+
+                    {/* Active Goals */}
+                    {evo.active_goals && evo.active_goals.length > 0 && (
+                      <>
+                        <h3 className="text-sm font-[Cinzel] text-gray-400 uppercase tracking-wider mb-3">Active Goals</h3>
+                        <div className="space-y-2 mb-6">
+                          {evo.active_goals.map((g: any, i: number) => (
+                            <div key={i} className="bg-[#161b22] border border-[#30363d] rounded p-3">
+                              <div className="flex justify-between items-center mb-1">
+                                <span className="text-sm text-gray-200">{g.description}</span>
+                                <span className={`text-xs px-2 py-0.5 rounded ${
+                                  g.priority > 0.7 ? 'bg-red-900/30 text-red-400' :
+                                  g.priority > 0.4 ? 'bg-amber-900/30 text-amber-400' :
+                                  'bg-gray-800 text-gray-400'
+                                }`}>{g.priority > 0.7 ? 'CRITICAL' : g.priority > 0.4 ? 'IMPORTANT' : 'MINOR'}</span>
+                              </div>
+                              <ProgressBar value={g.progress || 0} color={g.priority > 0.7 ? 'red' : 'amber'} label={`Progress: ${Math.round((g.progress || 0) * 100)}%`} />
+                            </div>
+                          ))}
+                        </div>
+                      </>
+                    )}
+
+                    {/* Relationship Tags */}
+                    {evo.relationship_tags && Object.keys(evo.relationship_tags).length > 0 && (
+                      <>
+                        <h3 className="text-sm font-[Cinzel] text-gray-400 uppercase tracking-wider mb-3">Relationship Tags</h3>
+                        <div className="space-y-1 mb-6">
+                          {Object.entries(evo.relationship_tags).map(([npcId, tags]: [string, any]) => (
+                            <div key={npcId} className="flex items-center gap-2 text-sm">
+                              <span className="text-gray-400">{npcId}:</span>
+                              {(tags as any[]).map((t: any, i: number) => (
+                                <span key={i} className={`px-2 py-0.5 rounded text-xs ${
+                                  t.tag === 'nemesis' ? 'bg-red-900/30 text-red-400 border border-red-800' :
+                                  t.tag === 'enemy' ? 'bg-red-900/20 text-red-300' :
+                                  t.tag === 'ally' || t.tag === 'savior' ? 'bg-green-900/20 text-green-300' :
+                                  t.tag === 'betrayer' ? 'bg-purple-900/20 text-purple-300' :
+                                  'bg-[#1c2128] text-gray-300'
+                                }`}>{t.tag} ({t.strength?.toFixed(1)})</span>
+                              ))}
+                            </div>
+                          ))}
+                        </div>
+                      </>
+                    )}
+
+                    {/* Evolution Log */}
+                    {evo.evolution_log && evo.evolution_log.length > 0 && (
+                      <>
+                        <h3 className="text-sm font-[Cinzel] text-gray-400 uppercase tracking-wider mb-3">Evolution Timeline</h3>
+                        <div className="space-y-1">
+                          {evo.evolution_log.slice().reverse().map((e: any, i: number) => {
+                            const typeColors: Record<string, string> = {
+                              trait_shift: 'text-cyan-400', fear_acquired: 'text-purple-400', fear_faded: 'text-gray-400',
+                              goal_completed: 'text-green-400', goal_failed: 'text-red-400', goal_new: 'text-amber-400',
+                              archetype_drift: 'text-yellow-400', relationship_tag: 'text-blue-400',
+                              nemesis_escalation: 'text-red-500', nemesis_broken: 'text-gray-500', nemesis_adaptation: 'text-orange-400',
+                            };
+                            return (
+                              <div key={i} className="flex gap-2 text-xs border-l-2 border-[#30363d] pl-3 py-1">
+                                <span className="text-gray-600 w-10">D{e.day}</span>
+                                <span className={`w-24 ${typeColors[e.change_type] || 'text-gray-400'}`}>[{e.change_type}]</span>
+                                <span className="text-gray-300 flex-1">{e.description}</span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </>
+                    )}
+
+                    {/* No evolution data */}
+                    {(!evo.fears || evo.fears.length === 0) && (!evo.active_goals || evo.active_goals.length === 0) && !evo.nemesis && (!evo.evolution_log || evo.evolution_log.length === 0) && (
+                      <div className="text-gray-500 text-center py-8">No evolution data yet. Events will shape this NPC over time.</div>
+                    )}
+                  </>
+                )}
               </motion.div>
             )}
           </AnimatePresence>

@@ -21,7 +21,7 @@ class Settings(BaseSettings):
 
     # World Simulation
     tick_interval_seconds: int = 300
-    max_active_npcs_per_tick: int = 10
+    max_active_npcs_per_tick: int = 28
     memory_summarize_threshold: int = 50
 
     # Paths

@@ -8,6 +8,8 @@ from celery import Celery
 
 from app.config import settings
 from app.graph.queries import GraphQueries
+from app.models.evolution import NPCEvolutionState, GoalStatus
+from app.simulation.evolution import run_evolution_phase
 from app.utils.logger import get_logger
 
 log = get_logger("ticker")
@@ -85,9 +87,9 @@ async def run_world_tick() -> dict:
     all_event_descs = recent_event_descs + [e["description"] for e in generated_events]
 
     # ── 4. NPC DECISIONS ───────────────────────────────────────────────
-    # At night, some NPCs sleep
+    # At night, fewer NPCs are active (20% sleep)
     if current_day_phase in ("night", "dawn"):
-        active_for_decisions = [n for n in active_npcs if _rng.random() > 0.4]  # 60% sleep
+        active_for_decisions = [n for n in active_npcs if _rng.random() > 0.2]
     else:
         active_for_decisions = active_npcs
 
@@ -162,6 +164,24 @@ async def run_world_tick() -> dict:
                     nd["reason"] = rel.get("reason", "")
                 enriched_nearby.append(nd)
 
+            # Load evolution state if available
+            evo_state = None
+            raw_evo = npc.get("evolution_state_json")
+            if raw_evo:
+                evo_state = NPCEvolutionState.model_validate_json(raw_evo)
+
+            evo_fears = [{"trigger": f.trigger, "intensity": round(f.intensity, 2)}
+                         for f in (evo_state.fears if evo_state else [])]
+            evo_active_goals = [{"description": g.description, "priority": round(g.priority, 2),
+                                 "progress": round(g.progress, 2)}
+                                for g in (evo_state.goals if evo_state else [])
+                                if g.status == GoalStatus.ACTIVE]
+            evo_completed_goals = [g.description for g in (evo_state.goals if evo_state else [])
+                                   if g.status == GoalStatus.COMPLETED
+                                   and world_day - (g.resolved_day or 0) < 5]
+            evo_relationship_tags = {rid: [t.tag for t in tags]
+                                     for rid, tags in (evo_state.relationship_tags if evo_state else {}).items()}
+
             ctx = NPCContext(
                 npc_id=npc["id"],
                 name=npc["name"],
@@ -187,6 +207,10 @@ async def run_world_tick() -> dict:
                 combat_capability=combat_capability,
                 gold=npc_gold,
                 nearby_locations=[loc["name"] for loc in connected_locs],
+                fears=evo_fears,
+                active_goals=evo_active_goals,
+                completed_goals=evo_completed_goals,
+                relationship_tags=evo_relationship_tags,
             )
 
             decision_tasks.append((npc, ctx))
@@ -207,18 +231,22 @@ async def run_world_tick() -> dict:
         return_exceptions=True,
     )
 
+    decisions_map: dict[str, dict] = {}
     for res in results:
         if res is None or isinstance(res, Exception):
             continue
         npc, decision = res
-        npc_actions.append({
+        decision_dict = {
             "npc_id": npc["id"],
             "npc_name": npc["name"],
             "action": decision.action,
             "target": decision.target,
             "dialogue": decision.dialogue,
             "reasoning": decision.reasoning,
-        })
+            "consequence": decision.consequence,
+        }
+        npc_actions.append(decision_dict)
+        decisions_map[npc["id"]] = decision_dict
         await _apply_decision(gq, npc, decision, locations, world_day)
         add_memory(npc["id"], f"Day {world_day}: I decided to {decision.action}" +
                    (f" targeting {decision.target}" if decision.target else ""), day=world_day)
@@ -242,6 +270,16 @@ async def run_world_tick() -> dict:
         gq, npc_agent, active_npcs, world_day, scenario_context_str,
     )
 
+    # ── 5b. EVOLUTION PHASE ─────────────────────────────────────────────
+    evolution_logs: dict[str, list[dict]] = {}
+    for npc in active_npcs:
+        npc_decision = decisions_map.get(npc["id"])
+        npc_interactions = [i for i in interactions
+                            if npc["id"] in (i.get("npc_a_id"), i.get("npc_b_id"))]
+        logs = await run_evolution_phase(gq, npc, npc_decision, npc_interactions, world_day)
+        if logs:
+            evolution_logs[npc["id"]] = [entry.model_dump() for entry in logs]
+
     # ── 6. CLEANUP ─────────────────────────────────────────────────────
     await propagate_rumors(gq, active_npcs, world_day)
 
@@ -257,6 +295,7 @@ async def run_world_tick() -> dict:
         "npc_actions": npc_actions,
         "interactions": interactions,
         "active_scenarios": scenario_infos,
+        "evolution_logs": evolution_logs,
     }
 
     log.info("tick_done", day=world_day, events=len(generated_events),
